@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Jobby</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<!-- CSS
+================================================== -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+
+</head>
+<body class="gray">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+<!-- Header Container
+================================================== -->
+{% include 'header.html' %}
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+
+<!-- Dashboard Container -->
+<div class="dashboard-container">
+
+	<!-- Dashboard Sidebar
+	================================================== -->
+{% include 'sidebar.html' %}
+	<!-- Dashboard Sidebar / End -->
+
+
+	<!-- Dashboard Content
+	================================================== -->
+	<div class="dashboard-content-container" data-simplebar>
+		<div class="dashboard-content-inner" >
+
+			<!-- Dashboard Headline -->
+			<div class="dashboard-headline">
+				<h3>Ayarlar</h3>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs" class="dark">
+					<ul>
+						<li><a href="{{ url_for('public.index') }}">Anasayfa</a></li>
+						<li><a href="#">Hesabım</a></li>
+						<li>Ayarlar</li>
+					</ul>
+				</nav>
+			</div>
+			{% if current_user.status == 'employer' %}
+				<div class="notification notice closeable">
+					<h3>Hoşgeldiniz!</h3>
+					<p>Sizi yakından tanıyalım</p>
+					<a class="close" href="#"></a>
+				</div>
+			{% endif %}
+
+			{% for message in get_flashed_messages() %}
+				<div class="notification error closeable">
+					<p>{{ message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			{% endfor %}
+			<!-- Row -->
+			<div class="row">
+
+				<form id="settings" method="POST" name="personel" action="{{ url_for('setting.setting_personel') }}" enctype="multipart/form-data">
+					<input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+
+					<div class="col-xl-12">
+						<div class="dashboard-box margin-top-0">
+								<div class="headline">
+									<h3><i class="icon-material-outline-account-circle"></i>Şirket Profili</h3>
+								</div>
+							<div class="content with-padding padding-bottom-0">
+
+								<div class="row">
+
+									<div class="col-auto">
+										<div class="avatar-wrapper" data-tippy-placement="bottom" title="Resminizi değiştirin">
+											<img class="profile-pic" src="{{ url_for('static', filename="images/"+current_user.profile_picture) }}" alt="" />
+											<div class="upload-button"></div>
+											<input class="file-upload" type="file" name="file"/>
+										</div>
+									</div>
+
+									<div class="col">
+										<div class="row">
+
+											<div class="col-xl-6">
+												<div class="submit-field">
+													<h5>Şirket Adı</h5>
+													<input type="text" name="name" class="with-border" value="{{ current_user.name }}">
+												</div>
+											</div>
+
+											<div class="col-xl-6">
+												<div class="submit-field">
+													<h5>Çalışan Sayısı</h5>
+													<input type="text" name="surname"class="with-border" value="{{ current_user.surname }}">
+												</div>
+											</div>
+
+											<div class="col-xl-6">
+												<div class="submit-field">
+													<h5>Kuruluş Tarihi</h5>
+													<input type="tel" name="phone_number" class="with-border" value="{{ current_user.phone_number }}">
+												</div>
+											</div>
+
+											<div class="col-xl-6">
+												<div class="submit-field">
+													<h5>Website</h5>
+													<input type="text" name="email" class="with-border" value="{{ current_user.email }}">
+												</div>
+												<button class="button personel" type="submit"><i class="icon-feather-save"></i> Kaydet</button>
+											</div>
+
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</form>
+
+					<!-- Dashboard Box -->
+					<div class="col-xl-12">
+						<div class="dashboard-box">
+
+							<div class="headline" name="collapse" style="cursor: pointer;">
+								<h3><i class="icon-material-outline-face"></i>Şirket Detayları</h3>
+							</div>
+
+							<div class="content" style="display: none;">
+								<ul class="fields-ul">
+									<li>
+										<div class="row">
+											<div class="col-xl-4">
+												<div class="submit-field">
+													<h5>Sektör</h5>
+													<select id="field_of_work" class="selectpicker with-border" data-size="7" title="Çalışma alanınız" data-live-search="true" value="">
+														{% for key, value in categories.items() %}
+															{% if current_user.field_of_work == key %}
+																<option value="{{ key }}" selected>{{ value }}</option>
+															{% else %}
+																<option value="{{ key }}">{{ value }}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+											<div class="col-xl-4">
+												<div class="submit-field">
+													<h5>Kısaca Şirketiniz</h5>
+													<input type="text" id="tagline" class="with-border" value="{{ current_user.tagline }}" placeholder="ör. web tasarımcı + seo uzmanı">
+												</div>
+											</div>
+
+											<div class="col-xl-4">
+												<div class="submit-field">
+													<h5>Şehir</h5>
+													<select id="province" class="selectpicker with-border" data-size="7" title="Şehir seçiniz" data-live-search="true" value="{{ current_user.province }}">
+														{% for key, value in cities.items() %}
+															{% if current_user.province == key %}
+																<option value="{{ key }}" selected>{{ value }}</option>
+															{% else %}
+																<option value="{{ key }}">{{ value }}</option>
+															{% endif %}
+														{% endfor %}
+													</select>
+												</div>
+											</div>
+
+											<div class="col-xl-12">
+												<div class="submit-field">
+													<h5>Şirketinizi Tanıtın</h5>
+												</div>
+												<div class="submit-field" id="editor3">
+													{{ current_user.introduction|safe }}
+												</div>
+												<input type='hidden' name="description" id="profileQuill" value=""/>
+												<a class="button saveSetting" data="profile"><i class="icon-feather-save"></i> Kaydet</a>
+											</div>
+
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<!-- Dashboard Box -->
+					<div class="col-xl-12">
+						<div class="dashboard-box">
+
+								<div class="headline" name="collapse" style="cursor: pointer;">
+									<h3><i class="icon-material-outline-lock"></i> Şifre & Guvenlik</h3>
+								</div>
+							<div class="content with-padding" style="display: none;">
+								<div class="row">
+									<div class="col-xl-4">
+										<div class="submit-field">
+											<h5>Şuanki şifreniz</h5>
+											<input id="password" type="password" class="with-border">
+										</div>
+									</div>
+
+									<div class="col-xl-4">
+										<div class="submit-field">
+											<h5>Yeni şifreniz</h5>
+											<input id="new_password" type="password" class="with-border">
+										</div>
+									</div>
+
+									<div class="col-xl-4">
+										<div class="submit-field">
+											<h5>Yeni şifre tekrar</h5>
+											<input id="confirm_password" type="password" class="with-border">
+										</div>
+										<a class="button saveSetting" data="security"><i class="icon-feather-save"></i> Kaydet</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+			</div>
+
+			<!-- Row / End -->
+
+			<!-- Footer -->
+			<div class="dashboard-footer-spacer"></div>
+			<div class="small-footer margin-top-15">
+				<div class="small-footer-copyrights">
+					© 2020 <strong>Jobby</strong>. Butun Hakları Saklıdır.
+				</div>
+				<ul class="footer-social-links">
+					<li>
+						<a href="#" title="Facebook" data-tippy-placement="top">
+							<i class="icon-brand-facebook-f"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="Twitter" data-tippy-placement="top">
+							<i class="icon-brand-twitter"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="Google Plus" data-tippy-placement="top">
+							<i class="icon-brand-google-plus-g"></i>
+						</a>
+					</li>
+					<li>
+						<a href="#" title="LinkedIn" data-tippy-placement="top">
+							<i class="icon-brand-linkedin-in"></i>
+						</a>
+					</li>
+				</ul>
+				<div class="clearfix"></div>
+			</div>
+			<!-- Footer / End -->
+
+		</div>
+	</div>
+	<!-- Dashboard Content / End -->
+
+</div>
+<!-- Dashboard Container / End -->
+
+</div>
+<!-- Wrapper / End -->
+
+
+<!-- Scripts
+================================================== -->
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
+<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
+<script type="text/javascript" src="/static/js/custom.js?u={{ last_updated }}"></script>
+<script type="text/javascript" src="/static/js/collapse.js?u={{ last_updated }}"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+// Snackbar for user status switcher
+$('#snackbar-user-status label').click(function() {
+	Snackbar.show({
+		text: 'Statunuz değiştirildi!',
+		pos: 'bottom-center',
+		showAction: false,
+		actionText: "Dismiss",
+		duration: 3000,
+		textColor: '#fff',
+		backgroundColor: '#383838'
+	});
+});
+</script>
+
+<script>
+
+	var toolbarOptions = [
+		['bold', 'italic', 'underline', 'link'],
+		[{'list': 'ordered'}, {'list': 'bullet'}]
+	];
+
+  var quill = new Quill('#editor', {
+    theme: 'snow',
+		modules: {
+			toolbar: toolbarOptions
+		}
+  });
+
+	var quill2 = new Quill('#editor2', {
+    theme: 'snow',
+		modules: {
+			toolbar: toolbarOptions
+		}
+  });
+
+	var quill3 = new Quill('#editor3', {
+    theme: 'snow',
+		modules: {
+			toolbar: toolbarOptions
+		}
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165052270-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-165052270-1');
+</script>
+<script data-ad-client="ca-pub-6285960755576892" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Jobby</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- CSS
+================================================== -->
+<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+
+</head>
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+<!-- Header Container
+================================================== -->
+{% include 'header.html' %}
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+
+
+<!-- Titlebar
+================================================== -->
+{% for message in get_flashed_messages() %}
+	<div class="notification success closeable">
+		<p>{{ message }}</p>
+		<a class="close" href="#"></a>
+	</div>
+{% endfor %}
+<div class="single-page-header freelancer-header" data-background-image="images/single-freelancer.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="single-page-header-inner">
+					<div class="left-side">
+						<div class="header-image freelancer-avatar"><img src="{{ url_for('static', filename="images/"+user.profile_picture) }}" alt=""></div>
+						<div class="header-details">
+							<h3>{{ user }} <span>{{ user.tagline }}</span></h3>
+							<ul>
+								{% if user.rating == 0 %}
+									<span class="company-not-rated">Puanı yok</span>
+								{% else %}
+									<li><div class="star-rating inline-stars" data-rating="{{ user.rating }}"></div></li>
+								{% endif %}
+								<li><i class="icon-material-outline-location-on"></i> {{ user.province }}</li>
+								<li><div class="verified-badge-with-title">Onaylandı</div></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Page Content
+================================================== -->
+
+<div class="container">
+	<div class="row">
+
+		<!-- Content -->
+		<div class="col-xl-8 col-lg-8 content-right-offset">
+
+			<!-- Page Content -->
+			<div class="single-page-section">
+				<h3 class="margin-bottom-25">Hakkımda</h3>
+				{{ user.introduction|safe }}
+			</div>
+
+			<!-- Boxed List -->
+			<div class="boxed-list margin-bottom-60">
+				<div class="boxed-list-headline">
+					<h3><i class="icon-material-outline-thumb-up"></i>Çalışma Geçmişi</h3>
+				</div>
+				<ul class="boxed-list-ul">
+					{% for rv in reviews %}
+						<li>
+							<div class="boxed-list-item">
+								<!-- Content -->
+								<div class="item-content">
+									<h4>{{ rv.reviewed }}</h4>
+									<div class="item-details margin-top-10">
+										<div class="star-rating" data-rating="{{ rv.rating }}"></div>
+										<div class="detail-item"><i class="icon-feather-user"></i> {{ rv.reviewed_emp }}</div>
+									</div>
+									<div class="item-description">
+										<p>{{ rv.body }}</p>
+									</div>
+								</div>
+							</div>
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<!-- Boxed List / End -->
+
+			<!-- Boxed List -->
+			<div class="boxed-list margin-bottom-60">
+				<div class="boxed-list-headline">
+					<h3><i class="icon-material-outline-business"></i> İş Deneyimi</h3>
+				</div>
+				<ul class="boxed-list-ul">
+					{% if workExps %}
+						{% for workExp in workExps %}
+							<li>
+							<div class="boxed-list-item">
+								<div class="item-content">
+									<h4>{{ workExp }}</h4>
+									<div class="item-details margin-top-7">
+										<div class="detail-item"><i class="icon-material-outline-business"></i> {{ workExp.company }}</a></div>
+										<div class="detail-item"><i class="icon-material-outline-date-range"></i> {{ workExp.start_month }} {{ workExp.start_year }} - {{ workExp.end_month }} {{ workExp.end_year }}</div>
+									</div>
+									<div class="item-description">
+										<p>{{ workExp.description|safe }}</p>
+									</div>
+								</div>
+							</div>
+						</li>
+						{% endfor %}
+					{% else %}
+						<div class="notification notice closeable">
+							{% if current_user == user %}
+								<p>İş deneyimi bilgisi eklemediniz. Eklemek için <a href="{{ url_for('setting.setting_page') }}"><b>tıklayın</b></a></p>
+							{% else %}
+								<p>Çalışma bilgisi bulunmuyor</p>
+							{% endif %}
+							<a class="close"></a>
+						</div>
+					{% endif %}
+				</ul>
+			</div>
+
+			<div class="boxed-list margin-bottom-60">
+				<div class="boxed-list-headline">
+					<h3><i class="icon-material-outline-school"></i> Eğitim Durumu</h3>
+				</div>
+				<ul class="boxed-list-ul">
+					{% if edus %}
+						{% for edu in edus %}
+							<li>
+								<div class="boxed-list-item">
+									<div class="item-content">
+										<h4>{{ edu }}</h4>
+										<div class="item-details margin-top-7">
+											<div class="detail-item"><a href="#"><i class="icon-material-outline-business"></i> {{ edu.school }}</a></div>
+											<div class="detail-item"><i class="icon-material-outline-date-range"></i> {{ edu.start_month }} {{ edu.start_year }} - {{ edu.end_month }} {{ edu.end_year }}</div>
+										</div>
+										<div class="item-description">
+											<p>{{ edu.description|safe }}</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						{% endfor %}
+					{% else %}
+						<div class="notification notice closeable">
+							{% if current_user == user %}
+								<p>Eğitim bilgisi eklemediniz. Eklemek için <a href="{{ url_for('setting.setting_page') }}"><b>tıklayın</b></a></p>
+							{% else %}
+								<p>Eğitim bilgisi bulunmuyor</p>
+							{% endif %}
+							<a class="close"></a>
+						</div>
+					{% endif %}
+				</ul>
+			</div>
+			<!-- Boxed List / End -->
+		</div>
+		<!-- Sidebar -->
+		<div class="col-xl-4 col-lg-4">
+			<div class="sidebar-container">
+
+				<!-- Profile Overview -->
+				<div class="profile-overview">
+					<div class="overview-item"><strong>{{ user.member_since.strftime('%d:%m:%Y') }}</strong><span>Uye oldu</span></div>
+				</div>
+
+				<!-- Button -->
+				<a href="#small-dialog" class="apply-now-button popup-with-zoom-anim margin-bottom-50">Teklif Sun <i class="icon-material-outline-arrow-right-alt"></i></a>
+
+				<!-- Freelancer Indicators -->
+				<div class="sidebar-widget">
+					<div class="freelancer-indicators">
+
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>%{{ user.recom() }} ({{ user.total_reviews() }})</strong>
+							<div class="indicator-bar" data-indicator-percentage="{{ user.recom() }}"><span></span></div>
+							<span>Tavsiye</span>
+						</div>
+
+						<!-- Indicator -->
+						<div class="indicator">
+							<strong>%{{ user.intime() }} ({{ user.total_reviews() }})</strong>
+							<div class="indicator-bar" data-indicator-percentage="{{ user.intime() }}"><span></span></div>
+							<span>Zamanında bitti</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Widget -->
+				<div class="sidebar-widget">
+					<h3>Yetenekler</h3>
+					<div class="task-tags">
+						{% for s in sk %}
+						<span>{{ s }}</span>
+						{% endfor %}
+					</div>
+				</div>
+
+				<!-- Sidebar Widget -->
+				<div class="sidebar-widget">
+					<h3>Kaydet veya Paylaş</h3>
+
+					<!-- Bookmark Button -->
+					{% if current_user.is_authenticated and current_user.is_marked_user(user) %}
+					<button id="bookmark" data="{{ user.id }}" data-type="1" class="bookmark-button margin-bottom-25 bookmarked">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">Kaydet</span>
+						<span class="bookmarked-text">Kaydedildi</span>
+					</button>
+					{% else %}
+					<button id="bookmark" data="{{ user.id }}" data-type="1" class="bookmark-button margin-bottom-25">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">Kaydet</span>
+						<span class="bookmarked-text">Kaydedildi</span>
+					</button>
+					{% endif %}
+					<!-- Copy URL -->
+					<div class="copy-url">
+						<input id="copy-url" type="text" value="" class="with-border">
+						<button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url" title="kopyala" data-tippy-placement="top"><i class="icon-material-outline-file-copy"></i></button>
+					</div>
+
+					<!-- Share Buttons -->
+					<div class="share-buttons margin-top-25">
+						<div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>
+						<div class="share-buttons-content">
+							<span>ilginç? <strong>Paylaş!</strong></span>
+							<ul class="share-buttons-icons">
+								<li><a href="#" data-button-color="#3b5998" title="Share on Facebook" data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
+								<li><a href="#" data-button-color="#1da1f2" title="Share on Twitter" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
+								<li><a href="#" data-button-color="#dd4b39" title="Share on Google Plus" data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a></li>
+								<li><a href="#" data-button-color="#0077b5" title="Share on LinkedIn" data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- Spacer -->
+<div class="margin-top-15"></div>
+<!-- Spacer / End-->
+
+<!-- Footer
+================================================== -->
+{% include 'footer.html' %}
+<!-- Footer / End -->
+
+</div>
+<!-- Wrapper / End -->
+
+
+<!-- Make an Offer Popup
+================================================== -->
+<div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
+
+	<!--Tabs -->
+	<div class="sign-in-form">
+
+		<ul class="popup-tabs-nav">
+			<li><a href="#tab">Teklif Sun</a></li>
+		</ul>
+
+		{% if current_user == user %}
+		<div class="popup-tabs-container">
+
+			<!-- Tab -->
+			<div class="popup-tab-content" id="tab">
+
+				<!-- Welcome Text -->
+				<div class="welcome-text">
+					<h3>Bu sizin sayfanız</h3>
+					<p>İşverenler buradan sizinle direkt olarak temas kurup proje teklif edebilirler. Projelerin daha yayınlanmadan, sadece size özel olarak sunulması profilinizdeki bilgilerin çokluğuyla orantılıdır. <strong>İş deneyimi</strong> ve/veya <strong>Eğitim durumu</strong> kısmını doldurmayı unutmayın.</p>
+				</div>
+
+			</div>
+		</div>
+		{% else %}
+			<div class="popup-tabs-container">
+
+				<!-- Tab -->
+				<div class="popup-tab-content" id="tab">
+
+					<!-- Welcome Text -->
+					<div class="welcome-text">
+						<h3>Projeni {{ user }} ile konuş</h3>
+					</div>
+
+					<!-- Form -->
+					<form method="post" action="{{ url_for('public.freelancer', user_id= user.id) }}" enctype="multipart/form-data">
+						<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
+
+						<div class="input-with-icon-left">
+							<i class="icon-material-outline-account-circle"></i>
+							<input type="text" class="input-text with-border" name="subject" id="subject" placeholder="Konu" required/>
+						</div>
+
+						<textarea name="message" cols="10" placeholder="Mesajınız" class="with-border" required></textarea>
+
+						<div class="uploadButton margin-top-25">
+							<input class="uploadButton-input" type="file" name="file" accept="image/*, application/pdf" id="upload" multiple/>
+							<label class="uploadButton-button ripple-effect" for="upload">Eklentiler</label>
+							<span class="uploadButton-file-name">İzin verilen dosya uzantıları: zip, pdf, png, jpg, jpeg <br> En fazla: 50 MB.</span>
+						</div>
+
+						<button class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit">Teklif Sun <i class="icon-material-outline-arrow-right-alt"></i></button>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+	</div>
+</div>
+<!-- Make an Offer Popup / End -->
+
+<!-- Scripts
+================================================== -->
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
+<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+// Snackbar for user status switcher
+$('#snackbar-user-status label').click(function() {
+	Snackbar.show({
+		text: 'Statunuz değiştirildi!',
+		pos: 'bottom-center',
+		showAction: false,
+		actionText: "Dismiss",
+		duration: 3000,
+		textColor: '#fff',
+		backgroundColor: '#383838'
+	});
+});
+
+// Snackbar for "place a bid" button
+$('#snackbar-place-bid').click(function() {
+	Snackbar.show({
+		text: 'Your bid has been placed!',
+	});
+});
+
+
+// Snackbar for copy to clipboard button
+$('.copy-url-button').click(function() {
+	Snackbar.show({
+		text: 'Copied to clipboard!',
+	});
+});
+</script>
+
+</body>
+</html>

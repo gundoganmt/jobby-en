@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165052270-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-165052270-1');
+</script>
+<script data-ad-client="ca-pub-6285960755576892" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Jobby</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- CSS
+================================================== -->
+<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+
+</head>
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+<!-- Header Container
+================================================== -->
+{% include 'header.html' %}
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+<!-- Titlebar
+================================================== -->
+<div class="single-page-header" data-background-image="images/single-task.jpg">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="single-page-header-inner">
+					<div class="left-side">
+						{% if task.poster.status == 'employer' %}
+							<div class="header-image"><img src="{{ url_for('static', filename='images/'+task.poster.profile_picture) }}" alt=""></a></div>
+						{% else %}
+							<div class="header-image"><a href="{{ url_for('public.freelancer', user_id=task.poster.id)}}"><img src="{{ url_for('static', filename='images/'+task.poster.profile_picture) }}" alt=""></a></div>
+						{% endif %}
+
+						<div class="salary-box" id="smallSalaryBox">
+							<div class="salary-type">Proje Butçesi</div>
+							{% if not task.budget_max %}
+								<div class="salary-amount">Belirtilmemiş</div>
+							{% else %}
+								<div class="salary-amount">{{ task.budget_min }} TL - {{task.budget_max }} TL</div>
+							{% endif %}
+						</div>
+
+						<div class="header-details">
+							<h3>{{ task }}</h3>
+							<h5>İşveren Hakkında</h5>
+							<ul>
+								{% if task.poster.status == 'employer' %}
+									<li><i class="icon-material-outline-business"></i> {{ task.poster }}</a></li>
+								{% else %}
+									<li><a href="{{ url_for('public.freelancer', user_id=task.poster.id) }}"><i class="icon-material-outline-business"></i> {{ task.poster }}</a></li>
+								{% endif %}
+								<li> <i class="icon-material-outline-location-on"></i>{{ task.location }}</li>
+								<li><div class="verified-badge-with-title">Onaylandı</div></li>
+							</ul>
+						</div>
+					</div>
+					<div class="right-side">
+						<div class="salary-box" id="bigSalaryBox">
+							<div class="salary-type">Proje Butçesi</div>
+							{% if not task.budget_max %}
+								<div class="salary-amount">Belirtilmemiş</div>
+							{% else %}
+								<div class="salary-amount">{{ task.budget_min }} TL - {{task.budget_max }} TL</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+
+		<!-- Content -->
+		<div class="col-xl-8 col-lg-8 content-right-offset">
+
+			<!-- Description -->
+			<div class="single-page-section">
+				<h3 class="margin-bottom-25">Açıklama</h3>
+				{{ task.description|safe }}
+			</div>
+
+			<!-- Skills -->
+			<div class="single-page-section">
+				<h3>Gerekli Yetenekler</h3>
+				<div class="task-tags">
+					{% for s in sk %}
+					<span>{{ s }}</span>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="clearfix"></div>
+
+			<!-- Freelancers Bidding -->
+			<div class="boxed-list margin-bottom-60">
+				<div class="boxed-list-headline">
+					<h3><i class="icon-material-outline-group"></i> Teklif Verenler </h3>
+				</div>
+				<ul class="boxed-list-ul">
+					{% for bidder in taskbids %}
+						<li>
+						<div class="bid">
+							<!-- Avatar -->
+							<div class="bids-avatar">
+								<div class="freelancer-avatar">
+									<div class="verified-badge"></div>
+									<a href="{{ url_for('public.freelancer', user_id=bidder.bidder.id)}}"><img src="{{ url_for('static', filename='images/'+bidder.bidder.profile_picture) }}" alt=""></a>
+								</div>
+							</div>
+
+							<!-- Content -->
+							<div class="bids-content">
+								<!-- Name -->
+								<div class="freelancer-name">
+									<h4><a href="{{ url_for('public.freelancer', user_id=bidder.bidder.id)}}">{{ bidder.bidder }} </a></h4>
+									{% if bidder.bidder.rating == 0 %}
+										<span class="not-rated">Puanı yok</span>
+									{% else %}
+										<div class="star-rating" data-rating="{{ bidder.bidder.rating }}"></div>
+									{% endif %}
+								</div>
+							</div>
+
+							<!-- Bid -->
+							<div class="bids-bid">
+								<div class="bid-rate">
+									<div class="rate">{{ bidder.bid_amount }} TL</div>
+									<span>{{ bidder.num_delivery }} {{ bidder.type_delivery }}</span>
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+		</div>
+
+
+		<!-- Sidebar -->
+		<div class="col-xl-4 col-lg-4">
+			<div class="sidebar-container">
+				<div class="sidebar-widget">
+					<div class="job-overview">
+						<div class="job-overview-headline">İlan Detayı</div>
+						<div class="job-overview-inner">
+							<ul>
+								<li>
+									<i class="icon-material-outline-location-on"></i>
+									<span>Yer</span>
+									<h5>{{ task.location }}</h5>
+								</li>
+								<li>
+									<i class="icon-material-outline-business-center"></i>
+									<span>İlan Tipi</span>
+									<h5>Proje</h5>
+								</li>
+								<li>
+									<i class="icon-material-outline-local-atm"></i>
+									<span>Proje Butçesi</span>
+									{% if not task.budget_max %}
+										<h5>Belirtilmemiş</h5>
+									{% else %}
+										<h5>{{ task.budget_min }} TL - {{ task.budget_max }} TL</h5>
+									{% endif %}
+								</li>
+								<li>
+									<i class="icon-material-outline-access-time"></i>
+									<span>İlan Tarihi</span>
+									<h5>{{ task.time_posted.strftime('%d:%m:%Y') }}</h5>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				{% if current_user.is_anonymous %}
+					<form method="POST", action="{{ url_for('public.task_page', task_url= task.generate_task_link()) }}">
+						<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
+					<div class="sidebar-widget">
+						<div class="bidding-widget">
+							<div class="bidding-headline"><h3>Bu işe teklif ver!</h3></div>
+							<div class="bidding-inner">
+
+								<!-- Headline -->
+								<span class="bidding-detail"><strong>En duşuk ucretini belirle</strong></span>
+
+								<!-- Price Slider -->
+								{% if not task.budget_max %}
+									<div class="bidding-value"></div>
+									<input class="with-border" type="number" name="bid_amount" min="10" max="1000000" step="1" value="10">
+								{% else %}
+									<div class="bidding-value"><span id="biddingVal"></span>TL</div>
+									<input class="bidding-slider" name="bid_amount" type="text" value="" data-slider-handle="custom" data-slider-currency="TL" data-slider-min="{{ task.budget_min }}" data-slider-max="{{ task.budget_max }}" data-slider-value="auto" data-slider-step="10" data-slider-tooltip="hide" />
+								{% endif %}
+								<!-- Headline -->
+								<span class="bidding-detail margin-top-30"><strong>Tamamlama sureni belirle</strong></span>
+
+								<!-- Fields -->
+								<div class="bidding-fields">
+									<div class="bidding-field">
+										<!-- Quantity Buttons -->
+										<div class="qtyButtons">
+											<div class="qtyDec"></div>
+											<input type="number" name="qtyInput" min="1" max="1000" step="1" value="1">
+											<div class="qtyInc"></div>
+										</div>
+									</div>
+									<div class="bidding-field">
+										<select name="time" class="selectpicker default">
+											<option selected>Gun</option>
+											<option>Saat</option>
+										</select>
+									</div>
+								</div>
+								<textarea id="bidmessage" name="message" cols="10" placeholder="Bu işe neden uygunsunuz?" class="with-border"></textarea>
+								<button id="place-bid" class="button ripple-effect move-on-hover full-width margin-top-30"><span>Teklifini Ver</span></button>
+							</div>
+						</form>
+							<div class="bidding-signup">Hesabınız yok mu? <a href="{{ url_for('account.signup') }}" >Kaydol</a></div>
+						</div>
+					</div>
+				{% else %}
+					{% if current_user.id != task.user_id and not current_user.is_bidder(task) %}
+					<form method="POST", action="{{ url_for('public.task_page', task_url= task.generate_task_link()) }}">
+						<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
+					<div class="sidebar-widget">
+						<div class="bidding-widget">
+							{% for message in get_flashed_messages() %}
+							<div class="notification error closeable">
+								<p>{{ message }}</p>
+								<a class="close" href="#"></a>
+							</div>
+							{% endfor %}
+							<div class="bidding-headline"><h3>Bu işe teklif ver!</h3></div>
+							<div class="bidding-inner">
+
+								<!-- Headline -->
+								<span class="bidding-detail"><strong>En duşuk ucretini belirle</strong></span>
+
+								<!-- Price Slider -->
+								<div class="bidding-value"><span></span></div>
+								{% if not task.budget_max %}
+									<div class="bidding-value"></div>
+									<input class="with-border" type="number" name="bid_amount" min="10" max="1000000" step="1" value="10">
+								{% else %}
+									<div class="bidding-value"><span id="biddingVal"></span>TL</div>
+									<input class="bidding-slider" name="bid_amount" type="text" value="" data-slider-handle="custom" data-slider-currency="TL" data-slider-min="{{ task.budget_min }}" data-slider-max="{{ task.budget_max }}" data-slider-value="auto" data-slider-step="10" data-slider-tooltip="hide" />
+								{% endif %}
+								<!-- Headline -->
+								<span class="bidding-detail margin-top-30"><strong>Tamamlama sureni belirle</strong></span>
+
+								<!-- Fields -->
+								<div class="bidding-fields">
+									<div class="bidding-field">
+										<!-- Quantity Buttons -->
+										<div class="qtyButtons">
+											<div class="qtyDec"></div>
+											<input type="text" name="qtyInput" value="1">
+											<div class="qtyInc"></div>
+										</div>
+									</div>
+									<div class="bidding-field">
+										<select name="time" class="selectpicker default">
+											<option selected>Gun</option>
+											<option>Saat</option>
+										</select>
+									</div>
+								</div>
+								<textarea id="bidmessage" name="message" cols="10" placeholder="Bu işe neden uygunsunuz?" class="with-border"></textarea>
+								<button id="snackbar-place-bid" class="button ripple-effect move-on-hover full-width margin-top-30"><span>Teklifini Ver</span></button>
+							</div>
+						</form>
+						</div>
+					</div>
+					{% endif %}
+				{% endif %}
+
+
+
+				{% if current_user.is_authenticated and current_user.is_bidder(task) %}
+					<div class="notification success closeable">
+						<h4>Bu işe teklif verdiniz!</h4>
+						<a class="close" href="#"></a>
+					</div>
+				{% endif %}
+
+				<!-- Sidebar Widget -->
+				<div class="sidebar-widget">
+					<h3>Kaydet ve Paylaş</h3>
+
+					<!-- Bookmark Button -->
+
+					{% if current_user.is_authenticated and current_user.is_marked_task(task) %}
+					<button id="bookmark" data="{{ task.id }}" data-type="0" class="bookmark-button margin-bottom-25 bookmarked">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">kaydet</span>
+						<span class="bookmarked-text">Kaydedildi</span>
+					</button>
+					{% else %}
+					<button id="bookmark" data="{{ task.id }}" data-type="0" class="bookmark-button margin-bottom-25">
+						<span class="bookmark-icon"></span>
+						<span class="bookmark-text">Kaydet</span>
+						<span class="bookmarked-text">Kaydedildi</span>
+					</button>
+					{% endif %}
+
+					<!-- Copy URL -->
+					<div class="copy-url">
+						<input id="copy-url" type="text" value="" class="with-border">
+						<button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url" title="Kopyala" data-tippy-placement="top"><i class="icon-material-outline-file-copy"></i></button>
+					</div>
+
+					<!-- Share Buttons -->
+					<div class="share-buttons margin-top-25">
+						<div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>
+						<div class="share-buttons-content">
+							<span>İlginç mi? <strong>Paylaş!</strong></span>
+							<ul class="share-buttons-icons">
+								<li><a href="#" data-button-color="#3b5998" title="Share on Facebook" data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
+								<li><a href="#" data-button-color="#1da1f2" title="Share on Twitter" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
+								<li><a href="#" data-button-color="#dd4b39" title="Share on Google Plus" data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a></li>
+								<li><a href="#" data-button-color="#0077b5" title="Share on LinkedIn" data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- Spacer -->
+<div class="margin-top-15"></div>
+<!-- Spacer / End-->
+
+<!-- Footer
+================================================== -->
+{% include 'footer.html' %}
+<!-- Footer / End -->
+
+</div>
+<!-- Wrapper / End -->
+
+<!-- Scripts
+================================================== -->
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
+<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
+<script type="text/javascript" src="/static/js/custom.js?u={{ last_updated }}"></script>
+<script type="text/javascript" src="/static/js/validateBid.js?u={{ last_updated }}"></script>
+
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+// Snackbar for user status switcher
+$('#snackbar-user-status label').click(function() {
+	Snackbar.show({
+		text: 'Statunuz değiştirildi!',
+		pos: 'bottom-center',
+		showAction: false,
+		actionText: "Dismiss",
+		duration: 3000,
+		textColor: '#fff',
+		backgroundColor: '#383838'
+	});
+});
+
+// Snackbar for copy to clipboard button
+$('.copy-url-button').click(function() {
+	Snackbar.show({
+		text: 'Kopyalandı!',
+	});
+});
+</script>
+
+</body>
+</html>

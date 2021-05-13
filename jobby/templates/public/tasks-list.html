@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165052270-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-165052270-1');
+</script>
+<script data-ad-client="ca-pub-6285960755576892" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+<!-- Basic Page Needs
+================================================== -->
+<title>Jobby</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+<!-- CSS
+================================================== -->
+<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+
+</head>
+<body class="gray">
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+<!-- Header Container
+================================================== -->
+{% include 'header.html' %}
+<div class="clearfix"></div>
+<!-- Header Container / End -->
+
+<!-- Spacer -->
+<div class="margin-top-50"></div>
+<!-- Spacer / End-->
+
+<!-- Page Content
+================================================== -->
+<div class="container">
+	<div class="row">
+		<div class="col-xl-3 col-lg-4" id="filterForm">
+			<div class="sidebar-container">
+
+				<!-- Location -->
+				<div class="sidebar-widget">
+					<h3>Yer</h3>
+					<div class="input-with-icon">
+						<div id="autocomplete-container" style="border: 1px solid #ccc;">
+							{% if location %}
+								<input id="autocomplete-input" type="text" value="{{ location }}">
+							{% else %}
+								<input id="autocomplete-input" type="text" placeholder="Yer">
+							{% endif %}
+						</div>
+						<i class="icon-material-outline-location-on"></i>
+					</div>
+				</div>
+
+				<!-- Category -->
+				<div class="sidebar-widget">
+					<h3>Kategori</h3>
+					<select name="category" class="selectpicker with-border" data-size="7" title="Hepsi" data-live-search="true">
+						{% for key, value in categories.items() %}
+							{% if ct == key %}
+								<option value="{{ key }}" selected>{{ value }}</option>
+							{% else %}
+								<option value="{{ key }}">{{ value }}</option>
+							{% endif %}
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- Keywords -->
+				<div class="sidebar-widget">
+					<h3>Anahtar Kelime</h3>
+					<div class="keywords-container">
+						<div class="keyword-input-container">
+							<input type="text" class="keyword-input" placeholder="ör. Web tasarım"/>
+							<button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
+						</div>
+						<div class="keywords-list"><!-- keywords go here --></div>
+						<div class="clearfix"></div>
+					</div>
+				</div>
+
+				<!-- Budget -->
+				<div class="sidebar-widget">
+					<h3>Proje Butçesi</h3>
+					<div class="margin-top-55"></div>
+
+					<!-- Range Slider -->
+					<input class="range-slider" type="text" value="" data-slider-currency="TL" data-slider-min="10" data-slider-max="2500" data-slider-step="25" data-slider-value="[50,2500]"/>
+				</div>
+
+				<button class="button ripple-effect" style="width: 100%;">Ara</button>
+
+			</div>
+		</div>
+		<div class="col-xl-9 col-lg-8 content-left-offset">
+
+			<h3 class="page-title">Arama Sonuçları</h3>
+
+			<div class="notify-box margin-top-15">
+				<div class="switch-container" id="filter">
+					<i class="icon-feather-filter"></i> filtrele
+				</div>
+				<div class="sort-by">
+					<span>Sırala:</span>
+					<select class="selectpicker hide-tick">
+						<option>İlgili</option>
+						<option>En yeni</option>
+						<option>En eski</option>
+						<option>Rastgele</option>
+					</select>
+				</div>
+			</div>
+			<!-- Tasks Container -->
+			<div class="tasks-list-container margin-top-35">
+				{% if tasks.items %}
+					{% for task in tasks.items %}
+					<!-- Task -->
+					<a href="{{ url_for('public.task_page', task_url=task.generate_task_link()) }}" class="task-listing">
+
+						<!-- Job Listing Details -->
+						<div class="task-listing-details">
+
+							<!-- Details -->
+							<div class="task-listing-description">
+								<h3 class="task-listing-title">{{ task.project_name }}</h3>
+								<ul class="task-icons">
+									<li><i class="icon-material-outline-location-on"></i> {{ task.location }}</li>
+									<li><i class="icon-material-outline-access-time"></i> {{ task.time_posted.strftime('%d:%m:%Y')}}</li>
+								</ul>
+								<div class="task-tags">
+									{% for skill in task.TSkills %}
+									<span>{{ skill }}</span>
+									{% endfor %}
+								</div>
+							</div>
+
+						</div>
+
+						<div class="task-listing-bid">
+							<div class="task-listing-bid-inner">
+								<div class="task-offers">
+									{% if not task.budget_max %}
+										<strong>Belirtilmemiş</strong>
+									{% else %}
+										<strong>{{ task.budget_min }} - {{ task.budget_max }}</strong>
+									{% endif %}
+									<span>Proje Butçesi</span>
+								</div>
+								<span class="button button-sliding-icon ripple-effect">Teklif Ver <i class="icon-material-outline-arrow-right-alt"></i></span>
+							</div>
+						</div>
+					</a>
+					{% endfor %}
+				{% else %}
+					<div class="notification error closeable">
+						<p>Aradığınız kriterlere uygun iş bulunmadı</p>
+						<a class="close"></a>
+					</div>
+				{% endif %}
+				<!-- Task -->
+
+				<!-- Pagination -->
+				<div class="clearfix"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<!-- Pagination -->
+						<div class="pagination-container margin-top-30 margin-bottom-60">
+							<nav class="pagination">
+								<ul>
+									{% if tasks.has_prev %}
+										<li class="pagination-arrow"><a href="{{ url_for('public.browseTasks', page=tasks.page-1) }}" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-left"></i></a></li>
+									{% endif %}
+									{% for page_num in tasks.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+										{% if page_num %}
+											{% if tasks.page == page_num %}
+												<li><a href="{{ url_for('public.browseTasks', page=page_num) }}" class="current-page ripple-effect">{{ page_num }}</a></li>
+											{% else %}
+												<li><a href="{{ url_for('public.browseTasks', page=page_num) }}" class="ripple-effect">{{ page_num }}</a></li>
+											{% endif %}
+										{% endif %}
+									{% endfor %}
+									{% if tasks.has_next %}
+									<li class="pagination-arrow"><a href="{{ url_for('public.browseTasks', page=tasks.page+1) }}" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a></li>
+									{% endif %}
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+				<!-- Pagination / End -->
+
+			</div>
+			<!-- Tasks Container / End -->
+
+		</div>
+	</div>
+</div>
+
+
+<!-- Footer
+================================================== -->
+{% include 'footer.html' %}
+<!-- Footer / End -->
+
+</div>
+<!-- Wrapper / End -->
+
+<!-- Scripts
+================================================== -->
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
+<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+
+<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
+<script>
+// Snackbar for user status switcher
+$('#snackbar-user-status label').click(function() {
+	Snackbar.show({
+		text: 'Statunuz değiştirildi!',
+		pos: 'bottom-center',
+		showAction: false,
+		actionText: "Dismiss",
+		duration: 3000,
+		textColor: '#fff',
+		backgroundColor: '#383838'
+	});
+});
+</script>
+
+<!-- Google Autocomplete -->
+<script>
+	function initAutocomplete() {
+		 var options = {
+		  types: ['(cities)'],
+		  // componentRestrictions: {country: "us"}
+		 };
+
+		 var input = document.getElementById('autocomplete-input');
+		 var autocomplete = new google.maps.places.Autocomplete(input, options);
+	}
+</script>
+
+<script type="text/javascript">
+	filter = document.getElementById('filter');
+	filterForm = document.getElementById('filterForm');
+	filter.addEventListener('click', () => {
+		filterForm.style.display = "block";
+	})
+</script>
+<!-- Google API & Maps -->
+<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
+<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
+
+</body>
+</html>
