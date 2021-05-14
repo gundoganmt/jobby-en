@@ -44,18 +44,19 @@ def confirm_email(token):
     flash('Tebrikler Email Adresiniz Doğrulandı!')
     return render_template('setting/settings.html')
 
-@account.route('/kaydol', methods=['GET','POST'])
+@account.route('/signup', methods=['GET','POST'])
 def signup():
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
-        email = request.form['register-email']
-        password = request.form['register-password']
-        account_type = request.form['radio_options']
+        name = request.form['name']
+        surname = request.form['surname']
+        email = request.form['email']
+        password = request.form['password']
         hashed_password = generate_password_hash(password, method='sha256')
         existing_user = Users.query.filter_by(email=email).first()
         if existing_user is None:
-            user = Users(email=email, password=hashed_password, member_since=datetime.utcnow(), status=account_type)
+            user = Users(name=name, surname=surname, email=email, password=hashed_password, member_since=datetime.utcnow(), status='employer')
             notif = Notification(notification_to=user, not_type=2)
             db.session.add(user)
             db.session.add(notif)
@@ -63,10 +64,10 @@ def signup():
             login_user(user)
             #send_confirmation_email(user)
             return render_template('account/welcome.html')
-        flash('Email adresi kullanılıyor')
-        return render_template('account/register.html')
+        flash('This email already being used!')
+        return render_template('account/signup.html')
 
-    return render_template('account/register.html')
+    return render_template('account/signup.html')
 
 @account.route('/logout')
 @login_required

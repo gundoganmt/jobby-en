@@ -165,6 +165,9 @@ class Users(UserMixin, db.Model):
     def is_offered(self):
         return Offers.query.filter_by(offered=self).count() > 0
 
+    def get_full_name(self):
+        return self.name + " " + self.surname
+
     def __repr__(self):
         return self.email
 

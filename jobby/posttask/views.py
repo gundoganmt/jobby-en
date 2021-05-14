@@ -51,4 +51,4 @@ def post_task():
         sk = Skills.query.all()
         if not current_user.email_approved:
             flash('Email adresiniz doğrulanmadı. İlan veremezsiniz!')
-        return render_template('post-a-task.html', sk=sk, last_updated=last_updated)
+        return render_template('tasks/post-a-task.html', sk=sk, last_updated=last_updated)

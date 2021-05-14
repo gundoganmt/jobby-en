@@ -28,14 +28,8 @@ def index():
         featured_tasks = Tasks.query.all()[:3]
         if current_user.is_authenticated:
             return render_template('public/index.html')
-        return render_template('public/landing.html', users=users, featured_tasks=featured_tasks, last_updated=last_updated)
+        return render_template('public/index.html', users=users, featured_tasks=featured_tasks, last_updated=last_updated)
         #return render_template('public/index.html')
-
-@public.route('/is-ilanlari/<job_url>', methods=['GET', 'POST'])
-def job_page(job_url):
-    job_id = job_url.split('-')[-1]
-    job = Jobs.query.filter_by(id=job_id).first_or_404()
-    return render_template("jobs/single-job-page.html", job=job)
 
 @public.route('/proje/<task_url>', methods=['GET', 'POST'])
 def task_page(task_url):
@@ -71,22 +65,9 @@ def task_page(task_url):
             flash('Teklif verebilmek için giriş yapmalısınız!')
             return redirect(url_for('account.login'))
 
-@public.route('/projeler')
+@public.route('/projects')
 def browseTasks():
-    with open("category.json") as category:
-        categories = json.load(category)
-    location = request.args.get('lc', type=str)
-    keyword = request.args.get('kw', type=str)
-    category = request.args.get('ct', type=str)
-    page = request.args.get('page', 1, type=int)
-    if location:
-        tasks = Tasks.query.filter_by(location=location).paginate(page=page, per_page=3)
-    elif category:
-        tasks = Tasks.query.filter_by(category=category).paginate(page=page, per_page=3)
-    else:
-        tasks = Tasks.query.paginate(page=page, per_page=5)
-    return render_template('public/tasks-list.html', tasks=tasks, last_updated=last_updated,
-        lc=location, ct=category, categories=categories)
+    return render_template('public/tasks-list.html')
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):
@@ -124,11 +105,7 @@ def freelancer(user_id):
 
 @public.route('/freelancers')
 def browseFreelancers():
-    with open("category.json") as category:
-        categories = json.load(category)
-    page = request.args.get('page', 1, type=int)
-    users = Users.query.filter_by(status='professional').paginate(page=page, per_page=3)
-    return render_template('public/candidates-list.html', users=users, last_updated=last_updated, categories=categories)
+    return render_template('public/freelancers-list.html')
 
 @public.app_errorhandler(404)
 def page_not_found(e):

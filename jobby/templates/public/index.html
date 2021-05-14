@@ -1,401 +1,714 @@
-<!doctype html>
-<html lang="en">
-<head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165052270-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+<!DOCTYPE html>
+    <html lang="en">
 
-  gtag('config', 'UA-165052270-1');
-</script>
-<script data-ad-client="ca-pub-6285960755576892" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- Basic Page Needs
-================================================== -->
-<title>Jobby</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <head>
+        <meta charset="utf-8" />
+        <title>Landrick - Saas & Software Landing Page Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
+        <meta name="keywords" content="Saas, Software, multi-uses, HTML, Clean, Modern" />
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <!-- Icons -->
+        <link href="{{ url_for('static', filename='css/index/materialdesignicons.min.css')}}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+        <!-- Slider -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/tiny-slider.css')}}"/>
+        <!-- Main Css -->
+        <link href="{{ url_for('static', filename='css/index/style.min.css')}}" rel="stylesheet" type="text/css" id="theme-opt" />
+        <link href="{{ url_for('static', filename='css/index/default.css')}}" rel="stylesheet" id="color-opt">
 
-<!-- CSS
-================================================== -->
-<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css')}}">
+    </head>
 
-</head>
-<body>
+    <body>
+        <!-- Loader -->
+        <!-- <div id="preloader">
+            <div id="status">
+                <div class="spinner">
+                    <div class="double-bounce1"></div>
+                    <div class="double-bounce2"></div>
+                </div>
+            </div>
+        </div> -->
+        <!-- Loader -->
 
-<!-- Wrapper -->
-<div id="wrapper">
+        {% include 'header-public.html' %}
 
-<!-- Header Container
-================================================== -->
-{% include 'header.html' %}
-<div class="clearfix"></div>
-<!-- Header Container / End -->
+        <!-- Hero Start -->
+        <section class="bg-half-170 pb-0 bg-light d-table w-100">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="title-heading text-center mt-4 mt-md-5 pt-md-5">
+                            <div class="alert alert-light alert-pills" role="alert">
+                                <span class="badge rounded-pill bg-success me-1">Start</span>
+                                <span class="content"> Fill job <a href="page-job-apply.html" class="text-primary">application</a> now !</span>
+                            </div>
+                            <h1 class="heading mb-3">Job Vacancies for <span class="text-primary typewrite" data-period="2000" data-type='[ "Freelancer", "Developer", "Designer", "UX Developer", "ios Developer" ]'> <span class="wrap"></span> </span></h1>
+                            <p class="para-desc mx-auto text-muted">Huge community of designers and developers ready for your project.</p>
+                            <form class="rounded p-4 mt-4 bg-white">
+                                <div class="row text-start">
+                                    <div class="col-lg-5 col-md-4">
+                                        <div class="mb-0">
+                                            <input type="text" class="form-control" required placeholder="Keywords">
+                                        </div>
+                                    </div><!--end col-->
 
-<!-- Intro Banner
-================================================== -->
-<!-- add class "disable-gradient" to enable consistent background overlay -->
-<div class="intro-banner" data-background-image="{{ url_for('static', filename='images/istanbul2.jpg') }}">
-	<div class="container">
+                                    <div class="col-lg-7 col-md-8">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4 mt-4 mt-sm-0">
+                                                <div class="mb-0">
+                                                    <select class="form-control custom-select">
+                                                        <option selected="">Location</option>
+                                                        <option value="AF">Afghanistan</option>
+                                                        <option value="AX">&Aring;land Islands</option>
+                                                        <option value="AL">Albania</option>
+                                                        <option value="DZ">Algeria</option>
+                                                        <option value="AS">American Samoa</option>
+                                                        <option value="AD">Andorra</option>
+                                                        <option value="AO">Angola</option>
+                                                        <option value="AI">Anguilla</option>
+                                                        <option value="AQ">Antarctica</option>
+                                                    </select>
+                                                </div>
+                                            </div><!--end col-->
 
-		<!-- Intro Headline -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="banner-headline">
-					<h3>
-						<strong>Alanında uzman binlerce <strong class="color">Profesyonel</strong> arasından işinize en uygun olanını bulun. Ya da profesyonel olarak çalışın. </strong>
-						<br>
-						<span>Binlerce işveren sizleri bekliyor <strong class="color">Jobby</strong> ile hayallerinizi gerçeğe dönuşturun</span>
-					</h3>
-				</div>
-			</div>
-		</div>
+                                            <div class="col-md-4 mt-4 mt-sm-0">
+                                                <div class="mb-0">
+                                                    <select class="form-control custom-select">
+                                                        <option selected="">Job Types</option>
+                                                        <option value="4">Accounting</option>
+                                                        <option value="1">IT & Software</option>
+                                                        <option value="3">Marketing</option>
+                                                        <option value="5">Banking</option>
+                                                    </select>
+                                                </div>
+                                            </div><!--end col-->
 
-		<!-- Search Bar -->
-		<form method="POST" action="{{ url_for('public.index') }}">
-			<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
-			<div class="row">
-			<div class="col-md-12">
-				<div class="intro-banner-search-form margin-top-95">
+                                            <div class="col-md-4 mt-4 mt-sm-0">
+                                                <div class="d-grid">
+                                                    <input type="submit" id="search" name="search" class="searchbtn btn btn-primary" value="Search">
+                                                </div>
+                                            </div><!--end col-->
+                                        </div><!--end row-->
+                                    </div> <!---end col-->
+                                </div><!--end row-->
+                            </form>
+                            <p class="text-muted mb-0 mt-4"><span class="text-dark">Keywords :</span> Web Developer, Web Designer, Php Developer, IOS Developer, etc...</p>
+                        </div>
+                    </div><!--end col-->
 
-					<!-- Search Field -->
-					<div class="intro-search-field with-autocomplete">
-						<label for="autocomplete-input" class="field-title ripple-effect">Yer?</label>
-						<div class="input-with-icon">
-							<input id="autocomplete-input" name="location" type="text" placeholder="ör. Online">
-							<i class="icon-material-outline-location-on"></i>
-						</div>
-					</div>
+                    <div class="col-12 mt-4 pt-3">
+                        <img src="images/job/home.png" class="img-fluid" alt="">
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
 
-					<!-- Search Field -->
-					<div class="intro-search-field">
-						<label for ="intro-keywords" class="field-title ripple-effect">Ne tur bir iş arıyorsun?</label>
-						<input id="intro-keywords"name="keyword" type="text" placeholder="ilan adı veya anahtar kelime">
-					</div>
+        <!-- Shape Start -->
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-white">
+                <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <!--Shape End-->
 
-					<!-- Button -->
-					<div class="intro-search-button">
-						<button type="submit" class="button ripple-effect">Ara </button>
-					</div>
-				</div>
-			</div>
-		</div>
-		</form>
-		<!-- Stats -->
-	</div>
-</div>
+        <!-- Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="section-title mb-4 pb-2">
+                            <h4 class="title mb-4">Popular Categories</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
 
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/1.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Communications</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-<!-- Content
-================================================== -->
-<!-- Category Boxes -->
-<div class="section margin-top-65">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12">
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/2.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Accounting</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-				<div class="section-headline centered margin-bottom-15">
-					<h3>Populer İş Kategorileri</h3>
-				</div>
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/3.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Restaurant</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-				<!-- Category Boxes Container -->
-				<div class="categories-container">
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/4.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Health</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='1')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-file-code-o"></i>
-						</div>
-						<div class="category-box-counter">612</div>
-						<div class="category-box-content">
-							<h3>Web Siteleri, BT ve Yazılım</h3>
-							<p>Yazılım Muhendisi, Web / Mobil Geliştirici & Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/5.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Finance</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='8')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-feather-truck"></i>
-						</div>
-						<div class="category-box-counter">113</div>
-						<div class="category-box-content">
-							<h3>Yukleme ve Nakliye</h3>
-							<p>Ev Taşıma, Yuk Taşıma, Vinç, Kepçe operatöru & Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/6.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Facilities</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='3')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-suitcase"></i>
-						</div>
-						<div class="category-box-counter">186</div>
-						<div class="category-box-content">
-							<h3>Temizlik İşleri</h3>
-							<p>Ev Temizliği & Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/7.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">HR</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='2')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-pencil"></i>
-						</div>
-						<div class="category-box-counter">298</div>
-						<div class="category-box-content">
-							<h3>Çeviri ve İçerik</h3>
-							<p>Yazar, Çevirmen, Editör ve Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="images/work/8.jpg" class="img-fluid" alt="">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Construction</a></li>
+                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='11')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-pie-chart"></i>
-						</div>
-						<div class="category-box-counter">549</div>
-						<div class="category-box-content">
-							<h3>Yerel İş ve Hizmetler</h3>
-							<p>Vinç, Kepçe operatörlugu & Fazlası</p>
-						</div>
-					</a>
+            <!-- Companies Start -->
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="section-title mb-4 pb-2">
+                            <h4 class="title mb-4">Featured Jobs</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='10')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-graduation-cap"></i>
-						</div>
-						<div class="category-box-counter">873</div>
-						<div class="category-box-content">
-							<h3>Eğitim & çalışma</h3>
-							<p>Özel Ders, Koç & Fazlası</p>
-						</div>
-					</a>
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Circleci.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Senior Web Developer</h4>
+                                    <p class="text-muted mb-0">London, UK</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='7')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-bullhorn"></i>
-						</div>
-						<div class="category-box-counter">125</div>
-						<div class="category-box-content">
-							<h3>Satış ve Dijital Pazarlama</h3>
-							<p>Sosyal Medya Uzmanı, Reklamcılık & Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Codepen.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Front-End Developer</h4>
+                                    <p class="text-muted mb-0">Brasilia, Brazil</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-					<!-- Category Box -->
-					<a href="{{ url_for('public.browseTasks', ct='4')}}" class="category-box">
-						<div class="category-box-icon">
-							<i class="icon-line-awesome-image"></i>
-						</div>
-						<div class="category-box-counter">445</div>
-						<div class="category-box-content">
-							<h3>Tasarım ve Mimari</h3>
-							<p>Logo Dizaynı, Grafik Dizaynı ve Fazlası</p>
-						</div>
-					</a>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Discord.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Back-End Developer</h4>
+                                    <p class="text-muted mb-0">Ottawa, Canada</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-				</div>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Eslint.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">UI Designer</h4>
+                                    <p class="text-muted mb-0">Beijing, China</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Category Boxes / End -->
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Gitlab.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">UX Designer</h4>
+                                    <p class="text-muted mb-0">Bogota, Colombia</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-<!-- Features Jobs -->
-<div class="section gray margin-top-45 padding-top-65 padding-bottom-75">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-12">
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Mg.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Php Developer</h4>
+                                    <p class="text-muted mb-0">Havana, Cuba</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-				<!-- Section Headline -->
-				<div class="section-headline margin-top-0 margin-bottom-35">
-					<h3>Seçilmiş İşler</h3>
-					<a href="{{ url_for('public.browseTasks') }}" class="headline-link">Hepsini Gör</a>
-				</div>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Sketch.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">IOS Developer</h4>
+                                    <p class="text-muted mb-0">Nicosia, Cyprus</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-				<!-- Jobs Container -->
-				<div class="listings-container compact-list-layout margin-top-35">
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Twilio.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Graphics Designer</h4>
+                                    <p class="text-muted mb-0">Cairo, Egypt</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-					{% for f in featured_tasks %}
-						<a href="{{ url_for('public.task_page', task_url=f.generate_task_link()) }}" class="job-listing with-apply-button">
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Udemy.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Data Entry</h4>
+                                    <p class="text-muted mb-0">Suva, Fiji</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-							<!-- Job Listing Details -->
-							<div class="job-listing-details">
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Webhooks.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Sketch Designer</h4>
+                                    <p class="text-muted mb-0">Helsinki, Finland</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-								<!-- Logo -->
-								<div class="job-listing-company-logo">
-									<img src="{{ url_for('static', filename='images/'+f.poster.profile_picture) }}" alt="">
-								</div>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Appdynamics.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Web Developer</h4>
+                                    <p class="text-muted mb-0">Berlin, Germany</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-								<!-- Details -->
-								<div class="job-listing-description">
-									<h3 class="job-listing-title">{{ f }}</h3>
+                    <div class="col-lg-4 col-md-6 col-12 mt-4 pt-2">
+                        <a href="page-job-detail.html">
+                            <div class="d-flex key-feature align-items-center p-3 rounded shadow">
+                                <img src="images/job/Gradle.svg" class="avatar avatar-ex-sm" alt="">
+                                <div class="flex-1 ms-3">
+                                    <h4 class="title mb-0 text-dark">Game Developer</h4>
+                                    <p class="text-muted mb-0">Ahmedabad, India</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div><!--end col-->
 
-									<!-- Job Listing Footer -->
-									<div class="job-listing-footer">
-										<ul>
-											<li><i class="icon-material-outline-business"></i> {{ f.poster}} <div class="verified-badge" title="Doğrulanmış işveren" data-tippy-placement="top"></div></li>
-											<li><i class="icon-material-outline-location-on"></i> {{ f.location }}</li>
-											<li><i class="icon-material-outline-business-center"></i> Proje</li>
-											<li><i class="icon-material-outline-access-time"></i> {{ f.time_posted.strftime('%d:%m:%Y') }}</li>
-										</ul>
-									</div>
-								</div>
+                    <div class="col-12 text-center mt-4 pt-2">
+                        <a href="page-jobs.html" class="btn btn-primary">See All Jobs <i class="uil uil-angle-right-b align-middle"></i></a>
+                    </div>
+                </div><!--end row-->
+            </div><!--end container-->
+            <!-- Companies End -->
 
-								<!-- Apply Button -->
-								<span class="list-apply-button ripple-effect">Teklif Ver</span>
-							</div>
-						</a>
-					{% endfor %}
-				</div>
-				<!-- Jobs Container / End -->
+            <!-- Candidates Start -->
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="section-title mb-4 pb-2">
+                            <h4 class="title mb-4">Expert Candidates</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
 
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Featured Jobs / End -->
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
+                        <div class="card team text-center border-0">
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <img src="images/client/01.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
+                                    <ul class="list-unstyled social-icon team-icon mb-0">
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                                    </ul><!--end icon-->
+                                </div>
+                                <div class="content pt-3 pb-3">
+                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Ronny Jofra</a></h5>
+                                    <small class="designation text-muted">Web Developer</small>
+                                    <h6 class="text-muted fw-normal">$ 2300</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-<!-- Highest Rated Freelancers -->
-<div class="section gray padding-top-65 padding-bottom-70 full-width-carousel-fix">
-	<div class="container">
-		<div class="row">
+                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
+                        <div class="card team text-center border-0">
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <img src="images/client/04.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
+                                    <ul class="list-unstyled social-icon team-icon mb-0">
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                                    </ul><!--end icon-->
+                                </div>
+                                <div class="content pt-3 pb-3">
+                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Micheal Carlo</a></h5>
+                                    <small class="designation text-muted">Web Designer</small>
+                                    <h6 class="text-muted fw-normal">$ 1950</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-			<div class="col-xl-12">
-				<!-- Section Headline -->
-				<div class="section-headline margin-top-0 margin-bottom-25">
-					<h3>En iyiler</h3>
-					<a href="{{ url_for('public.browseFreelancers') }}" class="headline-link">Hepsini gör</a>
-				</div>
-			</div>
+                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
+                        <div class="card team text-center border-0">
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <img src="images/client/02.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
+                                    <ul class="list-unstyled social-icon team-icon mb-0">
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                                    </ul><!--end icon-->
+                                </div>
+                                <div class="content pt-3 pb-3">
+                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Aliana Rosy</a></h5>
+                                    <small class="designation text-muted">IOS Developer</small>
+                                    <h6 class="text-muted fw-normal">$ 2540</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-			<div class="col-xl-12">
-				<div class="default-slick-carousel freelancers-container freelancers-grid-layout">
+                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
+                        <div class="card team text-center border-0">
+                            <div class="card-body">
+                                <div class="position-relative">
+                                    <img src="images/client/03.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
+                                    <ul class="list-unstyled social-icon team-icon mb-0">
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                                    </ul><!--end icon-->
+                                </div>
+                                <div class="content pt-3 pb-3">
+                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Sofia Razaq</a></h5>
+                                    <small class="designation text-muted">Php Developer</small>
+                                    <h6 class="text-muted fw-normal">$ 2190</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+            <!-- Candidates End -->
 
-					<!--Freelancer -->
-					{% for user in users %}
-					<div class="freelancer">
+            <!-- Testi start -->
+            <div class="container mt-100 mt-60">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <div class="section-title mb-4 pb-2">
+                            <h4 class="title mb-4">Candidates Review</h4>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
 
-						<!-- Overview -->
-						<div class="freelancer-overview">
-							<div class="freelancer-overview-inner">
+                <div class="row">
+                    <div class="col-12 mt-4 pt-2">
+                        <div class="tiny-three-item">
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/01.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" It seems that only fragments of the original text remain in the Lorem Ipsum texts used today. "</p>
+                                        <h6 class="text-primary">- Thomas Israel</h6>
+                                    </div>
+                                </div>
+                            </div>
 
-								<!-- Bookmark Icon -->
-								<span class="bookmark-icon"></span>
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/02.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" The most well-known dummy text is the 'Lorem Ipsum', which is said to have originated in the 16th century. "</p>
+                                        <h6 class="text-primary">- Carl Oliver</h6>
+                                    </div>
+                                </div>
+                            </div>
 
-								<!-- Avatar -->
-								<div class="freelancer-avatar">
-									<div class="verified-badge"></div>
-									<a href="{{ url_for('public.freelancer', user_id=user.id) }}"><img src="{{ url_for('static', filename='images/'+user.profile_picture) }}" alt=""></a>
-								</div>
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/03.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" One disadvantage of Lorum Ipsum is that in Latin certain letters appear more frequently than others. "</p>
+                                        <h6 class="text-primary">- Barbara McIntosh</h6>
+                                    </div>
+                                </div>
+                            </div>
 
-								<!-- Name -->
-								<div class="freelancer-name">
-									<h4><a href="{{ url_for('public.freelancer', user_id=user.id) }}">{{ user }} <img class="flag" data-tippy-placement="top"></a></h4>
-									<span>{{ user.tagline }}</span>
-								</div>
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/04.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" Thus, Lorem Ipsum has only limited suitability as a visual filler for German texts. "</p>
+                                        <h6 class="text-primary">- Jill Webb</h6>
+                                    </div>
+                                </div>
+                            </div>
 
-								<!-- Rating -->
-								<div class="freelancer-rating">
-									<div class="star-rating inline-stars" data-rating="5.0"></div>
-								</div>
-							</div>
-						</div>
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/05.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" There is now an abundance of readable dummy texts. These are usually used when a text is required. "</p>
+                                        <h6 class="text-primary">- Dean Tolle</h6>
+                                    </div>
+                                </div>
+                            </div>
 
-						<!-- Details -->
-						<div class="freelancer-details">
-							<div class="freelancer-details-list">
-								<ul>
-									<li>Yer <strong><i class="icon-material-outline-location-on"></i> {{ user.province }}</strong></li>
-									<li>Başarı Yuzdesi <strong>%95</strong></li>
-								</ul>
-							</div>
-							<a href="{{ url_for('public.freelancer', user_id=user.id) }}" class="button button-sliding-icon ripple-effect">Profili Gör <i class="icon-material-outline-arrow-right-alt"></i></a>
-						</div>
-					</div>
-					{% endfor %}
-					<!-- Freelancer / End -->
+                            <div class="tiny-slide">
+                                <div class="card client-testi border-0 text-center">
+                                    <div class="card-body">
+                                        <img src="images/client/06.jpg" class="img-fluid avatar avatar-small rounded-circle mx-auto shadow" alt="">
+                                        <p class="text-muted mt-4">" According to most sources, Lorum Ipsum can be traced back to a text composed by Cicero. "</p>
+                                        <h6 class="text-primary">- Christa Smith</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+            <div class="container pt-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-2 col-md-2 col-6 text-center">
+                        <img src="images/client/amazon.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
 
-				</div>
-			</div>
+                    <div class="col-lg-2 col-md-2 col-6 text-center">
+                        <img src="images/client/google.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
 
-		</div>
-	</div>
-</div>
-<!-- Highest Rated Freelancers / End-->
+                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
+                        <img src="images/client/lenovo.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
 
+                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
+                        <img src="images/client/paypal.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
 
-<!-- Footer
-================================================== -->
-{% include 'footer.html' %}
-<!-- Footer / End -->
+                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
+                        <img src="images/client/shopify.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
 
-</div>
-<!-- Wrapper / End -->
+                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
+                        <img src="images/client/spotify.svg" class="avatar avatar-ex-sm" alt="">
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+            <!-- Testi end -->
+        </section><!--end section-->
+        <!-- End -->
 
-<!-- Scripts
-================================================== -->
-<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
-<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+        <!-- Shape Start -->
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-light">
+                <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <!--Shape End-->
 
-<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
-<script>
-// Snackbar for user status switcher
-$('#snackbar-user-status label').click(function() {
-	Snackbar.show({
-		text: 'Statunuz değiştirildi!',
-		pos: 'bottom-center',
-		showAction: false,
-		actionText: "Dismiss",
-		duration: 3000,
-		textColor: '#fff',
-		backgroundColor: '#383838'
-	});
-});
-</script>
+        <!-- Footer Start -->
+        <footer class="footer bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
+                        <a href="#" class="logo-footer">
+                            <img src="images/logo-dark.png" height="24" alt="">
+                        </a>
+                        <p class="mt-4 text-muted">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        <ul class="list-unstyled social-icon social mb-0 mt-4">
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                        </ul><!--end icon-->
+                    </div><!--end col-->
 
+                    <div class="col-lg-2 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-dark footer-head">Company</h5>
+                        <ul class="list-unstyled footer-list mt-4">
+                            <li><a href="page-aboutus.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> About us</a></li>
+                            <li><a href="page-services.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Services</a></li>
+                            <li><a href="page-team.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Team</a></li>
+                            <li><a href="page-pricing.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Pricing</a></li>
+                            <li><a href="portfolio-modern-three.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Project</a></li>
+                            <li><a href="page-jobs.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Careers</a></li>
+                            <li><a href="page-blog-grid.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Blog</a></li>
+                            <li><a href="auth-cover-login.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Login</a></li>
+                        </ul>
+                    </div><!--end col-->
 
-<!-- Google Autocomplete -->
-<script>
-	function initAutocomplete() {
-		 var options = {
-		  types: ['(cities)'],
-		  // componentRestrictions: {country: "us"}
-		 };
+                    <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-dark footer-head">Usefull Links</h5>
+                        <ul class="list-unstyled footer-list mt-4">
+                            <li><a href="page-terms.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Terms of Services</a></li>
+                            <li><a href="page-privacy.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Privacy Policy</a></li>
+                            <li><a href="documentation.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Documentation</a></li>
+                            <li><a href="changelog.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Changelog</a></li>
+                            <li><a href="components.html" class="text-muted"><i class="uil uil-angle-right-b me-1"></i> Components</a></li>
+                        </ul>
+                    </div><!--end col-->
 
-		 var input = document.getElementById('autocomplete-input');
-		 var autocomplete = new google.maps.places.Autocomplete(input, options);
-	}
+                    <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-dark footer-head">Newsletter</h5>
+                        <p class="mt-4 text-muted">Sign up and receive the latest tips via email.</p>
+                        <form>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="foot-subscribe foot-white mb-3">
+                                        <label class="text-muted form-label">Write your email <span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="mail" class="fea icon-sm icons"></i>
+                                            <input type="email" name="email" id="emailsubscribe" class="form-control bg-light border ps-5 rounded" placeholder="Your email : " required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="d-grid">
+                                        <input type="submit" id="submitsubscribe" name="send" class="btn btn-primary" value="Subscribe">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </footer><!--end footer-->
+        <footer class="footer footer-bar">
+            <div class="container text-center">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="text-sm-start">
+                            <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> Landrick. Design with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in/" target="_blank" class="text-reset">Shreethemes</a>.</p>
+                        </div>
+                    </div><!--end col-->
 
-	// Autocomplete adjustment for homepage
-	if ($('.intro-banner-search-form')[0]) {
-	    setTimeout(function(){
-	        $(".pac-container").prependTo(".intro-search-field.with-autocomplete");
-	    }, 300);
-	}
+                    <div class="col-sm-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <ul class="list-unstyled text-sm-end mb-0">
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/american-ex.png" class="avatar avatar-ex-sm" title="American Express" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/discover.png" class="avatar avatar-ex-sm" title="Discover" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/master-card.png" class="avatar avatar-ex-sm" title="Master Card" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/paypal.png" class="avatar avatar-ex-sm" title="Paypal" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/visa.png" class="avatar avatar-ex-sm" title="Visa" alt=""></a></li>
+                        </ul>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </footer><!--end footer-->
+        <!-- Footer End -->
 
-</script>
+        <!-- Back to top -->
+        <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
+        <!-- Back to top -->
 
-<!-- Google API & Maps -->
-<!-- Geting an API Key: https://developers.google.com/maps/documentation/javascript/get-api-key -->
-<script src="https://maps.googleapis.com/maps/api/js?key=&libraries=places"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta2/js/bootstrap.bundle.min.js" integrity="sha512-43iShtbiyImxjjU4a9rhXBy7eKtIsrpll8xKhe1ghKqh5NyfME8phZs5JRFZpRBe1si44WM3tNmnqMym7JRmDQ==" crossorigin="anonymous"></script>        <!-- SLIDER -->
+        <script src="{{ url_for('static', filename='js/index/tiny-slider.js')}}"></script>
+        <!-- tobii js -->
+        <!-- Icons -->
+        <script src="{{ url_for('static', filename='js/index/feather.min.js')}}"></script>
+        <!-- Main Js -->
+        <script src="{{ url_for('static', filename='js/index/plugins.init.js')}}"></script><!--Note: All init js like tiny slider, counter, countdown, maintenance, lightbox, gallery, swiper slider, aos animation etc.-->
+        <script src="{{ url_for('static', filename='js/index/app.js')}}"></script><!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
 
-</body>
+    </body>
 </html>
