@@ -21,21 +21,31 @@
     </head>
 
     <body>
-        <!-- Loader -->
-        <!-- <div id="preloader">
-            <div id="status">
-                <div class="spinner">
-                    <div class="double-bounce1"></div>
-                    <div class="double-bounce2"></div>
-                </div>
-            </div>
-        </div> -->
-        <!-- Loader -->
 
         {% include 'header-public.html' %}
+        <section class="bg-half bg-light d-table w-100" style="padding: 120px 0 90px;">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 col-12">
+                        <div class="title-heading">
+                            <h1 class="fw-bold mt-2 mb-3">Hire the best freelancers for your need online</h1>
+                            <p class="para-desc text-muted">Whatever your needs, there will be a freelancer to get it done: from web design, mobile app development, logo design and more...</p>
+                            <div class="mt-4 pt-2">
+                                <a href="{{ url_for('posttask.post_task') }}" class="btn btn-primary me-2">Post Project</a>
+                                <a href="{{ url_for('account.login') }}" class="btn btn-outline-primary">Join Us</a>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0">
+                        <img src="{{ url_for('static', filename='images/brand.svg') }}" class="img-fluid d-block mx-auto" alt="">
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div> <!--end container-->
+        </section>
 
         <!-- Hero Start -->
-        <section class="bg-half-170 pb-0 bg-light d-table w-100">
+        <section class="bg-half-170 pb-0 bg-light d-table w-100" style="padding: 0;">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-10">
@@ -131,10 +141,10 @@
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                         <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/1.jpg" class="img-fluid" alt="">
+                            <img src="{{ url_for('static', filename='images/software.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Communications</a></li>
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Programming</a></li>
                                     <li class="h6 mb-0 jobs">125 Jobs</li>
                                 </ul>
                             </div>
@@ -143,10 +153,10 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                         <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/2.jpg" class="img-fluid" alt="">
+                            <img src="{{ url_for('static', filename='images/writing.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Accounting</a></li>
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Writing</a></li>
                                     <li class="h6 mb-0 jobs">125 Jobs</li>
                                 </ul>
                             </div>
@@ -155,10 +165,34 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                         <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/3.jpg" class="img-fluid" alt="">
+                            <img src="{{ url_for('static', filename='images/graphics.png')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Restaurant</a></li>
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Graphics & Design</a></li>
+                                    <li class="h6 mb-0 jobs">10 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="{{ url_for('static', filename='images/marketing.png')}}" class="img-fluid" style="height: 150px;">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Digital Marketing</a></li>
+                                    <li class="h6 mb-0 jobs">10 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="{{ url_for('static', filename='images/data.jpeg')}}" class="img-fluid" style="height: 150px;">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Data Science</a></li>
                                     <li class="h6 mb-0 jobs">125 Jobs</li>
                                 </ul>
                             </div>
@@ -167,11 +201,11 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                         <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/4.jpg" class="img-fluid" alt="">
+                            <img src="{{ url_for('static', filename='images/animation.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Health</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Video & Animation</a></li>
+                                    <li class="h6 mb-0 jobs">10 Jobs</li>
                                 </ul>
                             </div>
                         </div>
@@ -179,47 +213,23 @@
 
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
                         <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/5.jpg" class="img-fluid" alt="">
+                            <img src="{{ url_for('static', filename='images/lifestyle.jpg')}}" class="img-fluid" style="height: 150px;">
+                            <div class="card-body">
+                                <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Lifestyle</a></li>
+                                    <li class="h6 mb-0 jobs">15 Jobs</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
+                        <div class="card categories overflow-hidden rounded shadow border-0">
+                            <img src="{{ url_for('static', filename='images/finance.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
                                     <li><a href="javascript:void(0)" class="title h6 text-dark">Finance</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
-                        <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/6.jpg" class="img-fluid" alt="">
-                            <div class="card-body">
-                                <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Facilities</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
-                        <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/7.jpg" class="img-fluid" alt="">
-                            <div class="card-body">
-                                <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">HR</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
-                        <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="images/work/8.jpg" class="img-fluid" alt="">
-                            <div class="card-body">
-                                <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Construction</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
+                                    <li class="h6 mb-0 jobs">5 Jobs</li>
                                 </ul>
                             </div>
                         </div>

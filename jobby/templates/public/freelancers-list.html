@@ -21,16 +21,6 @@
     </head>
 
     <body>
-        <!-- Loader -->
-        <!-- <div id="preloader">
-            <div id="status">
-                <div class="spinner">
-                    <div class="double-bounce1"></div>
-                    <div class="double-bounce2"></div>
-                </div>
-            </div>
-        </div> -->
-        <!-- Loader -->
 
         {% include 'header-public.html' %}
 
@@ -207,258 +197,44 @@
 
                     <div class="col-lg-8 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <div class="row">
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
+                          {% for freelancer in freelancers %}
+                            <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
+                                <div class="candidate-list card rounded border-0 shadow">
+                                    <div class="card-body">
+                                        <ul class="list-unstyled align-items-center">
+                                            <li class="list-inline-item float-end"><a href="#" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
+                                            <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
+                                        </ul>
 
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
+                                        <div class="content text-center">
+                                            <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
+                                            <ul class="list-unstyled mb-1 mt-2">
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                            </ul>
+                                            <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
+                                            <p class="text-muted my-1">Front-end Developer</p>
 
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
+                                            <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
 
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <div class="col-lg-6 col-md-6 col-12 mt-4 pt-2">
-                              <div class="candidate-list card rounded border-0 shadow">
-                                  <div class="card-body">
-                                      <ul class="list-unstyled align-items-center">
-                                          <li class="list-inline-item float-end"><a href="javascript:void(0)" class="text-muted like"><i class="mdi mdi-heart h5 mb-0"></i></a></li>
-                                          <li class="list-inline-item"><span class="badge rounded-pill bg-soft-success">Featured</span></li>
-                                      </ul>
-
-                                      <div class="content text-center">
-                                          <img src="images/client/01.jpg" class="avatar avatar-md-md shadow-md rounded-circle" alt="">
-                                          <ul class="list-unstyled mb-1 mt-2">
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                              <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
-                                          </ul>
-                                          <a href="page-job-candidate.html" class="text-dark h5 name">Calvin Carlo</a>
-                                          <p class="text-muted my-1">Front-end Developer</p>
-
-                                          <span class="text-muted"><i class="uil uil-graduation-cap h4 mb-0 me-2 text-primary"></i>Experience <span class="text-success">3+ years</span></span>
-
-                                          <ul class="list-unstyled mt-3">
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                              <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
-                                          </ul>
-                                          <div class="d-grid">
-                                              <a href="page-job-candidate.html" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+                                            <ul class="list-unstyled mt-3">
+                                                <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
+                                                <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
+                                                <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
+                                                <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
+                                                <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
+                                            </ul>
+                                            <div class="d-grid">
+                                                <a href="{{ url_for('public.freelancer', user_id=freelancer.id)}}" class="btn btn-soft-primary">Read More <i class="uil uil-angle-right-b align-middle"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          {% endfor %}
                         </div><!--end row-->
 
                         <div class="row">
@@ -573,56 +349,6 @@
         <!-- Back to top -->
         <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
         <!-- Back to top -->
-
-        <!-- Style switcher -->
-        <div id="style-switcher" class="bg-light border p-3 pt-2 pb-2" onclick="toggleSwitcher()">
-            <div>
-                <h6 class="title text-center">Select Your Color</h6>
-                <ul class="pattern">
-                    <li class="list-inline-item">
-                        <a class="color1" href="javascript: void(0);" onclick="setColor('default')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color2" href="javascript: void(0);" onclick="setColor('green')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color3" href="javascript: void(0);" onclick="setColor('purple')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color4" href="javascript: void(0);" onclick="setColor('red')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color5" href="javascript: void(0);" onclick="setColor('skyblue')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color6" href="javascript: void(0);" onclick="setColor('skobleoff')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color7" href="javascript: void(0);" onclick="setColor('cyan')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color8" href="javascript: void(0);" onclick="setColor('slateblue')"></a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a class="color9" href="javascript: void(0);" onclick="setColor('yellow')"></a>
-                    </li>
-                </ul>
-
-                <h6 class="title text-center pt-3 mb-0 border-top">Theme Option</h6>
-                <ul class="text-center list-unstyled mb-0">
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-primary rtl-version t-rtl-light mt-2" onclick="setTheme('style-rtl')">RTL</a></li>
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-primary ltr-version t-ltr-light mt-2" onclick="setTheme('style')">LTR</a></li>
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-primary dark-rtl-version t-rtl-dark mt-2" onclick="setTheme('style-dark-rtl')">RTL</a></li>
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-primary dark-ltr-version t-ltr-dark mt-2" onclick="setTheme('style-dark')">LTR</a></li>
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-dark dark-version t-dark mt-2" onclick="setTheme('style-dark')">Dark</a></li>
-                    <li class="d-grid"><a href="javascript:void(0)" class="btn btn-sm btn-block btn-dark light-version t-light mt-2" onclick="setTheme('style')">Light</a></li>
-                </ul>
-            </div>
-            <div class="bottom">
-                <a href="javascript: void(0);" class="settings bg-white title-bg-dark shadow d-block"><i class="mdi mdi-cog ms-1 mdi-24px position-absolute mdi-spin text-primary"></i></a>
-            </div>
-        </div>
-        <!-- end Style switcher -->
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta2/js/bootstrap.bundle.min.js" integrity="sha512-43iShtbiyImxjjU4a9rhXBy7eKtIsrpll8xKhe1ghKqh5NyfME8phZs5JRFZpRBe1si44WM3tNmnqMym7JRmDQ==" crossorigin="anonymous"></script>        <!-- SLIDER -->
         <script src="{{ url_for('static', filename='js/index/tiny-slider.js')}}"></script>

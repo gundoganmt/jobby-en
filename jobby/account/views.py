@@ -17,18 +17,18 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
-        email = request.form['login-email']
-        password = request.form['login-password']
+        email = request.form['email']
+        password = request.form['password']
         user = Users.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for('public.index'))
             else:
-                flash('Email veya şifre yanlış')
+                flash('Wrong Credentials! Check your spelling.')
                 return render_template('account/login.html')
         else:
-            flash('Email veya şifre yanlış')
+            flash('Wrong Credentials! Check your spelling.')
             return render_template('account/login.html')
     return render_template('account/login.html')
 

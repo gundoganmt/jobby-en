@@ -71,14 +71,10 @@ def browseTasks():
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):
-    user = Users.query.filter_by(id=user_id, status='professional').first_or_404()
+    #user = Users.query.filter_by(id=user_id, status='professional').first_or_404()
     if request.method == 'GET':
-        reviews = Reviews.query.filter_by(reviewed_pro=user).all()
-        user.add_view()
-        workExps = WorkExperiences.query.filter_by(user_id=user_id).all()
-        edus = Educations.query.filter_by(user_id=user_id).all()
-        sk = user.UserSkills.all()
-        return render_template('freelancer-profile.html', user=user, sk=sk, reviews=reviews, workExps=workExps, edus=edus, last_updated=last_updated)
+        #user.add_view()
+        return render_template('public/freelancer-profile.html')
     else:
         if current_user.is_authenticated:
             offer = Offers(offered=user, offers=current_user)
@@ -105,7 +101,8 @@ def freelancer(user_id):
 
 @public.route('/freelancers')
 def browseFreelancers():
-    return render_template('public/freelancers-list.html')
+    freelancers = Users.query.all()
+    return render_template('public/freelancers-list.html', freelancers=freelancers)
 
 @public.app_errorhandler(404)
 def page_not_found(e):

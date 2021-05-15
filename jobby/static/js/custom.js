@@ -17,7 +17,7 @@ $(document).ready(function(){
 								.find('ul, div').removeClass('style-1 style-2 mega-menu mega-menu-content mega-menu-section').removeAttr('id');
 				$(".mmenu-init").find("ul").addClass("mm-listview");
 				$(".mmenu-init").find(".mobile-styles .mm-listview").unwrap();
- 
+
 
 				$(".mmenu-init").mmenu({
 				 	"counters": true
@@ -832,6 +832,59 @@ document.body.style.zoom=0.9;
 	/*--------------------------------------------------*/
 	/*  Keywords
 	/*--------------------------------------------------*/
+
+	/*--------------------------------------------------*/
+		/*  Keywords
+		/*--------------------------------------------------*/
+		$(".keywords-container").each(function() {
+			var keywordInput = $(this).find(".keyword-input");
+			var keywordsList = $(this).find(".keywords-list");
+			// adding keyword
+			function addKeyword() {
+				var $newKeyword = $("<span class='keyword'><span class='keyword-remove'></span><span class='keyword-text'>"+ keywordInput.val() +"</span></span>");
+				keywordsList.append($newKeyword).trigger('resizeContainer');
+				keywordInput.val("");
+			}
+			// add via enter key
+			keywordInput.on('keyup', function(e){
+				if((e.keyCode == 13) && (keywordInput.val()!=="")){
+					addKeyword();
+				}
+			});
+			// add via button
+			$('.keyword-input-button').on('click', function(){
+				if((keywordInput.val()!=="")){
+					addKeyword();
+				}
+			});
+			// removing keyword
+			$(document).on("click",".keyword-remove", function(){
+				$(this).parent().addClass('keyword-removed');
+				function removeFromMarkup(){
+				  $(".keyword-removed").remove();
+				}
+				setTimeout(removeFromMarkup, 500);
+				keywordsList.css({'height':'auto'}).height();
+			});
+			// animating container height
+			keywordsList.on('resizeContainer', function(){
+			    var heightnow = $(this).height();
+			    var heightfull = $(this).css({'max-height':'auto', 'height':'auto'}).height();
+				$(this).css({ 'height' : heightnow }).animate({ 'height': heightfull }, 200);
+			});
+			$(window).on('resize', function() {
+				keywordsList.css({'height':'auto'}).height();
+			});
+			// Auto Height for keywords that are pre-added
+			$(window).on('load', function() {
+				var keywordCount = $('.keywords-list').children("span").length;
+				// Enables scrollbar if more than 3 items
+				if (keywordCount > 0) {	
+					keywordsList.css({'height':'auto'}).height();
+
+				}
+			});
+		});
 
 	/*--------------------------------------------------*/
 	/*  Bootstrap Range Slider
