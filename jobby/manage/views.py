@@ -153,7 +153,7 @@ def bookmark(bookmark_id):
         task = Tasks.query.filter_by(id=bookmark_id).first()
         current_user.BookmarksTasks.append(task)
     db.session.commit()
-    return jsonify({"success": True})
+    return jsonify({"success": True, "bookmark": True})
 
 @csrf.exempt
 @manage.route('/unmark/<int:bookmark_id>', methods=['POST'])
@@ -168,7 +168,7 @@ def unmark(bookmark_id):
         task = Tasks.query.filter_by(id=bookmark_id).first()
         current_user.BookmarksTasks.remove(task)
     db.session.commit()
-    return jsonify({"success": True})
+    return jsonify({"success": True, "unmark": True})
 
 @manage.route('/bookmarked-tasks')
 @login_required

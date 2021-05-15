@@ -1,412 +1,396 @@
-<!doctype html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+    <html lang="en">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-165052270-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <head>
+        <meta charset="utf-8" />
+        <title>Landrick - Saas & Software Landing Page Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
+        <meta name="keywords" content="Saas, Software, multi-uses, HTML, Clean, Modern" />
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <!-- Icons -->
+        <link href="{{ url_for('static', filename='css/index/materialdesignicons.min.css')}}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://unicons.iconscout.com/release/v3.0.6/css/line.css">
+        <!-- Slider -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/tiny-slider.css')}}"/>
+        <!-- Main Css -->
+        <link href="{{ url_for('static', filename='css/index/style.min.css')}}" rel="stylesheet" type="text/css" id="theme-opt" />
+        <link href="{{ url_for('static', filename='css/index/default.css')}}" rel="stylesheet" id="color-opt">
 
-  gtag('config', 'UA-165052270-1');
-</script>
-<script data-ad-client="ca-pub-6285960755576892" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    </head>
 
-<!-- Basic Page Needs
-================================================== -->
-<title>Jobby</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <body>
 
-<!-- CSS
-================================================== -->
-<link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+        {% include 'header-public.html' %}
 
-</head>
-<body>
+        <!-- Hero Start -->
+        <section class="bg-half bg-light d-table w-100" style="background: url({{ url_for('static', filename='images/hh.jpg')}});">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-12 text-center">
+                        <div class="page-next-level">
+                            <img src="images/job/Gradle.svg" class="avatar avatar-small" alt="">
+                            <h4 class="title mt-4 mb-3"> {{ task.project_name }} </h4>
+                            <ul class="list-unstyled">
+                                <li class="list-inline-item text-primary me-3"><i class="mdi mdi-map-marker text-warning me-2"></i>{{ task.location }}</li>
+                                <li class="list-inline-item text-primary"><i class="mdi mdi-office-building text-warning me-2"></i>Gradle</li>
+                            </ul>
+                        </div>
+                    </div>  <!--end col-->
+                </div><!--end row-->
+            </div> <!--end container-->
+        </section><!--end section-->
+        <!-- Hero End -->
 
-<!-- Wrapper -->
-<div id="wrapper">
+        <!-- Shape Start -->
+        <div class="position-relative">
+            <div class="shape overflow-hidden text-white">
+                <svg viewBox="0 0 2880 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 48H1437.5H2880V0H2160C1442.5 52 720 0 720 0H0V48Z" fill="currentColor"></path>
+                </svg>
+            </div>
+        </div>
+        <!--Shape End-->
 
-<!-- Header Container
-================================================== -->
-{% include 'header.html' %}
-<div class="clearfix"></div>
-<!-- Header Container / End -->
+        <!-- Job Detail Start -->
+        <section class="section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-5 col-12">
+                        <div class="card sidebar sticky-bar rounded shadow border-0">
+                            <div class="card-body widget border-bottom">
+                                <h5 class="mb-0">Job Information</h5>
+                            </div>
 
-<!-- Titlebar
-================================================== -->
-<div class="single-page-header" data-background-image="images/single-task.jpg">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="single-page-header-inner">
-					<div class="left-side">
-						{% if task.poster.status == 'employer' %}
-							<div class="header-image"><img src="{{ url_for('static', filename='images/'+task.poster.profile_picture) }}" alt=""></a></div>
-						{% else %}
-							<div class="header-image"><a href="{{ url_for('public.freelancer', user_id=task.poster.id)}}"><img src="{{ url_for('static', filename='images/'+task.poster.profile_picture) }}" alt=""></a></div>
-						{% endif %}
+                            <div class="card-body">
+                                <div class="d-flex widget align-items-center">
+                                    <i data-feather="user-check" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Employee Type:</h6>
+                                        <p class="text-primary mb-0">Full Time</p>
+                                    </div>
+                                </div>
 
-						<div class="salary-box" id="smallSalaryBox">
-							<div class="salary-type">Proje Butçesi</div>
-							{% if not task.budget_max %}
-								<div class="salary-amount">Belirtilmemiş</div>
-							{% else %}
-								<div class="salary-amount">{{ task.budget_min }} TL - {{task.budget_max }} TL</div>
-							{% endif %}
-						</div>
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="map-pin" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Location:</h6>
+                                        <p class="text-primary mb-0">Beijing, China</p>
+                                    </div>
+                                </div>
 
-						<div class="header-details">
-							<h3>{{ task }}</h3>
-							<h5>İşveren Hakkında</h5>
-							<ul>
-								{% if task.poster.status == 'employer' %}
-									<li><i class="icon-material-outline-business"></i> {{ task.poster }}</a></li>
-								{% else %}
-									<li><a href="{{ url_for('public.freelancer', user_id=task.poster.id) }}"><i class="icon-material-outline-business"></i> {{ task.poster }}</a></li>
-								{% endif %}
-								<li> <i class="icon-material-outline-location-on"></i>{{ task.location }}</li>
-								<li><div class="verified-badge-with-title">Onaylandı</div></li>
-							</ul>
-						</div>
-					</div>
-					<div class="right-side">
-						<div class="salary-box" id="bigSalaryBox">
-							<div class="salary-type">Proje Butçesi</div>
-							{% if not task.budget_max %}
-								<div class="salary-amount">Belirtilmemiş</div>
-							{% else %}
-								<div class="salary-amount">{{ task.budget_min }} TL - {{task.budget_max }} TL</div>
-							{% endif %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="monitor" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Job Type:</h6>
+                                        <p class="text-primary mb-0">Back-end Developer</p>
+                                    </div>
+                                </div>
 
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="briefcase" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Experience:</h6>
+                                        <p class="text-primary mb-0">+2 Year</p>
+                                    </div>
+                                </div>
 
-<!-- Page Content
-================================================== -->
-<div class="container">
-	<div class="row">
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="book" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Qualifications:</h6>
+                                        <p class="text-primary mb-0">MSCIT</p>
+                                    </div>
+                                </div>
 
-		<!-- Content -->
-		<div class="col-xl-8 col-lg-8 content-right-offset">
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="dollar-sign" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Salary:</h6>
+                                        <p class="text-primary mb-0">+50k to 70k</p>
+                                    </div>
+                                </div>
 
-			<!-- Description -->
-			<div class="single-page-section">
-				<h3 class="margin-bottom-25">Açıklama</h3>
-				{{ task.description|safe }}
-			</div>
+                                <div class="d-flex widget align-items-center mt-3">
+                                    <i data-feather="clock" class="fea icon-ex-md me-3"></i>
+                                    <div class="flex-1">
+                                        <h6 class="widget-title mb-1">Date posted:</h6>
+                                        <p class="text-primary mb-0 mb-0">5th Sep, 2019</p>
+                                    </div>
+                                </div>
 
-			<!-- Skills -->
-			<div class="single-page-section">
-				<h3>Gerekli Yetenekler</h3>
-				<div class="task-tags">
-					{% for s in sk %}
-					<span>{{ s }}</span>
-					{% endfor %}
-				</div>
-			</div>
-			<div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
 
-			<!-- Freelancers Bidding -->
-			<div class="boxed-list margin-bottom-60">
-				<div class="boxed-list-headline">
-					<h3><i class="icon-material-outline-group"></i> Teklif Verenler </h3>
-				</div>
-				<ul class="boxed-list-ul">
-					{% for bidder in taskbids %}
-						<li>
-						<div class="bid">
-							<!-- Avatar -->
-							<div class="bids-avatar">
-								<div class="freelancer-avatar">
-									<div class="verified-badge"></div>
-									<a href="{{ url_for('public.freelancer', user_id=bidder.bidder.id)}}"><img src="{{ url_for('static', filename='images/'+bidder.bidder.profile_picture) }}" alt=""></a>
-								</div>
-							</div>
+                    <div class="col-lg-8 col-md-7 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <div class="ms-lg-4">
+                            <h5>Job Description: </h5>
+                              {{ task.description|safe }}
+                              <ul class="list-unstyled mt-3">
+                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
+                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
+                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
+                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
+                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
+                              </ul>
 
-							<!-- Content -->
-							<div class="bids-content">
-								<!-- Name -->
-								<div class="freelancer-name">
-									<h4><a href="{{ url_for('public.freelancer', user_id=bidder.bidder.id)}}">{{ bidder.bidder }} </a></h4>
-									{% if bidder.bidder.rating == 0 %}
-										<span class="not-rated">Puanı yok</span>
-									{% else %}
-										<div class="star-rating" data-rating="{{ bidder.bidder.rating }}"></div>
-									{% endif %}
-								</div>
-							</div>
+                            <div class="mt-4 pt-2">
+                                <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#bidform" class="btn btn-primary me-2">Bid Now <i class="mdi mdi-send"></i></a>
+                                {% if current_user.is_authenticated and current_user.is_marked_task(task) %}
+                                  <button id="bookmark" data="{{ task.id }}" data-type="0" class="btn btn-outline-primary bookmarked"><i class="uil uil-check"></i> Bookmarked</button>
+                                {% else %}
+                                  <button id="bookmark" data="{{ task.id }}" data-type="0" class="btn btn-outline-primary"><i class="uil uil-bookmark"></i> Bookmark</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </section><!--end section-->
+        <!-- Job Detail End -->
 
-							<!-- Bid -->
-							<div class="bids-bid">
-								<div class="bid-rate">
-									<div class="rate">{{ bidder.bid_amount }} TL</div>
-									<span>{{ bidder.num_delivery }} {{ bidder.type_delivery }}</span>
-								</div>
-							</div>
-						</div>
-					</li>
-					{% endfor %}
-				</ul>
-			</div>
+        <!-- Footer Start -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-12 mb-0 mb-md-4 pb-0 pb-md-2">
+                        <a href="#" class="logo-footer">
+                            <img src="images/logo-light.png" height="24" alt="">
+                        </a>
+                        <p class="mt-4">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        <ul class="list-unstyled social-icon foot-social-icon mb-0 mt-4">
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                        </ul><!--end icon-->
+                    </div><!--end col-->
 
-		</div>
+                    <div class="col-lg-2 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-light footer-head">Company</h5>
+                        <ul class="list-unstyled footer-list mt-4">
+                            <li><a href="page-aboutus.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> About us</a></li>
+                            <li><a href="page-services.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Services</a></li>
+                            <li><a href="page-team.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Team</a></li>
+                            <li><a href="page-pricing.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Pricing</a></li>
+                            <li><a href="portfolio-modern-three.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Project</a></li>
+                            <li><a href="page-jobs.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Careers</a></li>
+                            <li><a href="page-blog-grid.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Blog</a></li>
+                            <li><a href="auth-cover-login.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Login</a></li>
+                        </ul>
+                    </div><!--end col-->
 
+                    <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-light footer-head">Usefull Links</h5>
+                        <ul class="list-unstyled footer-list mt-4">
+                            <li><a href="page-terms.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Terms of Services</a></li>
+                            <li><a href="page-privacy.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Privacy Policy</a></li>
+                            <li><a href="documentation.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Documentation</a></li>
+                            <li><a href="changelog.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Changelog</a></li>
+                            <li><a href="components.html" class="text-foot"><i class="uil uil-angle-right-b me-1"></i> Components</a></li>
+                        </ul>
+                    </div><!--end col-->
 
-		<!-- Sidebar -->
-		<div class="col-xl-4 col-lg-4">
-			<div class="sidebar-container">
-				<div class="sidebar-widget">
-					<div class="job-overview">
-						<div class="job-overview-headline">İlan Detayı</div>
-						<div class="job-overview-inner">
-							<ul>
-								<li>
-									<i class="icon-material-outline-location-on"></i>
-									<span>Yer</span>
-									<h5>{{ task.location }}</h5>
-								</li>
-								<li>
-									<i class="icon-material-outline-business-center"></i>
-									<span>İlan Tipi</span>
-									<h5>Proje</h5>
-								</li>
-								<li>
-									<i class="icon-material-outline-local-atm"></i>
-									<span>Proje Butçesi</span>
-									{% if not task.budget_max %}
-										<h5>Belirtilmemiş</h5>
-									{% else %}
-										<h5>{{ task.budget_min }} TL - {{ task.budget_max }} TL</h5>
-									{% endif %}
-								</li>
-								<li>
-									<i class="icon-material-outline-access-time"></i>
-									<span>İlan Tarihi</span>
-									<h5>{{ task.time_posted.strftime('%d:%m:%Y') }}</h5>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+                    <div class="col-lg-3 col-md-4 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <h5 class="text-light footer-head">Newsletter</h5>
+                        <p class="mt-4">Sign up and receive the latest tips via email.</p>
+                        <form>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="foot-subscribe mb-3">
+                                        <label class="form-label">Write your email <span class="text-danger">*</span></label>
+                                        <div class="form-icon position-relative">
+                                            <i data-feather="mail" class="fea icon-sm icons"></i>
+                                            <input type="email" name="email" id="emailsubscribe" class="form-control ps-5 rounded" placeholder="Your email : " required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="d-grid">
+                                        <input type="submit" id="submitsubscribe" name="send" class="btn btn-soft-primary" value="Subscribe">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </footer><!--end footer-->
+        <footer class="footer footer-bar">
+            <div class="container text-center">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <div class="text-sm-start">
+                            <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> Landrick. Design with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in/" target="_blank" class="text-reset">Shreethemes</a>.</p>
+                        </div>
+                    </div><!--end col-->
 
-				{% if current_user.is_anonymous %}
-					<form method="POST", action="{{ url_for('public.task_page', task_url= task.generate_task_link()) }}">
-						<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
-					<div class="sidebar-widget">
-						<div class="bidding-widget">
-							<div class="bidding-headline"><h3>Bu işe teklif ver!</h3></div>
-							<div class="bidding-inner">
+                    <div class="col-sm-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
+                        <ul class="list-unstyled text-sm-end mb-0">
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/american-ex.png" class="avatar avatar-ex-sm" title="American Express" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/discover.png" class="avatar avatar-ex-sm" title="Discover" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/master-card.png" class="avatar avatar-ex-sm" title="Master Card" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/paypal.png" class="avatar avatar-ex-sm" title="Paypal" alt=""></a></li>
+                            <li class="list-inline-item"><a href="javascript:void(0)"><img src="images/payments/visa.png" class="avatar avatar-ex-sm" title="Visa" alt=""></a></li>
+                        </ul>
+                    </div><!--end col-->
+                </div><!--end row-->
+            </div><!--end container-->
+        </footer><!--end footer-->
+        <!-- Footer End -->
 
-								<!-- Headline -->
-								<span class="bidding-detail"><strong>En duşuk ucretini belirle</strong></span>
+        <!-- Modal Content Start -->
+        {% if current_user.is_authenticated %}
+          <div class="modal fade" id="bidform" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              {% if current_user.is_bidder(task) %}
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                        <div class="modal-body py-5">
+                            <div class="text-center">
+                                <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                    <h1 class="mb-0"><i class="uil uil-check-circle align-middle"></i></h1>
+                                </div>
+                                <div class="mt-4">
+                                    <h4>You allready bidded this one!</h4>
+                                    <p class="text-muted">Browse more project...</p>
+                                    <div class="mt-4">
+                                        <a href="{{ url_for('public.browseTasks') }}" class="btn btn-outline-primary">+ Browse Projects</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              {% else %}
+                {% if current_user.status == 'employer' %}
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                          <div class="modal-body py-5">
+                              <div class="text-center">
+                                  <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                      <h1 class="mb-0"><i class="uil uil-heart-break align-middle"></i></h1>
+                                  </div>
+                                  <div class="mt-4">
+                                      <h4>Your status must be freelancer!</h4>
+                                      <p class="text-muted">Fill in some information in order to become freelancer</p>
+                                      <div class="mt-4">
+                                          <a href="{{ url_for('setting.setting_page') }}" class="btn btn-outline-primary">+ Become Freelancer</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                {% else %}
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content rounded shadow border-0">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenterTitle">Bid Now </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body p-4">
+                              <div class="custom-form mt-3">
+                                <form>
+                                  <input type='hidden' id="csrf_token" value="{{ csrf_token() }}"/>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="mb-3">
+                                              <label class="form-label">Set your minimal rate <span class="text-danger">*</span></label>
+                                              <div class="form-icon position-relative">
+                                                  <i data-feather="dollar-sign" class="fea icon-sm icons"></i>
+                                                  <input id="bid_amount" type="number" class="form-control ps-5" placeholder="Price">
+                                              </div>
+                                          </div>
+                                      </div>
 
-								<!-- Price Slider -->
-								{% if not task.budget_max %}
-									<div class="bidding-value"></div>
-									<input class="with-border" type="number" name="bid_amount" min="10" max="1000000" step="1" value="10">
-								{% else %}
-									<div class="bidding-value"><span id="biddingVal"></span>TL</div>
-									<input class="bidding-slider" name="bid_amount" type="text" value="" data-slider-handle="custom" data-slider-currency="TL" data-slider-min="{{ task.budget_min }}" data-slider-max="{{ task.budget_max }}" data-slider-value="auto" data-slider-step="10" data-slider-tooltip="hide" />
-								{% endif %}
-								<!-- Headline -->
-								<span class="bidding-detail margin-top-30"><strong>Tamamlama sureni belirle</strong></span>
+                                      <div class="col-12">
+                                        <label class="form-label">Set your delivery time <span class="text-danger">*</span></label>
+                                        <div class="row">
+                                          <div class="col">
+                                            <div class="form-icon position-relative">
+                                              <i data-feather="clock" class="fea icon-sm icons"></i>
+                                              <input id="qtyInput" type="number" class="form-control ps-5" placeholder="1" required>
+                                            </div>
+                                          </div>
+                                          <div class="col">
+                                            <div class="form-icon position-relative">
+                                              <select class="form-control custom-select" id="qtyOption" required>
+                                                <option selected="">Hours</option>
+                                                <option value="4">Days</option>
+                                                <option value="1">Weeks</option>
+                                                <option value="3">Months</option>
+                                              </select>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div><!--end col-->
 
-								<!-- Fields -->
-								<div class="bidding-fields">
-									<div class="bidding-field">
-										<!-- Quantity Buttons -->
-										<div class="qtyButtons">
-											<div class="qtyDec"></div>
-											<input type="number" name="qtyInput" min="1" max="1000" step="1" value="1">
-											<div class="qtyInc"></div>
-										</div>
-									</div>
-									<div class="bidding-field">
-										<select name="time" class="selectpicker default">
-											<option selected>Gun</option>
-											<option>Saat</option>
-										</select>
-									</div>
-								</div>
-								<textarea id="bidmessage" name="message" cols="10" placeholder="Bu işe neden uygunsunuz?" class="with-border"></textarea>
-								<button id="place-bid" class="button ripple-effect move-on-hover full-width margin-top-30"><span>Teklifini Ver</span></button>
-							</div>
-						</form>
-							<div class="bidding-signup">Hesabınız yok mu? <a href="{{ url_for('account.signup') }}" >Kaydol</a></div>
-						</div>
-					</div>
-				{% else %}
-					{% if current_user.id != task.user_id and not current_user.is_bidder(task) %}
-					<form method="POST", action="{{ url_for('public.task_page', task_url= task.generate_task_link()) }}">
-						<input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
-					<div class="sidebar-widget">
-						<div class="bidding-widget">
-							{% for message in get_flashed_messages() %}
-							<div class="notification error closeable">
-								<p>{{ message }}</p>
-								<a class="close" href="#"></a>
-							</div>
-							{% endfor %}
-							<div class="bidding-headline"><h3>Bu işe teklif ver!</h3></div>
-							<div class="bidding-inner">
+                                      <div class="col-12">
+                                          <div class="mb-3">
+                                              <label class="form-label">Message <span class="text-danger">*</span></label>
+                                              <div class="form-icon position-relative">
+                                                  <i data-feather="message-circle" class="fea icon-sm icons clearfix"></i>
+                                                  <textarea id="bidMessage" rows="4" class="form-control ps-5" placeholder="Message :" required></textarea>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="d-grid">
+                                              <button type="button" id="submitBidButton" class="btn btn-primary">Send Bid</button>
+                                          </div>
+                                      </div><!--end col-->
+                                  </div><!--end row-->
+                                </form>
+                              </div><!--end custom-form-->
+                          </div>
+                      </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+          </div>
+        {% else %}
+          <div class="modal fade" id="bidform" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                    <div class="modal-body py-5">
+                        <div class="text-center">
+                            <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                <h1 class="mb-0"><i class="uil uil-heart-break align-middle"></i></h1>
+                            </div>
+                            <div class="mt-4">
+                                <h4>You are not signed up yet!</h4>
+                                <p class="text-muted">Create an account.</p>
+                                <div class="mt-4">
+                                    <a href="{{ url_for('account.signup') }}" class="btn btn-outline-primary">+ Create Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        {% endif %}
+        <!-- Modal Content End -->
 
-								<!-- Headline -->
-								<span class="bidding-detail"><strong>En duşuk ucretini belirle</strong></span>
+        <!-- Back to top -->
+        <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
+        <!-- Back to top -->
 
-								<!-- Price Slider -->
-								<div class="bidding-value"><span></span></div>
-								{% if not task.budget_max %}
-									<div class="bidding-value"></div>
-									<input class="with-border" type="number" name="bid_amount" min="10" max="1000000" step="1" value="10">
-								{% else %}
-									<div class="bidding-value"><span id="biddingVal"></span>TL</div>
-									<input class="bidding-slider" name="bid_amount" type="text" value="" data-slider-handle="custom" data-slider-currency="TL" data-slider-min="{{ task.budget_min }}" data-slider-max="{{ task.budget_max }}" data-slider-value="auto" data-slider-step="10" data-slider-tooltip="hide" />
-								{% endif %}
-								<!-- Headline -->
-								<span class="bidding-detail margin-top-30"><strong>Tamamlama sureni belirle</strong></span>
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
 
-								<!-- Fields -->
-								<div class="bidding-fields">
-									<div class="bidding-field">
-										<!-- Quantity Buttons -->
-										<div class="qtyButtons">
-											<div class="qtyDec"></div>
-											<input type="text" name="qtyInput" value="1">
-											<div class="qtyInc"></div>
-										</div>
-									</div>
-									<div class="bidding-field">
-										<select name="time" class="selectpicker default">
-											<option selected>Gun</option>
-											<option>Saat</option>
-										</select>
-									</div>
-								</div>
-								<textarea id="bidmessage" name="message" cols="10" placeholder="Bu işe neden uygunsunuz?" class="with-border"></textarea>
-								<button id="snackbar-place-bid" class="button ripple-effect move-on-hover full-width margin-top-30"><span>Teklifini Ver</span></button>
-							</div>
-						</form>
-						</div>
-					</div>
-					{% endif %}
-				{% endif %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta2/js/bootstrap.bundle.min.js" integrity="sha512-43iShtbiyImxjjU4a9rhXBy7eKtIsrpll8xKhe1ghKqh5NyfME8phZs5JRFZpRBe1si44WM3tNmnqMym7JRmDQ==" crossorigin="anonymous"></script>        <!-- SLIDER -->
+        <script src="{{ url_for('static', filename='js/index/tiny-slider.js')}}"></script>
+        <!-- tobii js -->
+        <!-- Icons -->
+        <script src="{{ url_for('static', filename='js/index/feather.min.js')}}"></script>
+        <!-- Main Js -->
+        <script src="{{ url_for('static', filename='js/index/plugins.init.js')}}"></script><!--Note: All init js like tiny slider, counter, countdown, maintenance, lightbox, gallery, swiper slider, aos animation etc.-->
+        <script src="{{ url_for('static', filename='js/index/app.js')}}"></script><!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
+        <script src="{{ url_for('static', filename='js/index/index.js')}}"></script>
 
-
-
-				{% if current_user.is_authenticated and current_user.is_bidder(task) %}
-					<div class="notification success closeable">
-						<h4>Bu işe teklif verdiniz!</h4>
-						<a class="close" href="#"></a>
-					</div>
-				{% endif %}
-
-				<!-- Sidebar Widget -->
-				<div class="sidebar-widget">
-					<h3>Kaydet ve Paylaş</h3>
-
-					<!-- Bookmark Button -->
-
-					{% if current_user.is_authenticated and current_user.is_marked_task(task) %}
-					<button id="bookmark" data="{{ task.id }}" data-type="0" class="bookmark-button margin-bottom-25 bookmarked">
-						<span class="bookmark-icon"></span>
-						<span class="bookmark-text">kaydet</span>
-						<span class="bookmarked-text">Kaydedildi</span>
-					</button>
-					{% else %}
-					<button id="bookmark" data="{{ task.id }}" data-type="0" class="bookmark-button margin-bottom-25">
-						<span class="bookmark-icon"></span>
-						<span class="bookmark-text">Kaydet</span>
-						<span class="bookmarked-text">Kaydedildi</span>
-					</button>
-					{% endif %}
-
-					<!-- Copy URL -->
-					<div class="copy-url">
-						<input id="copy-url" type="text" value="" class="with-border">
-						<button class="copy-url-button ripple-effect" data-clipboard-target="#copy-url" title="Kopyala" data-tippy-placement="top"><i class="icon-material-outline-file-copy"></i></button>
-					</div>
-
-					<!-- Share Buttons -->
-					<div class="share-buttons margin-top-25">
-						<div class="share-buttons-trigger"><i class="icon-feather-share-2"></i></div>
-						<div class="share-buttons-content">
-							<span>İlginç mi? <strong>Paylaş!</strong></span>
-							<ul class="share-buttons-icons">
-								<li><a href="#" data-button-color="#3b5998" title="Share on Facebook" data-tippy-placement="top"><i class="icon-brand-facebook-f"></i></a></li>
-								<li><a href="#" data-button-color="#1da1f2" title="Share on Twitter" data-tippy-placement="top"><i class="icon-brand-twitter"></i></a></li>
-								<li><a href="#" data-button-color="#dd4b39" title="Share on Google Plus" data-tippy-placement="top"><i class="icon-brand-google-plus-g"></i></a></li>
-								<li><a href="#" data-button-color="#0077b5" title="Share on LinkedIn" data-tippy-placement="top"><i class="icon-brand-linkedin-in"></i></a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-
-	</div>
-</div>
-
-
-<!-- Spacer -->
-<div class="margin-top-15"></div>
-<!-- Spacer / End-->
-
-<!-- Footer
-================================================== -->
-{% include 'footer.html' %}
-<!-- Footer / End -->
-
-</div>
-<!-- Wrapper / End -->
-
-<!-- Scripts
-================================================== -->
-<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/jquery-migrate-3.0.0.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/mmenu.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/tippy.all.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/simplebar.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-slider.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap-select.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/snackbar.js')}}"></script>
-<script src="{{ url_for('static', filename='js/clipboard.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/counterup.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
-<script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
-<script type="text/javascript" src="/static/js/custom.js?u={{ last_updated }}"></script>
-<script type="text/javascript" src="/static/js/validateBid.js?u={{ last_updated }}"></script>
-
-<!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
-<script>
-// Snackbar for user status switcher
-$('#snackbar-user-status label').click(function() {
-	Snackbar.show({
-		text: 'Statunuz değiştirildi!',
-		pos: 'bottom-center',
-		showAction: false,
-		actionText: "Dismiss",
-		duration: 3000,
-		textColor: '#fff',
-		backgroundColor: '#383838'
-	});
-});
-
-// Snackbar for copy to clipboard button
-$('.copy-url-button').click(function() {
-	Snackbar.show({
-		text: 'Kopyalandı!',
-	});
-});
-</script>
-
-</body>
+    </body>
 </html>

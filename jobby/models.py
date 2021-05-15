@@ -103,7 +103,7 @@ class Users(UserMixin, db.Model):
         return False
 
     def check_status(self):
-        skill = self.UserSkills.all()
+        skill = Skills.query.filter_by(user_id=self.id).all()
         if self.field_of_work and self.tagline and self.introduction and len(skill)>0 and self.email_approved:
             self.status = 'professional'
         else:
@@ -206,6 +206,7 @@ class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50))
+    task_pic = db.Column(db.String(80))
     budget_min = db.Column(db.Integer, nullable=True, default=10)
     budget_max = db.Column(db.Integer, nullable=True, default=100000)
     description = db.Column(db.Text, nullable=False)
@@ -233,6 +234,9 @@ class Tasks(db.Model):
         for bid in bids:
             total += bid.bid_amount
         return int(total/self.num_bids)
+
+    def get_all_skills(self):
+        return TaskSkills.query.filter_by(task_id=self.id).all()
 
     def __repr__(self):
         return self.project_name

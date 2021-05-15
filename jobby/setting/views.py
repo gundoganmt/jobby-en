@@ -52,12 +52,13 @@ def setting_profile():
 @login_required
 def setting_skill():
     data = request.get_json(force=True)
-    skill = Skills.query.filter_by(skill=data['skill']).first()
-    skill.level = data['level']
-    current_user.UserSkills.append(skill)
-    current_user.check_status()
+    skill = data['skill']
+    level = data['level']
+    new_skill = Skills(skill=skill, level=level, user_id=current_user.id)
+    db.session.add(new_skill)
     db.session.commit()
-    return jsonify({"success": True, "settingType": 's', "skill_id": skill.id, "skill": skill.skill})
+    current_user.check_status()
+    return jsonify({"success": True, "settingType": 's', "skill_id": new_skill.id, "skill": new_skill.skill})
 
 @setting.route('/setting/workExp', methods=['POST'])
 @login_required
@@ -123,7 +124,7 @@ def setting_page():
     if current_user.status == 'company':
         return render_template('setting/companySetting.html', last_updated=last_updated, categories=categories, cities=cities)
     else:
-        skills = current_user.UserSkills.all()
+        skills = Skills.query.filter_by(user_id=current_user.id).all()
         workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
         edus = Educations.query.filter_by(student=current_user).all()
         return render_template('setting/settings.html', last_updated=last_updated, skills=skills,

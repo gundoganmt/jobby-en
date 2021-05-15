@@ -28,6 +28,7 @@ ALLOWED_IMG_EXTENSIONS = {'jpeg', 'jpg', 'png'}
 ALLOWED_OFFER_EXTENSIONS = {'jpeg', 'jpg', 'png', 'pdf', 'zip'}
 
 UPLOAD_IMG_FOLDER = os.path.join(os.getcwd(), 'jobby/static/images')
+UPLOAD_TASK_FOLDER = os.path.join(os.getcwd(), 'jobby/static/images/taskpics')
 UPLOAD_OFFER_FOLDER = os.path.join(os.getcwd(), 'jobby/static/files')
 
 def allowed_img_file(filename):

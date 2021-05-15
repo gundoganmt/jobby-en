@@ -1,8 +1,10 @@
-from flask import render_template, Blueprint, request, redirect, url_for, flash
+from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from jobby import db, last_updated
-from jobby.models import Users, Tasks, Skills
-import re, bleach
+from jobby.models import Users, Tasks, TaskSkills
+import bleach, uuid, os
+from werkzeug.utils import secure_filename
+from utils import allowed_img_file, get_extension, UPLOAD_TASK_FOLDER
 
 posttask = Blueprint('posttask',__name__)
 
@@ -10,45 +12,35 @@ posttask = Blueprint('posttask',__name__)
 @login_required
 def post_task():
     if request.method == 'POST':
-        is_form_postable = False;
         project_name = request.form["project_name"]
         location = request.form["location"]
-        budget_min = request.form["budget_min"]
-        budget_max = request.form["budget_max"]
+        budget_min = request.form["budget_min"] or 0
+        budget_max = request.form["budget_max"] or 0
         category = request.form["category"]
+        skills_list = request.form.getlist('skills_list')
         description = bleach.clean(request.form["description"], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-        skills = request.form["skillsHidden"]
-
-        #validate form
-        if len(project_name) == 0:
-            flash("Proje isminiz çok kısa!")
-        if not category:
-            flash("Lutfen bir kategori seçiniz!")
-        if budget_min > budget_max:
-            flash("minimum değer maximumdan fazla olamaz!")
-        if not budget_min:
-            budget_min = 0
-        if not budget_max:
-            budget_max = 0
-        if len(description) < 30:
-            flash("Lutfen projenizi biraz açıklayın")
-        if not skills:
-            flash("Lutfen en az 1 yetenek seçin!")
-        if not is_form_postable and not current_user.email_approved:
-            return redirect(url_for('posttask.post_task'))
-        else:
-            is_form_postable = True
 
         task = Tasks(project_name=project_name, location=location, budget_min=budget_min,
                      budget_max=budget_max, category=category, description=description, user_id=current_user.id)
-        for skill in re.findall('[A-Z][^A-Z]*', skills):
-            sk = Skills.query.filter_by(skill=skill).first()
-            task.TSkills.append(sk)
+
+        if 'file' in request.files:
+            file = request.files['file']
+            filename = file.filename
+        if allowed_img_file(filename):
+            filename = secure_filename(filename)
+            unique_filename = str(uuid.uuid4())+get_extension(filename)
+            task.task_pic = unique_filename
+            file.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename))
+
         db.session.add(task)
         db.session.commit()
-        return redirect(url_for('public.task_page', task_url=task.generate_task_link()))
+
+        for skill in skills_list[0].split(','):
+            tskills = TaskSkills(skill=skill, task_id=task.id)
+            db.session.add(tskills)
+        db.session.commit()
+        return jsonify({'success': True, 'msg': url_for('public.task_page', task_url=task.generate_task_link())})
     else:
-        sk = Skills.query.all()
         if not current_user.email_approved:
-            flash('Email adresiniz doğrulanmadı. İlan veremezsiniz!')
-        return render_template('tasks/post-a-task.html', sk=sk, last_updated=last_updated)
+            flash('Your email has not been confirmed yet. You cannot post a project!')
+        return render_template('tasks/post-a-task.html', last_updated=last_updated)

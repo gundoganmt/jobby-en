@@ -1,10 +1,10 @@
-from flask import render_template, Blueprint, request, redirect, url_for, abort, flash
+from flask import render_template, Blueprint, request, redirect, url_for, abort, flash, jsonify
 from flask_login import current_user
 from jobby.models import (
     Tasks, Bids, Users,
     WorkExperiences, Educations,
     Views, Notification, Reviews, Offers,
-    Notification
+    Notification, TaskSkills
     )
 from jobby import db, last_updated
 from werkzeug.utils import secure_filename
@@ -12,10 +12,6 @@ import uuid, os, json
 from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER
 
 public = Blueprint('public',__name__)
-
-@public.route('/paddle', methods=['GET', 'POST'])
-def paddle():
-    return render_template('paddle.html')
 
 @public.route('/', methods=['GET', 'POST'])
 def index():
@@ -37,37 +33,28 @@ def task_page(task_url):
     task = Tasks.query.filter_by(id=task_id).first_or_404()
     taskbids = Bids.query.filter_by(task_id=task_id).all()
     if request.method == 'GET':
-        sk = task.TSkills.all()
+        sk = TaskSkills.query.filter_by(task_id=task.id).all()
         return render_template('tasks/single-task-page.html',task=task, sk=sk, taskbids=taskbids, last_updated=last_updated)
     else:
-        if current_user.is_authenticated:
-            if current_user.status == 'employer':
-                flash('Statunuz işveren olarak görunuyor, değiştirmek için ayarlara gidiniz!')
-                return redirect(request.url)
-            else:
-                bid_amount = request.form['bid_amount']
-                if not bid_amount:
-                    flash('Teklif miktarını girmediniz!')
-                    return redirect(request.url)
-                num_delivery = request.form['qtyInput']
-                type_delivery = request.form['time']
-                msg = request.form['message']
-                bid = Bids(user_id=current_user.id, task_id=task_id, bid_amount=bid_amount,
-                           num_delivery=num_delivery, type_delivery=type_delivery, message=msg)
-                notification = Notification(task_id=task_id, not_from=current_user.id, not_to=task.poster.id, not_type=1)
-                task.num_bids += 1
-                current_user.num_bids += 1
-                db.session.add(bid)
-                db.session.add(notification)
-                db.session.commit()
-                return redirect(url_for('manage.activeBids'))
-        else:
-            flash('Teklif verebilmek için giriş yapmalısınız!')
-            return redirect(url_for('account.login'))
+        bid_amount = request.form['bid_amount']
+        qtyInput = request.form['qtyInput']
+        qtyOption = request.form['qtyOption']
+        bidMessage = request.form['bidMessage']
+
+        bid = Bids(bid_amount=bid_amount, num_delivery=qtyInput, type_delivery=qtyOption,
+            message=bidMessage, user_id=current_user.id, task_id=task_id)
+        notification = Notification(task_id=task_id, not_from=current_user.id, not_to=task.poster.id, not_type=1)
+        task.num_bids += 1
+        current_user.num_bids += 1
+        db.session.add(bid)
+        db.session.add(notification)
+        db.session.commit()
+        return jsonify({'success': True, 'msg': url_for('manage.activeBids')})
 
 @public.route('/projects')
 def browseTasks():
-    return render_template('public/tasks-list.html')
+    tasks = Tasks.query.all()
+    return render_template('public/tasks-list.html', tasks=tasks)
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):

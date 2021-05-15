@@ -87,7 +87,7 @@
 
 													<!-- Details -->
 													<div class="job-listing-description">
-														<h3 class="job-listing-title"><a href="{{ url_for('public.task_page', task_id=bid.bidded.id) }}">{{ bid.bidded }}</a></h3>
+														<h3 class="job-listing-title"><a href="{{ url_for('public.task_page', task_url=bid.bidded.generate_task_link()) }}">{{ bid.bidded }}</a></h3>
 													</div>
 												</div>
 											</div>
@@ -122,7 +122,7 @@
 
 													<!-- Details -->
 													<div class="job-listing-description">
-														<h3 class="job-listing-title"><a href="{{ url_for('public.task_page', task_id=bid.bidded.id) }}">{{ bid.bidded }}</a></h3>
+														<h3 class="job-listing-title"><a href="{{ url_for('public.task_page', task_url=bid.bidded.generate_task_link()) }}">{{ bid.bidded }}</a></h3>
 													</div>
 												</div>
 											</div>

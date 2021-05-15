@@ -209,36 +209,6 @@ document.body.style.zoom=0.9;
 		return false
 	});
 
-    $('#bookmark').on('click', function(e){
-			const request = new XMLHttpRequest();
-	    var bookmark_id = parseInt($(this).attr('data'));
-			var bookmarkType = parseInt($(this).data('type'));
-			if($(this).hasClass('bookmarked')){
-				var url = '/unmark/' + bookmark_id;
-			}
-			else{
-				var url = '/bookmark/' + bookmark_id;
-			}
-
-	    request.open('POST', url);
-			request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-	    request.onload = () =>{
-	      if (request.status == 200){
-	        const result = JSON.parse(request.responseText);
-	        if(result.success){
-						$(this).toggleClass('bookmarked');
-	          e.preventDefault();
-	        }
-					else{
-						alert("Lutfen giriş yapınız");
-					}
-	      }
-	    }
-	    request.send(JSON.stringify({"bookmarkType": bookmarkType}));
-			return false;
-	});
-
-
 	/*----------------------------------------------------*/
 	/*  Notifications Boxes
 	/*----------------------------------------------------*/
@@ -879,7 +849,7 @@ document.body.style.zoom=0.9;
 			$(window).on('load', function() {
 				var keywordCount = $('.keywords-list').children("span").length;
 				// Enables scrollbar if more than 3 items
-				if (keywordCount > 0) {	
+				if (keywordCount > 0) {
 					keywordsList.css({'height':'auto'}).height();
 
 				}

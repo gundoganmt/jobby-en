@@ -51,6 +51,9 @@
 			{% if current_user.is_authenticated %}
 			<!-- Right Side Content / End -->
 			<div class="right-side">
+				<div class="header-widget" id="hideitmobile">
+        	<a href="{{ url_for('posttask.post_task') }}" class="btn btn-post margin-top-20" style="color: white;">Post Project</a>
+        </div>
 
 				<!--  User Notifications -->
 				<div class="header-widget hide-on-mobile">
