@@ -9,9 +9,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <!-- CSS
 ================================================== -->
+<link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900' rel='stylesheet' type='text/css'>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/setting.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
 
 </head>
 <body class="gray">
@@ -135,7 +138,7 @@
 					<div class="col-xl-12">
 						<div class="dashboard-box">
 
-							<div class="headline" name="collapse" style="cursor: pointer;">
+							<div class="headline collapse" style="cursor: pointer;">
 								<h3><i class="icon-material-outline-face"></i> Profil Ayarlarım</h3>
 							</div>
 
@@ -200,55 +203,63 @@
 					<div class="col-xl-12">
 						<div class="dashboard-box">
 
-							<div class="headline" name="collapse" style="cursor: pointer;">
+							<div class="headline collapse" style="cursor: pointer;">
 								<h3><i class="icon-material-outline-mouse"></i> Yetenekler</h3>
 							</div>
 							<div class="content with-padding" style="display: none;">
 							<div>
-							    <ul class="list-group" id="skill_ul">
-										{% if skills %}
-											{% for skill in skills %}
-								        <li class="list-group-item clearfix" id="s_{{skill.id}}">
-								            <div class="pull-left">{{ skill }}</div>
-														<span class="pull-right button-group">
-																<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-																<button type="button" data="s_{{ skill.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-														</span>
-								        </li>
-											{% endfor %}
-										{% else %}
-										<li class="list-group-item clearfix" style="display: none;">
-												<div class="pull-left"></div>
-												<span class="pull-right button-group">
-														<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-														<button type="button" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-												</span>
-										</li>
-										{% endif %}
-							    </ul>
+								{% if current_user.get_all_skills() %}
+									<table class="flatTable" id="skill_table">
+									 <tr class="headingTr">
+										 <td>SKILL</td>
+										 <td>LEVEL</td>
+										 <td>ACTION</td>
+									 </tr>
+									 <tbody id="tbody_skill">
+								 {% for skill in current_user.get_all_skills() %}
+									 <tr id="s_{{skill.id}}">
+										 <td>{{ skill }}</td>
+										 <td>{{ skill.level }}%</td>
+										 <td class="controlTd">
+												<button type="button" data="s_{{ skill.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
+										 </td>
+									 </tr>
+								 {% endfor %}
+							 </tbody>
+
+									</table>
+								{% else %}
+									<table class="flatTable" id="skill_table" style="display: none;">
+									 <tr class="headingTr">
+										 <td>SKILL</td>
+										 <td>LEVEL</td>
+										 <td>ACTION</td>
+									 </tr>
+									 <tbody id="tbody_skill">
+
+                   </tbody>
+
+								  </table>
+									{% endif %}
 							</div>
 								<div class="row" id="skillForm">
 									<div class="col">
 										<div class="submit-field">
-											<h5>Yetenek</h5>
+											<h5>Skill</h5>
 											<input id="skill" type="text" class="with-border">
 										</div>
 									</div>
 
 									<div class="col">
 										<div class="submit-field">
-											<h5>Seviye</h5>
-											<select id="level" class="with-border" type="text">
-												<option>Başlangıç</option>
-												<option>Orta</option>
-												<option>Profesyonel</option>
-											</select>
+											<h5>Level</h5>
+											<input id="level" type="number" class="with-border">
 										</div>
-										<a class="button saveSetting" data="skill"><i class="icon-feather-save"></i> Kaydet</a>
+										<a class="button saveSetting" data="skill"><i class="icon-feather-save"></i> Save</a>
 									</div>
 								</div>
 								<div class="col-xl-12 addField" name="addButton">
-									<p class="button-skill"><i class="icon-material-outline-add-circle-outline"></i> Başka yetenek ekle</p>
+									<p class="button-skill"><i class="icon-material-outline-add-circle-outline"></i> Add Another</p>
 								</div>
 							</div>
 						</div>
@@ -257,38 +268,50 @@
 					<div class="col-xl-12">
 						<div class="dashboard-box">
 
-							<div class="headline" name="collapse" style="cursor: pointer;">
-								<h3><i class="icon-material-outline-business"></i> İş Deneyimi</h3>
+							<div class="headline collapse" style="cursor: pointer;">
+								<h3><i class="icon-material-outline-business"></i> Work Experience</h3>
 							</div>
 
 							<div class="content with-padding" style="display: none;">
 								<div>
-								    <ul class="list-group" id="workExp_ul">
-											{% if workExps %}
-												{% for workExp in workExps %}
-									        <li class="list-group-item clearfix" id="w_{{workExp.id}}">
-									            <div class="pull-left">{{ workExp }}</div>
-															<span class="pull-right button-group">
-																	<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-																	<button type="button" data="w_{{ workExp.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-															</span>
-									        </li>
-												{% endfor %}
-											{% else %}
-											<li class="list-group-item clearfix" style="display: none;">
-													<div class="pull-left"></div>
-													<span class="pull-right button-group">
-															<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-															<button type="button" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-													</span>
-											</li>
-											{% endif %}
-								    </ul>
+									{% if current_user.workexps() %}
+										<table class="flatTable" id="workExp_table">
+										 <tr class="headingTr">
+											 <td>POSITION</td>
+											 <td>COMPANY</td>
+											 <td>ACTION</td>
+										 </tr>
+										 <tbody id="tbody_workExp">
+									 {% for workexp in current_user.workexps() %}
+										 <tr id="w_{{workexp.id}}">
+											 <td>{{ workexp }}</td>
+											 <td>{{ workexp.company }}</td>
+											 <td class="controlTd">
+													<button type="button" data="w_{{ workexp.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
+											 </td>
+										 </tr>
+									 {% endfor %}
+								 </tbody>
+
+										</table>
+									{% else %}
+										<table class="flatTable" id="workExp_table" style="display: none;">
+										 <tr class="headingTr">
+											 <td>POSITION</td>
+											 <td>COMPANY</td>
+											 <td>ACTION</td>
+										 </tr>
+										 <tbody id="tbody_workExp">
+
+	                   </tbody>
+
+									  </table>
+										{% endif %}
 								</div>
 								<div class="row" id="workExpForm">
 									<div class="col-xl-6">
 										<div class="submit-field">
-											<h5>Pozisyon</h5>
+											<h5>Position</h5>
 											<input type="text" id="position" class="with-border" placeholder="ör. Yazılım Muhendisi">
 										</div>
 									</div>
@@ -468,33 +491,45 @@
 					<div class="col-xl-12">
 						<div class="dashboard-box">
 
-							<div class="headline" name="collapse" style="cursor: pointer;">
-								<h3><i class="icon-line-awesome-mortar-board"></i> Eğitim Durumu</h3>
+							<div class="headline collapse" style="cursor: pointer;">
+								<h3><i class="icon-line-awesome-mortar-board"></i> Education</h3>
 							</div>
 
 							<div class="content with-padding" style="display: none;">
 								<div>
-								    <ul class="list-group" id="edu_ul">
-											{% if edus %}
-												{% for edu in edus %}
-									        <li class="list-group-item clearfix" id="w_{{ edu.id }}">
-									            <div class="pull-left">{{ edu }}</div>
-															<span class="pull-right button-group">
-																	<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-																	<button type="button" data="w_{{ edu.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-															</span>
-									        </li>
-												{% endfor %}
-											{% else %}
-											<li class="list-group-item clearfix" style="display: none;">
-													<div class="pull-left"></div>
-													<span class="pull-right button-group">
-															<button type="button" class="btn btn-primary"><i class="icon-feather-edit"></i></button>
-															<button type="button" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
-													</span>
-											</li>
-											{% endif %}
-								    </ul>
+									{% if current_user.edus() %}
+									 <table class="flatTable" id="edu_table">
+										<tr class="headingTr">
+											<td>FIELD</td>
+											<td>SCHOOL</td>
+											<td>ACTION</td>
+										</tr>
+										<tbody id="tbody_edu">
+									{% for edu in current_user.edus() %}
+										<tr id="e_{{edu.id}}">
+											<td>{{ edu }}</td>
+											<td>{{ edu.school }}</td>
+											<td class="controlTd">
+												 <button type="button" data="e_{{ edu.id }}" class="btn btn-danger deleteItem"><i class="icon-feather-trash-2"></i></button>
+											</td>
+										</tr>
+									{% endfor %}
+								</tbody>
+
+									 </table>
+								 {% else %}
+									 <table class="flatTable" id="edu_table" style="display: none;">
+										<tr class="headingTr">
+											<td>FIELD</td>
+											<td>SCHOOL</td>
+											<td>ACTION</td>
+										</tr>
+										<tbody id="tbody_edu">
+
+										</tbody>
+
+									 </table>
+									 {% endif %}
 								</div>
 								<div class="row" id="eduForm">
 									<div class="col-xl-6">
@@ -657,7 +692,7 @@
 										</div>
 										<div class="submit-field" id="editor"></div>
 										<input type='hidden' name="description" id="desc_edu" value=""/>
-										<a class="button saveSetting" data="education"><i class="icon-feather-save"></i> Kaydet</a>
+										<a class="button saveSetting" data="education"><i class="icon-feather-save"></i> Save Changes</a>
 									</div>
 								</div>
 								<div class="col-xl-12 addField" name="addButton">
@@ -667,35 +702,96 @@
 						</div>
 					</div>
 
-					<!-- Dashboard Box -->
 					<div class="col-xl-12">
 						<div class="dashboard-box">
 
-								<div class="headline" name="collapse" style="cursor: pointer;">
-									<h3><i class="icon-material-outline-lock"></i> Şifre & Guvenlik</h3>
+							<div class="headline collapse" style="cursor: pointer;">
+								<h3><i class="fab fa-twitter-square"></i> Social Links</h3>
+							</div>
+
+							<div class="content with-padding" style="display: none;">
+								<div class="notification notice closeable">
+									<p>You don't need to write whole url, just ending is enough!</p>
+									<a class="close" href="#"></a>
 								</div>
+								<div class="row">
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>Facebook</h5>
+											<input type="text" id="facebook" class="with-border" placeholder="www.facebook.com/">
+										</div>
+									</div>
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>Twitter</h5>
+											<input type="text" id="twitter" class="with-border" placeholder="www.twitter.com/">
+										</div>
+									</div>
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>Youtube</h5>
+											<input type="text" id="youtube" class="with-border" placeholder="www.youtube.com/">
+										</div>
+									</div>
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>Instagram</h5>
+											<input type="text" id="instagram" class="with-border" placeholder="www.instagram.com/">
+										</div>
+									</div>
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>Github</h5>
+											<input type="text" id="github" class="with-border" placeholder="www.github.com/">
+										</div>
+									</div>
+
+									<div class="col-xl-6">
+										<div class="submit-field">
+											<h5>LinkedIn</h5>
+											<input type="text" id="linkedin" class="with-border" placeholder="www.linkedin.com/">
+										</div>
+										<a class="button saveSetting" data="social"><i class="icon-feather-save"></i> Save Changes</a>
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Dashboard Box -->
+					<div class="col-xl-12">
+						<div class="dashboard-box">
+							<div class="headline collapse" style="cursor: pointer;">
+								<h3><i class="icon-material-outline-lock"></i> Password & Security</h3>
+							</div>
 							<div class="content with-padding" style="display: none;">
 								<div class="row">
 									<div class="col-xl-4">
 										<div class="submit-field">
-											<h5>Şuanki şifreniz</h5>
+											<h5>Old Password</h5>
 											<input id="password" type="password" class="with-border">
 										</div>
 									</div>
 
 									<div class="col-xl-4">
 										<div class="submit-field">
-											<h5>Yeni şifreniz</h5>
+											<h5>New Password</h5>
 											<input id="new_password" type="password" class="with-border">
 										</div>
 									</div>
 
 									<div class="col-xl-4">
 										<div class="submit-field">
-											<h5>Yeni şifre tekrar</h5>
+											<h5>New Password Again</h5>
 											<input id="confirm_password" type="password" class="with-border">
 										</div>
-										<a class="button saveSetting" data="security"><i class="icon-feather-save"></i> Kaydet</a>
+										<a class="button saveSetting" data="security"><i class="icon-feather-save"></i> Save Changes</a>
 									</div>
 								</div>
 							</div>
@@ -766,6 +862,8 @@
 <script type="text/javascript" src="/static/js/custom.js?u={{ last_updated }}"></script>
 <script type="text/javascript" src="/static/js/collapse.js?u={{ last_updated }}"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>
 // Snackbar for user status switcher

@@ -23,6 +23,12 @@ class Users(UserMixin, db.Model):
     status = db.Column(db.String(50), default="employer")
     email = db.Column(db.String(50), unique=True, nullable=False)
     password = db.Column(db.String(80))
+    facebook = db.Column(db.String(80), nullable=True, default="")
+    twitter = db.Column(db.String(80), nullable=True, default="")
+    youtube = db.Column(db.String(80), nullable=True, default="")
+    github = db.Column(db.String(80), nullable=True, default="")
+    instagram = db.Column(db.String(80), nullable=True, default="")
+    linkedin = db.Column(db.String(80), nullable=True, default="")
     email_approved = db.Column(db.Boolean, default=False)
     setting_completed = db.Column(db.Boolean, default=False)
     rating = db.Column(db.Float, default=0.0)
@@ -164,6 +170,15 @@ class Users(UserMixin, db.Model):
 
     def is_offered(self):
         return Offers.query.filter_by(offered=self).count() > 0
+
+    def get_all_skills(self):
+        return Skills.query.filter_by(user_id=self.id).all()
+
+    def workexps(self):
+        return WorkExperiences.query.filter_by(user_id=self.id).all()
+
+    def edus(self):
+        return Educations.query.filter_by(user_id=self.id).all()
 
     def get_full_name(self):
         return self.name + " " + self.surname

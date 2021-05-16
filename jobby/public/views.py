@@ -88,7 +88,7 @@ def freelancer(user_id):
 
 @public.route('/freelancers')
 def browseFreelancers():
-    freelancers = Users.query.all()
+    freelancers = Users.query.filter_by(status='professional').all()
     return render_template('public/freelancers-list.html', freelancers=freelancers)
 
 @public.app_errorhandler(404)

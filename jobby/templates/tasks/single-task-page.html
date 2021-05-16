@@ -30,7 +30,6 @@
                 <div class="row justify-content-center">
                     <div class="col-lg-12 text-center">
                         <div class="page-next-level">
-                            <img src="images/job/Gradle.svg" class="avatar avatar-small" alt="">
                             <h4 class="title mt-4 mb-3"> {{ task.project_name }} </h4>
                             <ul class="list-unstyled">
                                 <li class="list-inline-item text-primary me-3"><i class="mdi mdi-map-marker text-warning me-2"></i>{{ task.location }}</li>
@@ -249,14 +248,14 @@
                     <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
                         <div class="modal-body py-5">
                             <div class="text-center">
-                                <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                <div class="icon d-flex align-items-center justify-content-center bg-soft-success rounded-circle mx-auto" style="height: 95px; width:95px;">
                                     <h1 class="mb-0"><i class="uil uil-check-circle align-middle"></i></h1>
                                 </div>
                                 <div class="mt-4">
                                     <h4>You allready bidded this one!</h4>
                                     <p class="text-muted">Browse more project...</p>
                                     <div class="mt-4">
-                                        <a href="{{ url_for('public.browseTasks') }}" class="btn btn-outline-primary">+ Browse Projects</a>
+                                        <a href="{{ url_for('public.browseTasks') }}" class="btn btn-outline-primary">Browse Projects</a>
                                     </div>
                                 </div>
                             </div>

@@ -1,13 +1,10 @@
  document.addEventListener('DOMContentLoaded', () => {
-   headline = document.getElementsByName('collapse');
-   headline.forEach(function(h){
-     h.onclick = () =>{
-       if (h.offsetParent.lastElementChild.style.display == 'none'){
-         h.offsetParent.lastElementChild.style.display = 'block';
-       }
-       else{
-         h.offsetParent.lastElementChild.style.display = 'none';
-       }
+   $('.collapse').on('click', function(e){
+     if($(this).next().css("display") == 'none'){
+       $(this).next().show('slow');
+     }
+     else {
+       $(this).next().hide('slow');
      }
    })
 
@@ -84,6 +81,18 @@
    		var data = {'password': password.value, "new_password": new_password.value, "confirm_password": confirm_password.value};
    	}
 
+    else if (settingType == "social"){
+   		var url = '/setting/social';
+   		var facebook = document.getElementById('facebook').value;
+   		var twitter = document.getElementById('twitter').value;
+   		var youtube = document.getElementById('youtube').value;
+      var github = document.getElementById('github').value;
+   		var instagram = document.getElementById('instagram').value;
+   		var linkedin = document.getElementById('linkedin').value;
+   		var data = {'facebook': facebook, "twitter": twitter, "youtube": youtube,
+        "github": github, "instagram": instagram, "linkedin": linkedin};
+   	}
+
    	xhr.open('POST', url)
    	xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
    	xhr.setRequestHeader("X-CSRFToken", csrf_token);
@@ -92,18 +101,32 @@
    			const result = JSON.parse(xhr.responseText);
    			if(result.success){
           if(result.settingType == 's'){
-            saveSkill(result.skill, result.skill_id);
+            saveSkill(result.skill,result.level, result.skill_id);
           }
           else if(result.settingType == 'w'){
-            saveWorkExp(result.workExp, result.workExp_id);
+            saveWorkExp(result.workExp, result.company, result.workExp_id);
+          }
+          else if(result.settingType == 'so'){
+            Swal.fire({
+            title: "Good job!",
+            text: "Saved successfully!",
+            type: "success",
+            confirmButtonClass: 'btn btn-primary',
+            buttonsStyling: false,
+           });
           }
           else if(result.settingType == 'e'){
-            saveEdu(result.edu, result.edu_id);
+            saveEdu(result.field, result.school, result.edu_id);
           }
           else if(result.settingType == 'p'){
-            alert(result.msg);
+            Swal.fire({
+            title: "Good job!",
+            text: "Saved successfully!",
+            type: "success",
+            confirmButtonClass: 'btn btn-primary',
+            buttonsStyling: false,
+           });
           }
-
    			}
    			else{
    				alert(result.msg);
@@ -114,40 +137,70 @@
    	return false;
    })
 
-   function saveSkill(skill, skill_id){
-     var parent = document.getElementById('skill_ul');
-     var li = parent.firstElementChild.cloneNode(true);
-     var form = document.getElementById('skillForm');
-     li.firstElementChild.innerText = skill;
-     li.style.display = "block";
-     li.setAttribute('id', "s_"+skill_id);
-     li.lastElementChild.lastElementChild.setAttribute('data', "s_"+skill_id);
-     parent.appendChild(li);
-     form.style.display = 'none';
+   function saveSkill(skill, level, skill_id){
+      var skill_table = document.getElementById('skill_table');
+      var form_skill = document.getElementById('skillForm');
+      if (skill_table.style.display == 'none'){
+        skill_table.style.display = "";
+      }
+
+      var tbody = document.getElementById('tbody_skill');
+      tbody.innerHTML += '<tr class="table-active" id=s_' + skill_id + '>' +
+        '<td>' +
+          '<span class="font-weight-bold">' + skill + '</span>' +
+        '</td>' +
+        '<td>' + level + '</td>' +
+        '<td>' +
+        '<button type="button" class="btn btn-danger deleteItem" data="s_' + skill_id + '"><i class="icon-feather-trash-2"></i></button>' +
+        '</td>' +
+      '</tr>';
+
+      form_skill.style.display = 'none';
+      return false;
+    }
+
+   function saveWorkExp(position, company, workExp_id){
+     var workExp_table = document.getElementById('workExp_table');
+     var form_workexp = document.getElementById('workExpForm');
+     if (workExp_table.style.display == 'none'){
+       workExp_table.style.display = "";
+     }
+
+     var tbody = document.getElementById('tbody_workExp');
+     tbody.innerHTML += '<tr class="table-active" id=w_' + workExp_id + '>' +
+       '<td>' +
+         '<span class="font-weight-bold">' + position + '</span>' +
+       '</td>' +
+       '<td>' + company + '</td>' +
+       '<td>' +
+       '<button type="button" class="btn btn-danger deleteItem" data="w_' + workExp_id + '"><i class="icon-feather-trash-2"></i></button>' +
+       '</td>' +
+     '</tr>';
+
+     form_workexp.style.display = 'none';
+     return false;
    }
 
-   function saveWorkExp(workExp, workExp_id){
-     var parent = document.getElementById('workExp_ul');
-     var li = parent.firstElementChild.cloneNode(true);
-     var form = document.getElementById('workExpForm');
-     li.firstElementChild.innerText = workExp;
-     li.style.display = "block";
-     li.setAttribute('data', "w_"+workExp_id);
-     li.lastElementChild.lastElementChild.setAttribute('data', "w_"+workExp_id);
-     parent.appendChild(li);
-     form.style.display = 'none';
-   }
+   function saveEdu(field, school, edu_id){
+     var edu_table = document.getElementById('edu_table');
+     var form_edu = document.getElementById('eduForm');
+     if (edu_table.style.display == 'none'){
+       edu_table.style.display = "";
+     }
 
-   function saveEdu(edu, edu_id){
-     var parent = document.getElementById('edu_ul');
-     var li = parent.firstElementChild.cloneNode(true);
-     var form = document.getElementById('eduForm');
-     li.firstElementChild.innerText = edu;
-     li.style.display = "block";
-     li.setAttribute('data', "w_"+edu_id);
-     li.lastElementChild.lastElementChild.setAttribute('data', "w_"+edu_id);
-     parent.appendChild(li);
-     form.style.display = 'none';
+     var tbody = document.getElementById('tbody_edu');
+     tbody.innerHTML += '<tr class="table-active" id=e_' + edu_id + '>' +
+       '<td>' +
+         '<span class="font-weight-bold">' + field + '</span>' +
+       '</td>' +
+       '<td>' + school + '</td>' +
+       '<td>' +
+       '<button type="button" class="btn btn-danger deleteItem" data="e_' + edu_id + '"><i class="icon-feather-trash-2"></i></button>' +
+       '</td>' +
+     '</tr>';
+
+     form_edu.style.display = 'none';
+     return false;
    }
 
   document.addEventListener('click', deleteItem);
@@ -167,9 +220,36 @@
   			if (request.status == 200){
   				const result = JSON.parse(request.responseText);
   				if(result.success){
-            var item = document.getElementById(type_id);
-  					item.parentNode.removeChild(item);
-  					e.preventDefault();
+            if (result.currentField == 's') {
+              var tbody = document.getElementById('tbody_skill');
+              var item = document.getElementById(type_id);
+              item.parentNode.removeChild(item);
+              if (tbody.childElementCount == 0){
+                var skill_table = document.getElementById('skill_table');
+                skill_table.style.display = "none";
+              }
+              e.preventDefault();
+            }
+            else if (result.currentField == 'w') {
+              var tbody = document.getElementById('tbody_workExp');
+              var item = document.getElementById(type_id);
+              item.parentNode.removeChild(item);
+              if (tbody.childElementCount == 0){
+                var workExp_table = document.getElementById('workExp_table');
+                workExp_table.style.display = "none";
+              }
+              e.preventDefault();
+            }
+            else if (result.currentField == 'e') {
+              var tbody = document.getElementById('tbody_edu');
+              var item = document.getElementById(type_id);
+              item.parentNode.removeChild(item);
+              if (tbody.childElementCount == 0){
+                var edu_table = document.getElementById('edu_table');
+                edu_table.style.display = "none";
+              }
+              e.preventDefault();
+            }
   				}
   				else{
   					alert("Lutfen giriş yapınız");
@@ -192,10 +272,6 @@
         alert("Lutfen açık formu kaydedin");
       }
     }
-  })
-
-  $('.list_group-item').on('click', function(e){
-
   })
 
  })

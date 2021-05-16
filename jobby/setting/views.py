@@ -46,7 +46,7 @@ def setting_profile():
     current_user.introduction = bleach.clean(data['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
     current_user.check_status()
     db.session.commit()
-    return jsonify({"success": True, "settingType": "p", "msg": "Profil ayarlarınız değişti."})
+    return jsonify({"success": True, "settingType": "p"})
 
 @setting.route('/setting/skill', methods=['POST'])
 @login_required
@@ -58,7 +58,7 @@ def setting_skill():
     db.session.add(new_skill)
     db.session.commit()
     current_user.check_status()
-    return jsonify({"success": True, "settingType": 's', "skill_id": new_skill.id, "skill": new_skill.skill})
+    return jsonify({"success": True, "settingType": 's', "skill_id": new_skill.id, "skill": new_skill.skill, 'level': new_skill.level})
 
 @setting.route('/setting/workExp', methods=['POST'])
 @login_required
@@ -70,7 +70,7 @@ def setting_workExp():
         description=description, user_id=current_user.id)
     db.session.add(workExp)
     db.session.commit()
-    return jsonify({"success": True, "settingType": 'w', 'workExp_id': workExp.id, "workExp": workExp.position})
+    return jsonify({"success": True, "settingType": 'w', 'workExp_id': workExp.id, "workExp": workExp.position, 'company': workExp.company})
 
 @setting.route('/setting/education', methods=['POST'])
 @login_required
@@ -82,7 +82,7 @@ def setting_education():
         description=description, user_id=current_user.id)
     db.session.add(edu)
     db.session.commit()
-    return jsonify({"success": True, "settingType": 'e', "edu_id": edu.id, "edu": edu.field})
+    return jsonify({"success": True, "settingType": 'e', "edu_id": edu.id, "field": edu.field, 'school': edu.school})
 
 @setting.route('/setting/security', methods=['POST'])
 @login_required
@@ -98,21 +98,44 @@ def setting_security():
         db.session.commit()
         return jsonify({"success": True, "msg": "Guvenlik ayarlarınız değişti."})
 
+@setting.route('/setting/social', methods=['POST'])
+@login_required
+def setting_social():
+    data = request.get_json(force=True)
+
+    current_user.facebook = data['facebook']
+    current_user.twitter = data['twitter']
+    current_user.instagram = data['instagram']
+    current_user.github = data['github']
+    current_user.youtube = data['youtube']
+    current_user.linkedin = data['linkedin']
+
+    db.session.commit()
+
+    return jsonify({"success": True, 'settingType': 'so'})
+
+
 @setting.route('/deleteItem', methods=['POST'])
 @login_required
 def deleteItem():
     data = request.get_json(force=True)
     itemType, itemId = data['type_id'].split('_')
     if itemType == 'w':
-        #item = WorkExperiences.query.filter_by(id=itemId).first()
-        #db.session.delete(item)
-        return jsonify({"success": True})
+        item = WorkExperiences.query.filter_by(id=itemId, user_id=current_user.id).first()
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({"success": True, 'currentField': 'w'})
     elif itemType == 's':
-        item = Skills.query.filter_by(id=itemId).first()
-        current_user.UserSkills.remove(item)
+        item = Skills.query.filter_by(id=itemId, user_id=current_user.id).first()
+        db.session.delete(item)
         current_user.check_status()
         db.session.commit()
-        return jsonify({"success": True})
+        return jsonify({"success": True, 'currentField': 's'})
+    elif itemType == 'e':
+        item = Educations.query.filter_by(id=itemId, user_id=current_user.id).first()
+        db.session.delete(item)
+        db.session.commit()
+        return jsonify({"success": True, 'currentField': 'e'})
 
 @setting.route('/setting')
 @login_required
