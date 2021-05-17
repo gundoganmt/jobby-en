@@ -13,15 +13,26 @@ setting = Blueprint('setting',__name__)
 @setting.route('/setting', methods=['POST'])
 @login_required
 def setting_personel():
-    if not request.form['name'] or not request.form['surname']:
-        flash('İsim veya soyisim boş olamaz')
-        return redirect(request.url)
-    else:
-        current_user.name = request.form['name']
-        current_user.surname = request.form['surname']
+    name = request.form['name']
+    surname = request.form['surname']
+    email = request.form['email']
+    phone_number = request.form['phone_number']
 
-    current_user.email = request.form['email']
-    current_user.phone_number = request.form['phone_number']
+    if len(name) < 5 or len(name) > 30 or len(surname) < 5 or len(surname) > 30:
+        flash("The length of name and surname should be between 5 and 30")
+        return redirect(request.url)
+
+    if len(email) > 50:
+        flash("Incorrect Email!")
+        return redirect(request.url)
+
+    if email != current_user.email:
+        flash("Confirmation email has been sent!")
+
+    current_user.name = name
+    current_user.surname = surname
+    current_user.email = email
+    current_user.phone_number = phone_number
 
     if 'file' in request.files:
         file = request.files['file']
@@ -152,3 +163,8 @@ def setting_page():
         edus = Educations.query.filter_by(student=current_user).all()
         return render_template('setting/settings.html', last_updated=last_updated, skills=skills,
             workExps=workExps, edus=edus, categories=categories, cities=cities)
+
+@setting.app_errorhandler(413)
+def file_too_large(e):
+    flash('The file size is too big! At most 2Mb.')
+    return redirect(request.url)

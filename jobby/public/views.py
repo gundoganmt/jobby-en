@@ -20,7 +20,7 @@ def index():
         keyword = request.form['keyword']
         return redirect(url_for('.browseTasks', location=location, keyword=keyword))
     else:
-        users = Users.query.filter_by(status='professional').all()[:5]
+        users = Users.query.filter_by(status='freelancer').all()[:5]
         featured_tasks = Tasks.query.all()[:3]
         if current_user.is_authenticated:
             return render_template('public/index.html')
@@ -58,7 +58,7 @@ def browseTasks():
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):
-    #user = Users.query.filter_by(id=user_id, status='professional').first_or_404()
+    #user = Users.query.filter_by(id=user_id, status='freelancer').first_or_404()
     if request.method == 'GET':
         #user.add_view()
         return render_template('public/freelancer-profile.html')
@@ -88,7 +88,7 @@ def freelancer(user_id):
 
 @public.route('/freelancers')
 def browseFreelancers():
-    freelancers = Users.query.filter_by(status='professional').all()
+    freelancers = Users.query.filter_by(status='freelancer').all()
     return render_template('public/freelancers-list.html', freelancers=freelancers)
 
 @public.app_errorhandler(404)

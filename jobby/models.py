@@ -37,7 +37,7 @@ class Users(UserMixin, db.Model):
     introduction = db.Column(db.Text, default="")
     num_bids = db.Column(db.Integer, default=0)
     field_of_work = db.Column(db.String(25), nullable=True)
-    province = db.Column(db.String(25), nullable=True)
+    country = db.Column(db.String(25), nullable=True)
     tagline = db.Column(db.String(80), nullable=False, default="")
     message_sid = db.Column(db.String(80), default="")
     member_since = db.Column(db.DateTime)
@@ -54,7 +54,7 @@ class Users(UserMixin, db.Model):
     offers = db.relationship('Offers', foreign_keys='Offers.offers_user', backref='offers', cascade='all, delete-orphan')
     won = db.relationship('Tasks', foreign_keys='Tasks.winner_id', backref='winner', cascade='all, delete-orphan')
     views = db.relationship('Views', backref='viewed', cascade='all, delete-orphan')
-    reviews_pro = db.relationship('Reviews', foreign_keys='Reviews.professional', backref='reviewed_pro', cascade='all, delete-orphan')
+    reviews_pro = db.relationship('Reviews', foreign_keys='Reviews.freelancer', backref='reviewed_pro', cascade='all, delete-orphan')
     reviews_emp = db.relationship('Reviews', foreign_keys='Reviews.employer', backref='reviewed_emp', cascade='all, delete-orphan')
     bids = db.relationship('Bids', backref='bidder', lazy='dynamic', cascade='all, delete-orphan')
     messages_sent = db.relationship('Messages', foreign_keys='Messages.sender_id', backref='sender', cascade='all, delete-orphan')
@@ -111,7 +111,7 @@ class Users(UserMixin, db.Model):
     def check_status(self):
         skill = Skills.query.filter_by(user_id=self.id).all()
         if self.field_of_work and self.tagline and self.introduction and len(skill)>0 and self.email_approved:
-            self.status = 'professional'
+            self.status = 'freelancer'
         else:
             self.status = 'employer'
         db.session.commit()
@@ -265,7 +265,7 @@ class Reviews(db.Model):
     reply = db.Column(db.String(300), nullable=True)
     rating = db.Column(db.Float)
     task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
-    professional = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    freelancer = db.Column(db.Integer, db.ForeignKey('Users.id'))
     employer = db.Column(db.Integer, db.ForeignKey('Users.id'))
 
 class Bids(db.Model):

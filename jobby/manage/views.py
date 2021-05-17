@@ -23,7 +23,7 @@ def reviews():
             notif.seen = True
         db.session.commit()
         i_review = Reviews.query.filter_by(reviewed_emp=current_user).all()
-        if current_user.status == 'professional':
+        if current_user.status == 'freelancer':
             my_reviews = Reviews.query.filter_by(reviewed_pro=current_user).all()
         else:
             my_reviews = Reviews.query.filter_by(reviewed_emp=current_user).all()

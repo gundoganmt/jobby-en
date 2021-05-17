@@ -240,7 +240,7 @@
 						</div>
 
 						<ul class="user-menu-small-nav">
-							{% if current_user.status == 'professional' %}
+							{% if current_user.status == 'freelancer' %}
 								<li><a href="{{ url_for('public.freelancer', user_id=current_user.id) }}"><i class="icon-material-outline-account-circle"></i> Profilim</a></li>
 							{% else %}
 								<li><a href="{{ url_for('manage.dashboard') }}"><i class="icon-material-outline-dashboard"></i> Profesyonel Ol</a></li>
