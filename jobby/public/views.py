@@ -58,33 +58,29 @@ def browseTasks():
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):
-    #user = Users.query.filter_by(id=user_id, status='freelancer').first_or_404()
+    user = Users.query.filter_by(id=user_id, status='freelancer').first_or_404()
     if request.method == 'GET':
         #user.add_view()
-        return render_template('public/freelancer-profile.html')
+        return render_template('public/freelancer-profile.html', user=user)
     else:
-        if current_user.is_authenticated:
-            offer = Offers(offered=user, offers=current_user)
-            offer.subject = request.form['subject']
-            offer.message = request.form['message']
-            if 'file' in request.files:
-                file = request.files['file']
-                filename = file.filename
-            if file and allowed_offer_file(filename):
+        offer = Offers(offered=user, offers=current_user)
+        offer.subject = request.form['subject']
+        offer.message = request.form['offerMessage']
+        if 'formFile' in request.files:
+            file = request.files['formFile']
+            filename = file.filename
+            if allowed_offer_file(filename):
                 filename = secure_filename(filename)
                 unique_filename = str(uuid.uuid4())+get_extension(filename)
                 offer.filename = unique_filename
                 file.save(os.path.join(UPLOAD_OFFER_FOLDER, unique_filename))
 
-            notif = Notification(notification_from=current_user, notification_to=user, not_type=4)
-            db.session.add(offer)
-            db.session.add(notif)
-            db.session.commit()
-            flash("Teklifiniz Başarıyla iletildi.")
-            return redirect(request.url)
-        else:
-            flash("Teklif sunabilmek için giriş yapmalısınız!")
-            return redirect(url_for('account.login'))
+        notif = Notification(notification_from=current_user, notification_to=user, not_type=4)
+        db.session.add(offer)
+        db.session.add(notif)
+        db.session.commit()
+        return redirect(request.url)
+
 
 @public.route('/freelancers')
 def browseFreelancers():

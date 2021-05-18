@@ -15,30 +15,20 @@
 				<!-- Main Navigation -->
 				<nav id="navigation">
 					<ul id="responsive">
-						<li><a href="#"><b>İlan Ara</b></a>
-							<ul class="dropdown-nav">
-								<li><a href="{{ url_for('public.browseTasks') }}"><b>Proje İlanları</b></a></li>
-								<li><a href="index-2.html"><b>İş İlanları</b></a></li>
-							</ul>
-						</li>
+						<li><a href="{{ url_for('public.browseTasks') }}"><b>PROJECTS</b></a></li>
 
-						<li><a href="#"><b>İlan Ver</b></a>
-							<ul class="dropdown-nav">
-								<li><a href="{{ url_for('posttask.post_task') }}"><b>Proje İlanı Ver</b></a></li>
-							</ul>
-						</li>
+						<li><a href="{{ url_for('public.browseFreelancers') }}"><b>FREELANCERS</b></a></li>
 
-						<li><a href="{{ url_for('public.browseFreelancers') }}"><b>Freelancer Bul</b></a></li>
 						{% if current_user.status == 'freelancer' %}
-							<li><a href="{{ url_for('manage.dashboard') }}">Hesabım</a></li>
+							<li><a href="{{ url_for('manage.dashboard') }}"><b>DASHBOARD</b></a></li>
 						{% endif %}
 						{% if current_user.is_authenticated %}
-							<li class="onlyMobile"><a href="{{ url_for('manage.reviews') }}"><b>Değerlendirmeler</b></a></li>
-							<li class="onlyMobile"><a href="{{ url_for('account.logout') }}"><b>Çıkış</b></a></li>
+							<li class="onlyMobile"><a href="{{ url_for('manage.reviews') }}"><b>REVIEWS</b></a></li>
+							<li class="onlyMobile"><a href="{{ url_for('account.logout') }}"><b>LOGOUT</b></a></li>
 						{% endif %}
 						{% if current_user.is_anonymous %}
-							<li class="onlyMobile"><a href="{{ url_for('account.login') }}"><b>Giriş Yap</b></a></li>
-							<li class="onlyMobile"><a href="{{ url_for('account.signup') }}"><b>Kaydol</b></a></li>
+							<li class="onlyMobile"><a href="{{ url_for('account.login') }}"><b>LOGIN</b></a></li>
+							<li class="onlyMobile"><a href="{{ url_for('account.signup') }}"><b>SIGN UP</b></a></li>
 						{% endif %}
 					</ul>
 				</nav>
@@ -70,7 +60,7 @@
 						<div class="header-notifications-dropdown">
 
 							<div class="header-notifications-headline">
-								<h4>Bildirimler</h4>
+								<h4>Notifications</h4>
 								<button class="mark-as-read ripple-effect-dark" title="Okundu olarak işaretle" data-tippy-placement="left">
 									<i class="icon-feather-check-square"></i>
 								</button>
@@ -85,7 +75,7 @@
 													<a href="{{ url_for('manage.manageBidders', task_id=nt.notedTask.id) }}">
 														<span class="notification-icon"><i class="icon-material-outline-gavel"></i></span>
 														<span class="notification-text">
-															<strong>{{ nt.notification_from }} </strong><span class="color">{{ nt.notedTask }}</span> için teklif verdi.
+															<strong>{{ nt.notification_from }} </strong> bidded for <span class="color">{{ nt.notedTask }}.</span>
 														</span>
 													</a>
 												</li>
@@ -95,7 +85,7 @@
 													<a href="#">
 														<span class="notification-icon"><i class="icon-line-awesome-info"></i></span>
 														<span class="notification-text">
-															<strong>Email adresinizi doğrulayın!</strong>
+															<strong>Please confirm your email!</strong>
 														</span>
 													</a>
 												</li>
@@ -105,7 +95,7 @@
 													<a href="{{ url_for('manage.activeBids') }}">
 														<span class="notification-icon" style="background: green; color: white;"><i class="icon-material-outline-check-circle"></i></span>
 														<span class="notification-text">
-															<strong>Tebrikler </strong><span class="color">{{ nt.notedTask }}</span> işini kazandınız!
+															<strong>congratulations!</strong> You won <span class="color">{{ nt.notedTask }}</span>
 														</span>
 													</a>
 												</li>
@@ -115,7 +105,7 @@
 												<a href="{{ url_for('manage.manageOffers') }}">
 													<span class="notification-icon"><i class="icon-material-outline-local-offer"></i></span>
 													<span class="notification-text">
-														<strong>{{ nt.notification_from }} </strong> size bir teklif sundu.
+														<strong>{{ nt.notification_from }} </strong> has proposed you an offer.
 													</span>
 												</a>
 											</li>
@@ -125,7 +115,7 @@
 												<a href="{{ url_for('manage.reviews') }}">
 													<span class="notification-icon"><i class="icon-material-outline-rate-review"></i></span>
 													<span class="notification-text">
-														<strong>{{ nt.notification_from }} </strong> size <span class="color">{{ nt.notedTask }}</span> işi için puan verdi.
+														<strong>{{ nt.notification_from }} </strong> has reviewed your <span class="color">{{ nt.notedTask }}</span> work.
 													</span>
 												</a>
 											</li>
@@ -136,7 +126,7 @@
 												<a href="#">
 													<span class="notification-icon"><i class="icon-line-awesome-info"></i></span>
 													<span class="notification-text">
-														<strong>Hiç bildiriminiz yok</strong>
+														<strong>You don't have any notification</strong>
 													</span>
 												</a>
 											</li>
@@ -159,7 +149,7 @@
 						<div class="header-notifications-dropdown">
 
 							<div class="header-notifications-headline">
-								<h4>Mesajlar</h4>
+								<h4>Messages</h4>
 								<button class="mark-as-read ripple-effect-dark" title="Mark all as read" data-tippy-placement="left">
 									<i class="icon-feather-check-square"></i>
 								</button>
@@ -184,7 +174,7 @@
 								</div>
 							</div>
 
-							<a href="{{ url_for('message.messages') }}" class="header-notifications-button ripple-effect button-sliding-icon">Butun mesajları gör<i class="icon-material-outline-arrow-right-alt"></i></a>
+							<a href="{{ url_for('message.messages') }}" class="header-notifications-button ripple-effect button-sliding-icon">See all messages<i class="icon-material-outline-arrow-right-alt"></i></a>
 						</div>
 					</div>
 
@@ -210,22 +200,16 @@
 								<div class="user-details">
 									<div class="user-avatar status-online"><img src="{{ url_for('static', filename='images/'+current_user.profile_picture) }}" alt=""></div>
 									<div class="user-name">
-										{% if not current_user.status == 'company' %}
-											{% if current_user.name %}
-												{{ current_user.get_full_name() }}
-											{% else %}
-												{{ current_user.email }}
-											{% endif %}
+										{% if current_user.name %}
+											{{ current_user.get_full_name() }}
 										{% else %}
 											{{ current_user.email }}
 										{% endif %}
 
-										{% if current_user.status == 'company' %}
-											<span>Şirket</span>
-										{% elif current_user.status == 'employer' %}
-											<span>İşveren</span>
+										{% if current_user.status == 'employer' %}
+											<span>Employer</span>
 										{% else %}
-											<span>Profesyonel</span>
+											<span>Freelancer</span>
 										{% endif %}
 									</div>
 								</div>
@@ -241,12 +225,12 @@
 
 						<ul class="user-menu-small-nav">
 							{% if current_user.status == 'freelancer' %}
-								<li><a href="{{ url_for('public.freelancer', user_id=current_user.id) }}"><i class="icon-material-outline-account-circle"></i> Profilim</a></li>
+								<li><a href="{{ url_for('public.freelancer', user_id=current_user.id) }}"><i class="icon-material-outline-account-circle"></i> My Profile</a></li>
 							{% else %}
-								<li><a href="{{ url_for('manage.dashboard') }}"><i class="icon-material-outline-dashboard"></i> Profesyonel Ol</a></li>
+								<li><a href="{{ url_for('setting.setting_page') }}"><i class="icon-material-outline-dashboard"></i> Become Freelancer</a></li>
 							{% endif %}
-							<li><a href="{{ url_for('setting.setting_page') }}"><i class="icon-material-outline-settings"></i> Ayarlar</a></li>
-							<li><a href="{{ url_for('account.logout') }}"><i class="icon-material-outline-power-settings-new"></i> Çıkış </a></li>
+							<li><a href="{{ url_for('setting.setting_page') }}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+							<li><a href="{{ url_for('account.logout') }}"><i class="icon-material-outline-power-settings-new"></i> Logout </a></li>
 						</ul>
 
 						</div>
@@ -258,7 +242,7 @@
 			 <!-- Right Side Content / End -->
 				<div class="right-side">
 					<div class="header-widget">
-						<a href={{ url_for('account.login') }} class="log-in-button"><i class="icon-feather-log-in"></i> <span>Giriş Yap / Kaydol</span></a>
+						<a href="{{ url_for('account.login') }}" class="log-in-button"><i class="icon-feather-log-in"></i> <span>Log In / Sign Up</span></a>
 					</div>
 				{% endif %}
 				<!-- Mobile Navigation Button -->

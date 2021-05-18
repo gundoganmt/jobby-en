@@ -25,7 +25,7 @@ def dir_last_updated(folder):
         for f in files))
 
 ALLOWED_IMG_EXTENSIONS = {'jpeg', 'jpg', 'png'}
-ALLOWED_OFFER_EXTENSIONS = {'jpeg', 'jpg', 'png', 'pdf', 'zip'}
+ALLOWED_OFFER_EXTENSIONS = {'docx', 'doc', 'pdf'}
 
 UPLOAD_IMG_FOLDER = os.path.join(os.getcwd(), 'jobby/static/images')
 UPLOAD_TASK_FOLDER = os.path.join(os.getcwd(), 'jobby/static/images/taskpics')

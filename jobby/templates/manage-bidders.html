@@ -114,7 +114,7 @@
 													<div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
 														<a class="popup-with-zoom-anim button ripple-effect winner" style="background: green; color: white;"><i class="icon-material-outline-check"></i> Kazandı</a>
 														<a href="#small-dialog-2" name="sendMessage" data="{{ winner_bid.bidder.id }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Mesaj Gönder</a>
-														<a href="#small-dialog" name="getmessage" data="{{ winner_bid.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Önyazıyı Gör" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
+														<a href="#small-dialog" name="getmessage" data="b_{{ winner_bid.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Önyazıyı Gör" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
 													</div>
 												</div>
 											</div>
@@ -162,7 +162,7 @@
 																<a href="#small-dialog-1"  name="acceptBid" data="{{ bid.id }}" class="popup-with-zoom-anim button ripple-effect"><i class="icon-material-outline-check"></i> Kabul Et</a>
 															{% endif %}
 															<a href="#small-dialog-2" name="sendMessage" data="{{ bid.bidder.id }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Mesaj Gönder</a>
-															<a href="#small-dialog" name="getmessage" data="{{ bid.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Önyazıyı Gör" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
+															<a href="#small-dialog" name="getmessage" data="b_{{ bid.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Önyazıyı Gör" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
 															<a href="#" class="button gray ripple-effect ico" title="Teklifi Sil" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
 														</div>
 													</div>

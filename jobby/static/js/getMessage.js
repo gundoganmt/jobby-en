@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   msg.forEach(function(m){
     m.onclick = () => {
       const request = new XMLHttpRequest();
-      var bid_id = parseInt(m.getAttribute('data'));
-      var url = '/get-message/' + bid_id;
+      var type_id = m.getAttribute('data');
+      var url = '/get-message/' + type_id;
       request.open('GET', url);
 
       request.onload = () =>{

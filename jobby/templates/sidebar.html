@@ -9,41 +9,41 @@
             <span class="hamburger-inner"></span>
           </span>
         </span>
-        <span class="trigger-title">Navigasyon Menusu</span>
+        <span class="trigger-title">Navigation Menu</span>
       </a>
 
       <!-- Navigation -->
       <div class="dashboard-nav">
         <div class="dashboard-nav-inner">
 
-          <ul data-submenu-title="Başlangıç">
-            <li><a href="{{ url_for('manage.dashboard') }}"><i class="icon-material-outline-dashboard"></i> Hesabım</a></li>
-            <li><a href="{{ url_for('message.messages') }}"><i class="icon-material-outline-question-answer"></i> Mesajlar</a></li>
-            <li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i> Kaydedilenler</a>
+          <ul data-submenu-title="Start">
+            <li><a href="{{ url_for('manage.dashboard') }}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('message.messages') }}"><i class="icon-material-outline-question-answer"></i> Messages</a></li>
+            <li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i> Bookmarks</a>
               <ul>
-                <li><a href="{{ url_for('manage.bookmarkedTasks') }}">Kayıtlı İşlerim</a></li>
-                <li><a href="{{ url_for('manage.bookmarkedUsers') }}">Kayıtlı Kişilerim</a></li>
+                <li><a href="{{ url_for('manage.bookmarkedTasks') }}">Bookmarked Tasks</a></li>
+                <li><a href="{{ url_for('manage.bookmarkedUsers') }}">Bookmarked Users</a></li>
               </ul>
             </li>
-            <li><a href="{{ url_for('manage.reviews') }}"><i class="icon-material-outline-rate-review"></i> Değerlendirmeler</a></li>
+            <li><a href="{{ url_for('manage.reviews') }}"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
           </ul>
 
-          <ul data-submenu-title="Yönet">
-            <li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i> Proje İlanları</a>
+          <ul data-submenu-title="Manage">
+            <li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i>Manage Projects</a>
               <ul>
-                {% if current_user.is_offered() %}
-                  <li><a href="{{ url_for('manage.manageOffers') }}">Gelen Teklifler</a></li>
+                {% if current_user.is_there_offer() %}
+                  <li><a href="{{ url_for('manage.manageOffers') }}">Recieved Offers</a></li>
                 {% endif %}
-                <li><a href="{{ url_for('manage.manageTasks') }}">Projeleri Yönet</a></li>
-                <li><a href="{{ url_for('manage.activeBids') }}">Teklif Verdiklerim</a></li>
-                <li><a href="{{ url_for('posttask.post_task') }}">Proje İlanı Ver</a></li>
+                <li><a href="{{ url_for('manage.manageTasks') }}">Posted Projects</a></li>
+                <li><a href="{{ url_for('manage.activeBids') }}">Active Bids</a></li>
+                <li><a href="{{ url_for('posttask.post_task') }}">Post a Project</a></li>
               </ul>
             </li>
           </ul>
 
-          <ul data-submenu-title="Hesap">
-            <li><a href="{{ url_for('setting.setting_page') }}"><i class="icon-material-outline-settings"></i> Ayarlar</a></li>
-            <li><a href="{{ url_for('account.logout') }}"><i class="icon-material-outline-power-settings-new"></i> Çıkış</a></li>
+          <ul data-submenu-title="Account">
+            <li><a href="{{ url_for('setting.setting_page') }}"><i class="icon-material-outline-settings"></i> Settings</a></li>
+            <li><a href="{{ url_for('account.logout') }}"><i class="icon-material-outline-power-settings-new"></i> Logout</a></li>
           </ul>
 
         </div>

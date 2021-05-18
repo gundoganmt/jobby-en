@@ -7,6 +7,12 @@
         </a>
         <div class="buy-button">
           {% if current_user.is_authenticated %}
+          <li class="list-inline-item mb-0" style="margin-right: 10px;">
+            <a href="{{ url_for('posttask.post_task') }}">
+              <div class="btn btn-outline-primary">Post Project</div>
+            </a>
+          </li>
+
             <li class="list-inline-item mb-0">
               <div class="dropdown dropdown-primary">
                   <button type="button" class="btn btn-icon btn-soft-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="uil uil-user align-middle icons"></i></button>
@@ -44,9 +50,6 @@
                 <li><a href="{{ url_for('public.browseTasks') }}" class="sub-menu-item">Projects</a></li>
                 <li><a href="{{ url_for('public.browseFreelancers') }}" class="sub-menu-item">Freelancers</a></li>
             </ul><!--end navigation menu-->
-            <div class="buy-menu-btn d-none">
-                <a href="{{ url_for('account.signup') }}" class="btn btn-primary">Sign Up</a>
-            </div><!--end login button-->
         </div><!--end navigation-->
     </div><!--end container-->
 </header><!--end header-->

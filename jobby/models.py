@@ -168,7 +168,10 @@ class Users(UserMixin, db.Model):
             return 0
         return math.floor((total_success/self.total_reviews())*100)
 
-    def is_offered(self):
+    def is_offered(self, user):
+        return Offers.query.filter_by(offers=self, offered=user).count() > 0
+
+    def is_there_offer(self):
         return Offers.query.filter_by(offered=self).count() > 0
 
     def get_all_skills(self):

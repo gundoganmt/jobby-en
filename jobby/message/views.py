@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, jsonify, flash, redirect, url_for, abort
 from flask_login import current_user, login_required
-from jobby.models import Users, Messages, Bids
+from jobby.models import Users, Messages, Bids, Offers
 from jobby import db, last_updated
 from sqlalchemy import or_, and_
 from datetime import datetime
@@ -8,15 +8,19 @@ from flask_socketio import emit
 from .. import socketio
 message = Blueprint('message',__name__)
 
-@message.route('/get-message/<int:bid_id>')
+@message.route('/get-message/<type_id>')
 @login_required
-def getMessage(bid_id):
-    data = Bids.query.filter_by(id=bid_id).first_or_404()
-    if current_user == data.bidder or current_user == data.bidded.poster:
+def getMessage(type_id):
+    itemType, itemId = type_id.split('_')
+    if itemType == 'b':
+        data = Bids.query.filter_by(id=itemId).first_or_404()
+        if current_user == data.bidder or current_user == data.bidded.poster:
+            return jsonify({"message": data.message})
+    elif itemType == 'o':
+        data = Offers.query.filter_by(id=itemId, offered=current_user).first_or_404()
         return jsonify({"message": data.message})
-    #here i should return 500 forbidden
     else:
-        abort(404)
+        jsonify({"message": 'Some thing went wrong'})
 
 @message.route('/get-recipient/<int:recipient_id>')
 @login_required

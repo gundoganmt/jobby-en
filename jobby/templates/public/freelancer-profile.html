@@ -34,48 +34,73 @@
         {% include 'header-public.html' %}
 
         <!-- Hero Start -->
-        <section class="bg-half-260 d-table w-100" style="background: url('images/job/candidate.jpg');">
+        <section class="bg-half-260 d-table w-100" style="background: url({{ url_for('static', filename='images/bg-freelancer.png') }}); background-size: auto 100%;">
             <div class="bg-overlay"></div>
         </section><!--end section-->
         <!-- Hero End -->
 
         <!-- Candidate Detail Start -->
-        <section class="section">
+        <section class="section" style="padding: 20 0;">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-4 col-md-5 col-12">
                         <div class="card job-profile shadow border-0">
                             <div class="text-center py-5 border-bottom rounded-top">
-                                <img src="images/client/01.jpg" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
-                                <h5 class="mt-3 mb-0">Thomas Brewer</h5>
-                                <p class="text-muted mb-0">Senior Web Developer</p>
+                                <img src="{{ url_for('static', filename="images/"+user.profile_picture) }}" class="avatar avatar-medium mx-auto rounded-circle shadow d-block" alt="">
+                                <h5 class="mt-3 mb-0">{{ user.get_full_name() }}</h5>
+                                <p class="text-muted mb-0">{{ user.tagline }}</p>
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Personal Details :</h5>
 
                                 <ul class="list-unstyled">
-                                    <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> thomas@mail.com</li>
+                                    <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> {{ user.email }}</li>
                                     <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">D.O.B. :</span> 31st Dec, 1996</li>
                                     <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Address :</span> 15 Razy street</li>
                                     <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning me-3"></i><span class="text-muted">City :</span> London</li>
-                                    <li class="h6"><i data-feather="globe" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Country :</span> UK</li>
+                                    <li class="h6"><i data-feather="globe" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Country :</span> {{ user.country }}</li>
                                     <li class="h6"><i data-feather="server" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Postal Code :</span> 521452</li>
                                     <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Mobile :</span> (+125) 1542-8452</li>
 
                                     <li>
                                         <ul class="list-unstyled social-icon mb-0 mt-4">
-                                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                          {% if user.facebook %}
+                                            <li class="list-inline-item"><a href="https://www.facebook.com/{{user.facebook}}" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
+                                          {% if user.instagram %}
                                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
+                                          {% if user.twitter %}
                                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
+                                          {% if user.linkedin %}
                                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
+                                          {% if user.github %}
                                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="github" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
+                                          {% if user.youtube %}
                                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="youtube" class="fea icon-sm fea-social"></i></a></li>
-                                            <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="gitlab" class="fea icon-sm fea-social"></i></a></li>
+                                          {% endif %}
                                         </ul><!--end icon-->
                                     </li>
                                 </ul>
-                                <div class="d-grid">
-                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#Contactme" class="btn btn-primary"><i class="uil uil-envelope align-middle"></i> Contact Me</a>
+                                <div class="mt-4 pt-2">
+                                  {% if current_user.is_authenticated %}
+                                    {% if current_user.is_offered(user) %}
+                                      <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#HireMe" class="btn btn-success me-2"><i class="uil uil-bag-alt"></i> Hired</a>
+                                    {% else %}
+                                      <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#HireMe" class="btn btn-primary me-2"><i class="uil uil-bag-alt"></i> Hire me</a>
+                                    {% endif %}
+                                  {% else %}
+                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#HireMe" class="btn btn-primary me-2"><i class="uil uil-bag-alt"></i> Hire me</a>
+                                  {% endif %}
+
+                                  {% if current_user.is_authenticated and current_user.is_marked_user(user) %}
+                                    <button id="bookmark" data="{{ user.id }}" data-type="1" class="btn btn-outline-primary bookmarked"><i class="uil uil-check"></i> Bookmarked</button>
+                                  {% else %}
+                                    <button id="bookmark" data="{{ user.id }}" data-type="1" class="btn btn-outline-primary"><i class="uil uil-bookmark"></i> Bookmark</button>
+                                  {% endif %}
                                 </div>
                             </div>
                         </div>
@@ -83,133 +108,161 @@
 
                     <div class="col-lg-8 col-md-7 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <div class="ms-lg-4">
-                            <h4>About us :</h4>
-                            <p class="text-muted">Obviously I'M Web Developer. Web Developer with over 3 years of experience. Experienced with all stages of the development cycle for dynamic web projects. The as opposed to using 'Content here, content here', making it look like readable English.</p>
-                            <p class="text-muted mb-0">Data Structures and Algorithms are the heart of programming. Initially most of the developers do not realize its importance but when you will start your career in software development, you will find your code is either taking too much time or taking too much space.</p>
-
+                            <h4>About me :</h4>
+                            {{ user.introduction|safe }}
                             <!-- Skills Start -->
-                            <h4 class="mt-lg-5 mt-4">Skills :</h4>
-                            <div class="progress-box mt-4">
-                                <h6 class="title text-muted">WordPress</h6>
-                                <div class="progress">
-                                    <div class="progress-bar position-relative bg-primary" style="width:84%;">
-                                        <div class="progress-value d-block text-muted h6">84%</div>
-                                    </div>
+                            <div class="container" style="padding-left: 0;">
+                                <div class="row">
+                                  <ul class="nav nav-pills shadow flex-column flex-sm-row d-md-inline-flex mb-0 p-1 bg-white rounded position-relative overflow-hidden" id="pills-tab" role="tablist">
+                                      <li class="nav-item m-1">
+                                          <a class="nav-link py-2 px-5 active rounded" id="skills-data" data-bs-toggle="pill" href="#skill" role="tab" aria-controls="skill" aria-selected="false">
+                                              <div class="text-center">
+                                                  <h6 class="mb-0">Skills</h6>
+                                              </div>
+                                          </a><!--end nav link-->
+                                      </li><!--end nav item-->
+
+                                      <li class="nav-item m-1">
+                                          <a class="nav-link py-2 px-5 rounded" id="education-info" data-bs-toggle="pill" href="#education" role="tab" aria-controls="education" aria-selected="false">
+                                              <div class="text-center">
+                                                  <h6 class="mb-0">Education</h6>
+                                              </div>
+                                          </a><!--end nav link-->
+                                      </li><!--end nav item-->
+
+                                      <li class="nav-item m-1">
+                                          <a class="nav-link py-2 px-5 rounded" id="experience-info" data-bs-toggle="pill" href="#experience" role="tab" aria-controls="experience" aria-selected="false">
+                                              <div class="text-center">
+                                                  <h6 class="mb-0">Experience</h6>
+                                              </div>
+                                          </a><!--end nav link-->
+                                      </li><!--end nav item-->
+
+                                      <li class="nav-item m-1">
+                                          <a class="nav-link py-2 px-5 rounded" id="review-comments" data-bs-toggle="pill" href="#review" role="tab" aria-controls="review" aria-selected="false">
+                                              <div class="text-center">
+                                                  <h6 class="mb-0">Review</h6>
+                                              </div>
+                                          </a><!--end nav link-->
+                                      </li><!--end nav item-->
+                                  </ul>
+                                  <div class="tab-content" id="pills-tabContent">
+                                      <div class="card border-0 tab-pane fade show active" id="skill" role="tabpanel" aria-labelledby="skill-data">
+                                        <h4 class="mt-lg-5 mt-4">Skills :</h4>
+                                        {% for skill in user.get_all_skills() %}
+                                          <div class="progress-box mt-4">
+                                              <h6 class="title text-muted">{{ skill }}</h6>
+                                              <div class="progress">
+                                                  <div class="progress-bar position-relative bg-primary" style="width:{{ skill.level }}%;">
+                                                      <div class="progress-value d-block text-muted h6">{{ skill.level }}%</div>
+                                                  </div>
+                                              </div>
+                                          </div><!--end process box-->
+                                        {% endfor %}
+                                        <!-- Skills End -->
+                                      </div>
+
+                                      <div class="card border-0 tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-info">
+                                        <!-- Education Start -->
+                                        <h4 class="mt-lg-5 mt-4">Education</h4>
+                                        <div class="row">
+                                          {% for edu in user.edus() %}
+                                            <div class="col-lg-12 mt-4 pt-2">
+                                              <div class="d-flex">
+                                                <div class="company-logo text-muted h6 me-3 text-center">
+                                                    <img src="{{ url_for('static', filename='images/campus.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ edu.start_year }}-{{ edu.end_year }}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h5 class="title mb-0">{{ edu.field }}</h5>
+                                                    <small class="text-muted company-university">{{ edu.school }}</small>
+                                                    <p class="text-muted mt-2 mb-0">{{ edu.description|safe }} </p>
+                                                </div>
+                                              </div>
+                                            </div><!--end col-->
+                                          {% endfor %}
+                                        </div><!--end row-->
+                                        <!-- Education End -->
+                                      </div>
+
+                                      <div class="card border-0 tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-info">
+                                        <!-- Education Start -->
+                                        <h4 class="mt-lg-5 mt-4">Work Experience</h4>
+                                        <div class="row">
+                                          {% for workexp in user.workexps() %}
+                                            <div class="col-lg-12 mt-4 pt-2">
+                                              <div class="d-flex">
+                                                <div class="company-logo text-muted h6 me-3 text-center">
+                                                    <img src="{{ url_for('static', filename='images/enterprise.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ workexp.start_year }}-{{ workexp.end_year }}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <h5 class="title mb-0">{{ workexp.position }}</h5>
+                                                    <small class="text-muted company-university">{{ workexp.company }}</small>
+                                                    <p class="text-muted mt-2 mb-0">{{ workexp.description|safe }} </p>
+                                                </div>
+                                              </div>
+                                            </div><!--end col-->
+                                          {% endfor %}
+                                        </div><!--end row-->
+                                        <!-- Education End -->
+                                      </div>
+
+                                      <div class="card border-0 tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-comments" style="margin-top: 3rem!important;">
+                                          <div class="row">
+                                              <div class="col-lg-12">
+                                                  <ul class="media-list list-unstyled mb-0">
+                                                      <li>
+                                                          <div class="d-flex justify-content-between">
+                                                              <div class="d-flex align-items-center">
+                                                                  <a class="pe-3" href="#">
+                                                                      <img src="images/client/01.jpg" class="img-fluid avatar avatar-md-sm rounded-circle shadow" alt="img">
+                                                                  </a>
+                                                                  <div class="flex-1 commentor-detail">
+                                                                      <h6 class="mb-0"><a href="javascript:void(0)" class="text-dark media-heading">Lorenzo Peterson</a></h6>
+                                                                      <small class="text-muted">15th August, 2019 at 01:25 pm</small>
+                                                                  </div>
+                                                              </div>
+                                                              <ul class="list-unstyled mb-0">
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                              </ul>
+                                                          </div>
+                                                          <div class="mt-3">
+                                                              <p class="text-muted fst-italic p-3 bg-light rounded">" Awesome product "</p>
+                                                          </div>
+                                                      </li>
+
+                                                      <li class="mt-4">
+                                                          <div class="d-flex justify-content-between">
+                                                              <div class="d-flex align-items-center">
+                                                                  <a class="pe-3" href="#">
+                                                                      <img src="images/client/02.jpg" class="img-fluid avatar avatar-md-sm rounded-circle shadow" alt="img">
+                                                                  </a>
+                                                                  <div class="flex-1 commentor-detail">
+                                                                      <h6 class="mb-0"><a href="javascript:void(0)" class="media-heading text-dark">Tammy Camacho</a></h6>
+                                                                      <small class="text-muted">15th August, 2019 at 05:44 pm</small>
+                                                                  </div>
+                                                              </div>
+                                                              <ul class="list-unstyled mb-0">
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star text-warning"></i></li>
+                                                                  <li class="list-inline-item"><i class="mdi mdi-star-outline text-warning"></i></li>
+                                                              </ul>
+                                                          </div>
+                                                          <div class="mt-3">
+                                                              <p class="text-muted fst-italic p-3 bg-light rounded mb-0">" Good "</p>
+                                                          </div>
+                                                      </li>
+                                                  </ul>
+                                              </div><!--end col-->
+                                          </div><!--end row-->
+                                      </div>
+                                  </div>
                                 </div>
-                            </div><!--end process box-->
-                            <div class="progress-box mt-4">
-                                <h6 class="title text-muted">PHP / MYSQL</h6>
-                                <div class="progress">
-                                    <div class="progress-bar position-relative bg-primary" style="width:75%;">
-                                        <div class="progress-value d-block text-muted h6">75%</div>
-                                    </div>
-                                </div>
-                            </div><!--end process box-->
-                            <div class="progress-box mt-4">
-                                <h6 class="title text-muted">Angular / JavaScript</h6>
-                                <div class="progress">
-                                    <div class="progress-bar position-relative bg-primary" style="width:79%;">
-                                        <div class="progress-value d-block text-muted h6">79%</div>
-                                    </div>
-                                </div>
-                            </div><!--end process box-->
-                            <div class="progress-box mt-4">
-                                <h6 class="title text-muted">HTML</h6>
-                                <div class="progress">
-                                    <div class="progress-bar position-relative bg-primary" style="width:95%;">
-                                        <div class="progress-value d-block text-muted h6">95%</div>
-                                    </div>
-                                </div>
-                            </div><!--end process box-->
-                            <!-- Skills End -->
-
-                            <!-- Experience Start -->
-                            <h4 class="mt-lg-5 mt-4">Experience :</h4>
-                            <div class="row">
-                                <div class="col-lg-12 mt-4 pt-2">
-                                    <div class="d-flex">
-                                        <div class="company-logo text-muted h6 me-3 text-center">
-                                            <img src="images/job/Codepen.svg" class="avatar avatar-md-sm mx-auto d-block mb-2" alt="">2017-18
-                                        </div>
-                                        <div class="flex-1">
-                                            <h5 class="title mb-0">Back-end Developer</h5>
-                                            <small class="text-muted company-university">Codepen - CHINA</small>
-                                            <p class="text-muted mt-2 mb-0">It seems that only fragments of the original text remain in the Lorem Ipsum texts used today. One may speculate that over the course of time certain letters were added or deleted at various positions within the text. </p>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-
-                                <div class="col-lg-12 mt-4 pt-2">
-                                    <div class="d-flex">
-                                        <div class="company-logo text-muted h6 me-3 text-center">
-                                            <img src="images/job/Circleci.svg" class="avatar avatar-md-sm mx-auto d-block mb-2" alt="">2014-17
-                                        </div>
-                                        <div class="flex-1">
-                                            <h5 class="title mb-0">Senior Web Designer</h5>
-                                            <small class="text-muted company-university">CircleCi - SAN FRANCISCO</small>
-                                            <p class="text-muted mt-2 mb-0">It seems that only fragments of the original text remain in the Lorem Ipsum texts used today. One may speculate that over the course of time certain letters were added or deleted at various positions within the text. </p>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-                            </div><!--end row-->
-                            <!-- Experience End -->
-
-                            <!-- Start Projects Work -->
-                            <h4 class="mt-lg-5 mt-4">Projects :</h4>
-                            <div class="row">
-                                <div class="col-md-6 col-12 mt-4 pt-2">
-                                    <div class="card border-0 work-container work-classic">
-                                        <div class="card-body p-0">
-                                            <a href="portfolio-detail-one.html"><img src="images/work/1.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                            <div class="content pt-3">
-                                                <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Iphone mockup</a></h5>
-                                                <h6 class="text-muted tag mb-0">Branding</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-
-                                <div class="col-md-6 col-12 mt-4 pt-2">
-                                    <div class="card border-0 work-container work-classic">
-                                        <div class="card-body p-0">
-                                            <a href="portfolio-detail-one.html"><img src="images/work/2.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                            <div class="content pt-3">
-                                                <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Mockup Collection</a></h5>
-                                                <h6 class="text-muted tag mb-0">Mockup</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-
-                                <div class="col-md-6 col-12 mt-4 pt-2">
-                                    <div class="card border-0 work-container work-classic">
-                                        <div class="card-body p-0">
-                                            <a href="portfolio-detail-one.html"><img src="images/work/3.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                            <div class="content pt-3">
-                                                <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Abstract images</a></h5>
-                                                <h6 class="text-muted tag mb-0">Abstract</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-
-                                <div class="col-md-6 col-12 mt-4 pt-2">
-                                    <div class="card border-0 work-container work-classic">
-                                        <div class="card-body p-0">
-                                            <a href="portfolio-detail-one.html"><img src="images/work/4.jpg" class="img-fluid rounded work-image" alt=""></a>
-                                            <div class="content pt-3">
-                                                <h5 class="mb-0"><a href="portfolio-detail-one.html" class="text-dark title">Yellow bg with Books</a></h5>
-                                                <h6 class="text-muted tag mb-0">Books</h6>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!--end col-->
-                            </div><!--end row-->
-                            <!-- End Projects Work -->
-
-                            <div class="mt-4 pt-2">
-                                <a href="javascript:void(0)" class="btn btn-primary me-2"><i class="uil uil-user-check"></i> Hire me</a>
-                                <a href="javascript:void(0)" class="btn btn-outline-primary"><i class="uil uil-print"></i> Print CV</a>
                             </div>
                         </div>
                     </div><!--end col-->
@@ -218,80 +271,128 @@
         </section><!--end section-->
 
         <!-- Modal Content Start -->
-        <div class="modal fade" id="Contactme" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content rounded shadow border-0">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalCenterTitle">Contact Me </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body p-4">
-                        <div class="custom-form mt-3">
-                            <form method="post" name="myForm" onsubmit="return validateForm()">
-                              {% if not current_user.is_authenticated %}
-                                <div id="message-box">
-                                  <div class="error_message">You must be logged in to send request!</div>
+        {% if current_user.is_authenticated %}
+          <div class="modal fade" id="HireMe" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              {% if current_user.is_offered(user) %}
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                        <div class="modal-body py-5">
+                            <div class="text-center">
+                                <div class="icon d-flex align-items-center justify-content-center bg-soft-success rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                    <h1 class="mb-0"><i class="uil uil-check-circle align-middle"></i></h1>
                                 </div>
-                              {% endif %}
-                                <p id="error-msg" class="mb-0"></p>
-                                <div id="simple-msg"></div>
-                                <div class="row">
+                                <div class="mt-4">
+                                    <h4>You allready offred this user!</h4>
+                                    <p class="text-muted">Browse more freelancer...</p>
+                                    <div class="mt-4">
+                                        <a href="{{ url_for('public.browseFreelancers') }}" class="btn btn-outline-primary">Browse Freelancers</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              {% else %}
+                {% if user == current_user %}
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                          <div class="modal-body py-5">
+                              <div class="text-center">
+                                  <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                      <h1 class="mb-0"><i class="uil uil-smile-beam align-middle"></i></h1>
+                                  </div>
+                                  <div class="mt-4">
+                                      <h4>This is your page. You can't offer yourself!</h4>
+                                      <p class="text-muted">But you can offer other freelancers</p>
+                                      <div class="mt-4">
+                                          <a href="{{ url_for('public.browseFreelancers') }}" class="btn btn-outline-primary">Browse Freelancers</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                {% else %}
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content rounded shadow border-0">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalCenterTitle">Offer Job </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body p-4">
+                              <div class="custom-form mt-3">
+                                <form id="offerForm" method="post" action="{{ url_for('public.freelancer', user_id= user.id) }}" enctype="multipart/form-data">
+                                  <input type='hidden' name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
+                                  <div class="row" id="formField">
                                     <div class="col-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Your Name <span class="text-danger">*</span></label>
+                                            <label class="form-label">Subject <span class="text-danger">*</span></label>
                                             <div class="form-icon position-relative">
-                                                <i data-feather="user" class="fea icon-sm icons"></i>
-                                                <input name="name" id="name" type="text" class="form-control ps-5" placeholder="Name :">
+                                                <i data-feather="tag" class="fea icon-sm icons"></i>
+                                                <input id="subject" name="subject" type="text" class="form-control ps-5" placeholder="Subject" required maxlength="100" minlength="5">
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="col-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Your Email <span class="text-danger">*</span></label>
-                                            <div class="form-icon position-relative">
-                                                <i data-feather="mail" class="fea icon-sm icons"></i>
-                                                <input name="email" id="email" type="email" class="form-control ps-5" placeholder="Email :">
-                                            </div>
-                                        </div>
-                                    </div><!--end col-->
-
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Subject</label>
-                                            <div class="form-icon position-relative">
-                                                <i data-feather="book" class="fea icon-sm icons"></i>
-                                                <input name="subject" id="subject" class="form-control ps-5" placeholder="subject :">
-                                            </div>
-                                        </div>
-                                    </div><!--end col-->
-
-                                    <div class="col-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">Comments <span class="text-danger">*</span></label>
+                                            <label class="form-label">Message <span class="text-danger">*</span></label>
                                             <div class="form-icon position-relative">
                                                 <i data-feather="message-circle" class="fea icon-sm icons clearfix"></i>
-                                                <textarea name="comments" id="comments" rows="4" class="form-control ps-5" placeholder="Message :"></textarea>
+                                                <textarea id="offerMessage" name="offerMessage" rows="4" class="form-control ps-5" placeholder="Message :" required maxlength="500" minlength="15"></textarea>
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-12">
+                                      <div class="mb-3">
+                                        <label for="formFile" class="form-label">Upload file :</label>
+                                        <input class="form-control" type="file" id="formFile" name="formFile" accept="application/pdf, application/msword">
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                  <div class="row">
+                                      <div class="col-12">
+                                          <div class="d-grid">
+                                              <button type="submit" id="submitOfferButton" class="btn btn-primary">Send Offer</button>
+                                          </div>
+                                      </div><!--end col-->
+                                  </div><!--end row-->
+                                </form>
+                              </div><!--end custom-form-->
+                          </div>
+                      </div>
+                  </div>
+                {% endif %}
+              {% endif %}
+          </div>
+        {% else %}
+          <div class="modal fade" id="HireMe" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content rounded shadow-lg border-0 overflow-hidden">
+                    <div class="modal-body py-5">
+                        <div class="text-center">
+                            <div class="icon d-flex align-items-center justify-content-center bg-soft-danger rounded-circle mx-auto" style="height: 95px; width:95px;">
+                                <h1 class="mb-0"><i class="uil uil-heart-break align-middle"></i></h1>
+                            </div>
+                            <div class="mt-4">
+                                <h4>Please sign up to offer!</h4>
+                                <p class="text-muted">Create an account.</p>
+                                <div class="mt-4">
+                                    <a href="{{ url_for('account.signup') }}" class="btn btn-outline-primary">Create Account</a>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="d-grid">
-                                            <button type="submit" id="submit" name="send" class="btn btn-primary">Send Message</button>
-                                        </div>
-                                    </div><!--end col-->
-                                </div><!--end row-->
-                            </form>
-                        </div><!--end custom-form-->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+          </div>
+        {% endif %}
         <!-- Modal Content End -->
-        <!-- Candidate Detail End -->
 
+
+        <!-- Candidate Detail End -->
         <!-- Footer Start -->
         <footer class="footer">
             <div class="container">
@@ -386,6 +487,7 @@
         <a href="#" onclick="topFunction()" id="back-to-top" class="btn btn-icon btn-primary back-to-top"><i data-feather="arrow-up" class="icons"></i></a>
         <!-- Back to top -->
 
+        <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta2/js/bootstrap.bundle.min.js" integrity="sha512-43iShtbiyImxjjU4a9rhXBy7eKtIsrpll8xKhe1ghKqh5NyfME8phZs5JRFZpRBe1si44WM3tNmnqMym7JRmDQ==" crossorigin="anonymous"></script>        <!-- SLIDER -->
         <script src="{{ url_for('static', filename='js/index/tiny-slider.js')}}"></script>
         <!-- tobii js -->
@@ -394,5 +496,7 @@
         <!-- Main Js -->
         <script src="{{ url_for('static', filename='js/index/plugins.init.js')}}"></script><!--Note: All init js like tiny slider, counter, countdown, maintenance, lightbox, gallery, swiper slider, aos animation etc.-->
         <script src="{{ url_for('static', filename='js/index/app.js')}}"></script><!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
+        <script src="{{ url_for('static', filename='js/index/index.js')}}"></script>
+
     </body>
 </html>

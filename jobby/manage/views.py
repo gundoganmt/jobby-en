@@ -1,7 +1,10 @@
-from flask import render_template, Blueprint, request, flash, redirect, url_for, abort, jsonify
+from flask import render_template, Blueprint, request, flash, redirect, url_for, abort, jsonify, send_file
 from flask_login import current_user, login_required
 from jobby.models import Bids, Tasks, Users, Views, Notification, Reviews, Offers
 from jobby import db, csrf, last_updated
+from utils import UPLOAD_OFFER_FOLDER
+import os
+
 manage = Blueprint('manage',__name__)
 
 @manage.route('/dashboard')
@@ -181,3 +184,8 @@ def bookmarkedTasks():
 def bookmarkedUsers():
     bookmarked_users = current_user.BookmarksUser.all()
     return render_template('bookmark-users.html', bookmarked_users=bookmarked_users, last_updated=last_updated)
+
+@manage.route('/download/<filename>')
+def download(filename):
+    path = os.path.join(UPLOAD_OFFER_FOLDER, filename)
+    return send_file(path, as_attachment=True)

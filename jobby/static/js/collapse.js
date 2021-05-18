@@ -27,11 +27,11 @@
       var editor = document.querySelector('#editor3');
    		var field_of_work = document.getElementById('field_of_work');
    		var tagline = document.getElementById('tagline');
-   		var province = document.getElementById('province');
+   		var location = document.getElementById('location');
    		var introduction = document.querySelector('#profileQuill');
       introduction.value = editor.children[0].innerHTML;
    		var data = {'field_of_work': field_of_work.value, "tagline": tagline.value,
-   		'province': province.value, "introduction": introduction.value};
+   		'location': location.value, "introduction": introduction.value};
    	}
 
    	else if(settingType == "skill"){

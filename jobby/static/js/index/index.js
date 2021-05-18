@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () =>{
           }
         }
         else{
-          alert("Lutfen giriş yapınız");
+          alert("Please Sign In!");
         }
       }
     }
@@ -34,35 +34,71 @@ document.addEventListener('DOMContentLoaded', () =>{
     return false;
   });
 
-  submitBidButton.addEventListener('click', () =>{
-    bid_amount = document.getElementById('bid_amount').value;
-    qtyInput = document.getElementById('qtyInput').value;
-    qtyOption = document.getElementById('qtyOption').value;
-    bidMessage = document.getElementById('bidMessage').value;
-    submitBidButton = document.getElementById('submitBidButton');
-    
-    var form_data = new FormData();
-    const xhr = new XMLHttpRequest();
-    var url = window.location.pathname;
-    var csrf_token = document.getElementById('csrf_token').value;
+  if (document.getElementById('submitBidButton')) {
+    var submitBidButton = document.getElementById('submitBidButton');
+    submitBidButton.addEventListener('click', () =>{
+      var bid_amount = document.getElementById('bid_amount').value;
+      var qtyInput = document.getElementById('qtyInput').value;
+      var qtyOption = document.getElementById('qtyOption').value;
+      var bidMessage = document.getElementById('bidMessage').value;
 
-    form_data.append("bid_amount", bid_amount);
-    form_data.append("qtyInput", qtyInput);
-    form_data.append("qtyOption", qtyOption);
-    form_data.append("bidMessage", bidMessage);
+      var form_data = new FormData();
+      const xhr = new XMLHttpRequest();
+      var url = window.location.pathname;
+      var csrf_token = document.getElementById('csrf_token').value;
 
-    xhr.open('POST', url)
-    xhr.setRequestHeader("X-CSRFToken", csrf_token);
-    xhr.onload = () =>{
-      if(xhr.status == 200){
-        const result = JSON.parse(xhr.responseText);
-        if(result.success){
-          window.location.href = result.msg;
+      form_data.append("bid_amount", bid_amount);
+      form_data.append("qtyInput", qtyInput);
+      form_data.append("qtyOption", qtyOption);
+      form_data.append("bidMessage", bidMessage);
+
+      xhr.open('POST', url)
+      xhr.setRequestHeader("X-CSRFToken", csrf_token);
+      xhr.onload = () =>{
+        if(xhr.status == 200){
+          const result = JSON.parse(xhr.responseText);
+          if(result.success){
+            window.location.href = result.msg;
+          }
         }
       }
-    }
-    xhr.send(form_data);
-    return false;
-  })
+      xhr.send(form_data);
+      return false;
+    })
+  }
+
+  if (document.getElementById('offerForm')) {
+    var offerForm = document.getElementById('offerForm');
+    offerForm.addEventListener('submit', (e) =>{
+      var subject = document.getElementById('subject').value;
+      var offerMessage = document.getElementById('offerMessage').value;
+      var ins = document.getElementById('formFile').files.length;
+      var ext = ['pdf', 'doc', 'docx'];
+
+      if(subject.length < 5 || subject.length > 100){
+        alert("subject length should be between 5 and 100.");
+        e.preventDefault();
+      }
+
+      if(offerMessage.length < 15 || offerMessage.length > 500){
+        alert("subjec length should be between 15 and 500.");
+        e.preventDefault();
+      }
+
+      if(ins > 0) {
+        var size = document.getElementById('formFile').files[0].size;
+      }
+
+      if(size > 2*1024*1024) {
+        alert("file size is too big!At most 2Mb.")
+        e.preventDefault();
+      }
+
+      if ( !ext.includes(document.getElementById('formFile').value.split('.').pop()) ) {
+        alert('Invalid file type! Only pdf, doc, docx are allowed');
+        e.preventDefault();
+      }
+    })
+  }
 
 })

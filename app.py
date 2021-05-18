@@ -73,6 +73,7 @@ admin.add_view(MyModelView(Bids, db.session, menu_icon_type='glyph', menu_icon_v
 admin.add_view(MyModelView(Reviews, db.session, menu_icon_type='fa', menu_icon_value='fa-bar-chart', name="Reviews"))
 admin.add_view(MyModelView(Messages, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-envelope', name="Messages"))
 admin.add_view(MyModelView(TaskSkills, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-briefcase', name="TaskSkills"))
+admin.add_view(MyModelView(Offers, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-briefcase', name="Offers"))
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

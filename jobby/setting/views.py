@@ -53,7 +53,7 @@ def setting_profile():
     data = request.get_json(force=True)
     current_user.field_of_work = data['field_of_work']
     current_user.tagline = data['tagline']
-    current_user.province = data['province']
+    current_user.country = data['location']
     current_user.introduction = bleach.clean(data['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
     current_user.check_status()
     db.session.commit()
