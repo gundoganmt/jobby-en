@@ -10,6 +10,7 @@ from jobby.models import (
     Reviews, Offers, TaskSkills
     )
 from jobby import db
+import flask_whooshalchemy as wa
 
 class MyModelView(sqla.ModelView):
 
@@ -58,6 +59,8 @@ class CustomView(BaseView):
         return self.render('admin/custom_index.html')
 
 app = create_app()
+wa.whoosh_index(app, Tasks)
+
 admin = Admin(
     app,
     'My Dashboard',

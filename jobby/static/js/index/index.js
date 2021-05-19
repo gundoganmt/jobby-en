@@ -17,10 +17,12 @@ document.addEventListener('DOMContentLoaded', () =>{
         const result = JSON.parse(request.responseText);
         if(result.success){
           if(result.bookmark){
+            $(this).addClass('bookmarked');
             $(this).html('<i class="uil uil-check"></i> Bookmarked');
             e.preventDefault();
           }
           else {
+            $(this).removeClass('bookmarked');
             $(this).html('<i class="uil uil-bookmark"></i> Bookmark');
             e.preventDefault();
           }

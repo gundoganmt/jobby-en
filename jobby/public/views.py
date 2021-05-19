@@ -1,31 +1,44 @@
 from flask import render_template, Blueprint, request, redirect, url_for, abort, flash, jsonify
 from flask_login import current_user
+from sqlalchemy import or_, and_
 from jobby.models import (
     Tasks, Bids, Users,
     WorkExperiences, Educations,
     Views, Notification, Reviews, Offers,
     Notification, TaskSkills
     )
-from jobby import db, last_updated
+from jobby import db
+from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import uuid, os, json
 from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER
 
 public = Blueprint('public',__name__)
 
-@public.route('/', methods=['GET', 'POST'])
+@public.route('/')
 def index():
-    if request.method == 'POST':
-        location = request.form['location']
-        keyword = request.form['keyword']
-        return redirect(url_for('.browseTasks', location=location, keyword=keyword))
-    else:
-        users = Users.query.filter_by(status='freelancer').all()[:5]
-        featured_tasks = Tasks.query.all()[:3]
-        if current_user.is_authenticated:
-            return render_template('public/index.html')
-        return render_template('public/index.html', users=users, featured_tasks=featured_tasks, last_updated=last_updated)
-        #return render_template('public/index.html')
+    return render_template('public/index.html')
+
+@public.route('/search/<where>', methods=['POST'])
+def search(where):
+    if where == 'index':
+        keyword = request.form['keyword'] or None
+        location = request.form['location'] or None
+        category = request.form['category'] or None
+
+        return redirect(url_for('.browseTasks', lc=location, kw=keyword, ct=category))
+    elif where == 'tasklist':
+        keyword = request.form['keyword'] or None
+        location = request.form['location'] or None
+        category = request.form['category'] or None
+        budget_min = request.form['budget_min'] or None
+        budget_max = request.form['budget_max'] or None
+        checks = request.form.getlist('flexRadioDefault')
+        print(checks)
+        print(type(checks))
+
+        return redirect(url_for('.browseTasks', lc=location, kw=keyword, ct=category,
+            bn=budget_min, bx=budget_max, cx=checks))
 
 @public.route('/proje/<task_url>', methods=['GET', 'POST'])
 def task_page(task_url):
@@ -34,7 +47,7 @@ def task_page(task_url):
     taskbids = Bids.query.filter_by(task_id=task_id).all()
     if request.method == 'GET':
         sk = TaskSkills.query.filter_by(task_id=task.id).all()
-        return render_template('tasks/single-task-page.html',task=task, sk=sk, taskbids=taskbids, last_updated=last_updated)
+        return render_template('tasks/single-task-page.html',task=task, sk=sk, taskbids=taskbids)
     else:
         bid_amount = request.form['bid_amount']
         qtyInput = request.form['qtyInput']
@@ -53,7 +66,47 @@ def task_page(task_url):
 
 @public.route('/projects')
 def browseTasks():
-    tasks = Tasks.query.all()
+    keyword = request.args.get('kw', type=str)
+    location = request.args.get('lc', type=str)
+    category = request.args.get('ct', type=str)
+    budget_min = request.args.get('bn', type=str)
+    budget_max = request.args.get('bx', type=str)
+    checks = request.args.get('cx', type=str)
+
+    if request.args:
+        tasks = db.session.query(Tasks)
+        if keyword:
+            tasks = Tasks.query.whoosh_search(keyword)
+
+        if checks:
+            if checks == 'lasthour':
+                lasthour = datetime.now() - timedelta(hours = 1)
+                tasks = tasks.filter(Tasks.time_posted >= lasthour)
+            elif checks == 'oneday':
+                oneday = datetime.now() - timedelta(1)
+                tasks = tasks.filter(Tasks.time_posted >= oneday)
+            elif checks == 'threedays':
+                threedays = datetime.now() - timedelta(3)
+                tasks = tasks.filter(Tasks.time_posted >= threedays)
+            elif checks == 'sevendays':
+                sevendays = datetime.now() - timedelta(7)
+                tasks = tasks.filter(Tasks.time_posted >= sevendays)
+            else:
+                fourteendays = datetime.now() - timedelta(14)
+                tasks = tasks.filter(Tasks.time_posted >= fourteendays)
+
+        if location:
+            tasks = tasks.filter(Tasks.location==location)
+        if category:
+            tasks = tasks.filter(Tasks.category==category)
+        if budget_min:
+            tasks = tasks.filter(Tasks.budget_min >= int(budget_min))
+        if budget_max:
+            tasks = tasks.filter(Tasks.budget_max <= int(budget_max))
+
+        tasks = tasks.all()
+    else:
+        tasks = Tasks.query.all()
     return render_template('public/tasks-list.html', tasks=tasks)
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])

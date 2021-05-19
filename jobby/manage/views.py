@@ -171,7 +171,7 @@ def unmark(bookmark_id):
         task = Tasks.query.filter_by(id=bookmark_id).first()
         current_user.BookmarksTasks.remove(task)
     db.session.commit()
-    return jsonify({"success": True, "unmark": True})
+    return jsonify({"success": True, "bookmark": False})
 
 @manage.route('/bookmarked-tasks')
 @login_required

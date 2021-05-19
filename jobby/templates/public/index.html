@@ -3,10 +3,10 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Landrick - Saas & Software Landing Page Template</title>
+        <title>Jobby - Freelance Services for Marketplaces for Induviduals and Businesses </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="Premium Bootstrap 5 Landing Page Template" />
-        <meta name="keywords" content="Saas, Software, multi-uses, HTML, Clean, Modern" />
+        <meta name="description" content="Marketplace for Freelance Business" />
+        <meta name="keywords" content="Freelance job, Online marketplace" />
         <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
         <!-- Icons -->
@@ -23,7 +23,7 @@
     <body>
 
         {% include 'header-public.html' %}
-        
+
         <section class="bg-half bg-light d-table w-100" style="padding: 120px 0 90px;">
             <div class="container">
                 <div class="row align-items-center">
@@ -33,7 +33,7 @@
                             <p class="para-desc text-muted">Whatever your needs, there will be a freelancer to get it done: from web design, mobile app development, logo design and more...</p>
                             <div class="mt-4 pt-2">
                                 <a href="{{ url_for('posttask.post_task') }}" class="btn btn-primary me-2">Post Project</a>
-                                <a href="{{ url_for('account.login') }}" class="btn btn-outline-primary">Join Us</a>
+                                <a href="{{ url_for('account.signup') }}" class="btn btn-outline-primary">Join Us</a>
                             </div>
                         </div>
                     </div><!--end col-->
@@ -57,11 +57,12 @@
                             </div>
                             <h1 class="heading mb-3">Job Vacancies for <span class="text-primary typewrite" data-period="2000" data-type='[ "Freelancer", "Developer", "Designer", "UX Developer", "ios Developer" ]'> <span class="wrap"></span> </span></h1>
                             <p class="para-desc mx-auto text-muted">Huge community of designers and developers ready for your project.</p>
-                            <form class="rounded p-4 mt-4 bg-white">
+                            <form class="rounded p-4 mt-4 bg-white" method="POST" action="{{ url_for('public.search', where='index') }}">
+                              <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <div class="row text-start">
                                     <div class="col-lg-5 col-md-4">
                                         <div class="mb-0">
-                                            <input type="text" class="form-control" required placeholder="Keywords">
+                                            <input type="text" class="form-control" placeholder="Keywords" name="keyword">
                                         </div>
                                     </div><!--end col-->
 
@@ -69,29 +70,25 @@
                                         <div class="row align-items-center">
                                             <div class="col-md-4 mt-4 mt-sm-0">
                                                 <div class="mb-0">
-                                                    <select class="form-control custom-select">
-                                                        <option selected="">Location</option>
-                                                        <option value="AF">Afghanistan</option>
-                                                        <option value="AX">&Aring;land Islands</option>
-                                                        <option value="AL">Albania</option>
-                                                        <option value="DZ">Algeria</option>
-                                                        <option value="AS">American Samoa</option>
-                                                        <option value="AD">Andorra</option>
-                                                        <option value="AO">Angola</option>
-                                                        <option value="AI">Anguilla</option>
-                                                        <option value="AQ">Antarctica</option>
+                                                    <select class="form-control custom-select" name="location" id="location" title="Select Location">
+                                                      <option selected value="">Location</option>
                                                     </select>
                                                 </div>
                                             </div><!--end col-->
 
                                             <div class="col-md-4 mt-4 mt-sm-0">
                                                 <div class="mb-0">
-                                                    <select class="form-control custom-select">
-                                                        <option selected="">Job Types</option>
-                                                        <option value="4">Accounting</option>
-                                                        <option value="1">IT & Software</option>
-                                                        <option value="3">Marketing</option>
-                                                        <option value="5">Banking</option>
+                                                    <select class="form-control custom-select" name="category">
+                                                        <option selected value="" >Category</option>
+                                                        <option value="1">Programming</option>
+                                                        <option value="2">Writing</option>
+                                                        <option value="3">Graphics Design</option>
+                                                        <option value="4">Digital Marketing</option>
+                                                        <option value="5">Data Science</option>
+                                                        <option value="6">Video & Animation</option>
+                                                        <option value="7">Lifestyle</option>
+                                                        <option value="8">Finance</option>
+                                                        <option value="9">Other</option>
                                                     </select>
                                                 </div>
                                             </div><!--end col-->
@@ -134,7 +131,7 @@
                     <div class="col-12 text-center">
                         <div class="section-title mb-4 pb-2">
                             <h4 class="title mb-4">Popular Categories</h4>
-                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Jobby</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
@@ -244,7 +241,7 @@
                     <div class="col-12 text-center">
                         <div class="section-title mb-4 pb-2">
                             <h4 class="title mb-4">Featured Jobs</h4>
-                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Jobby</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
@@ -401,112 +398,13 @@
             </div><!--end container-->
             <!-- Companies End -->
 
-            <!-- Candidates Start -->
-            <div class="container mt-100 mt-60">
-                <div class="row justify-content-center">
-                    <div class="col-12 text-center">
-                        <div class="section-title mb-4 pb-2">
-                            <h4 class="title mb-4">Expert Candidates</h4>
-                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
-
-                <div class="row">
-                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
-                        <div class="card team text-center border-0">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="images/client/01.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
-                                    <ul class="list-unstyled social-icon team-icon mb-0">
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
-                                    </ul><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Ronny Jofra</a></h5>
-                                    <small class="designation text-muted">Web Developer</small>
-                                    <h6 class="text-muted fw-normal">$ 2300</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
-                        <div class="card team text-center border-0">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="images/client/04.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
-                                    <ul class="list-unstyled social-icon team-icon mb-0">
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
-                                    </ul><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Micheal Carlo</a></h5>
-                                    <small class="designation text-muted">Web Designer</small>
-                                    <h6 class="text-muted fw-normal">$ 1950</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
-                        <div class="card team text-center border-0">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="images/client/02.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
-                                    <ul class="list-unstyled social-icon team-icon mb-0">
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
-                                    </ul><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Aliana Rosy</a></h5>
-                                    <small class="designation text-muted">IOS Developer</small>
-                                    <h6 class="text-muted fw-normal">$ 2540</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-
-                    <div class="col-lg-3 col-md-6 mt-4 pt-2">
-                        <div class="card team text-center border-0">
-                            <div class="card-body">
-                                <div class="position-relative">
-                                    <img src="images/client/03.jpg" class="img-fluid avatar avatar-ex-large rounded-circle shadow" alt="">
-                                    <ul class="list-unstyled social-icon team-icon mb-0">
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
-                                        <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
-                                    </ul><!--end icon-->
-                                </div>
-                                <div class="content pt-3 pb-3">
-                                    <h5 class="mb-0"><a href="javascript:void(0)" class="name text-dark">Sofia Razaq</a></h5>
-                                    <small class="designation text-muted">Php Developer</small>
-                                    <h6 class="text-muted fw-normal">$ 2190</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!--end col-->
-                </div><!--end row-->
-            </div><!--end container-->
-            <!-- Candidates End -->
-
             <!-- Testi start -->
             <div class="container mt-100 mt-60">
                 <div class="row justify-content-center">
                     <div class="col-12 text-center">
                         <div class="section-title mb-4 pb-2">
                             <h4 class="title mb-4">Candidates Review</h4>
-                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Landrick</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                            <p class="text-muted para-desc mx-auto mb-0">Start working with <span class="text-primary fw-bold">Jobby</span> that can provide everything you need to generate awareness, drive traffic, connect.</p>
                         </div>
                     </div><!--end col-->
                 </div><!--end row-->
@@ -577,33 +475,7 @@
                     </div><!--end col-->
                 </div><!--end row-->
             </div><!--end container-->
-            <div class="container pt-5">
-                <div class="row justify-content-center">
-                    <div class="col-lg-2 col-md-2 col-6 text-center">
-                        <img src="images/client/amazon.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
 
-                    <div class="col-lg-2 col-md-2 col-6 text-center">
-                        <img src="images/client/google.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
-
-                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
-                        <img src="images/client/lenovo.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
-
-                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
-                        <img src="images/client/paypal.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
-
-                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
-                        <img src="images/client/shopify.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
-
-                    <div class="col-lg-2 col-md-2 col-6 text-center mt-4 mt-sm-0">
-                        <img src="images/client/spotify.svg" class="avatar avatar-ex-sm" alt="">
-                    </div><!--end col-->
-                </div><!--end row-->
-            </div><!--end container-->
             <!-- Testi end -->
         </section><!--end section-->
         <!-- End -->
@@ -626,7 +498,7 @@
                         <a href="#" class="logo-footer">
                             <img src="images/logo-dark.png" height="24" alt="">
                         </a>
-                        <p class="mt-4 text-muted">Start working with Landrick that can provide everything you need to generate awareness, drive traffic, connect.</p>
+                        <p class="mt-4 text-muted">Start working with Jobby that can provide everything you need to get paid for your skills. </p>
                         <ul class="list-unstyled social-icon social mb-0 mt-4">
                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
                             <li class="list-inline-item"><a href="javascript:void(0)" class="rounded"><i data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
@@ -690,7 +562,7 @@
                 <div class="row align-items-center">
                     <div class="col-sm-6">
                         <div class="text-sm-start">
-                            <p class="mb-0">© <script>document.write(new Date().getFullYear())</script> Landrick. Design with <i class="mdi mdi-heart text-danger"></i> by <a href="https://shreethemes.in/" target="_blank" class="text-reset">Shreethemes</a>.</p>
+                            <p class="mb-0">© 2021 Jobby. Designed with <i class="mdi mdi-heart text-danger"></i></p>
                         </div>
                     </div><!--end col-->
 
@@ -720,6 +592,7 @@
         <!-- Main Js -->
         <script src="{{ url_for('static', filename='js/index/plugins.init.js')}}"></script><!--Note: All init js like tiny slider, counter, countdown, maintenance, lightbox, gallery, swiper slider, aos animation etc.-->
         <script src="{{ url_for('static', filename='js/index/app.js')}}"></script><!--Note: All important javascript like page loader, menu, sticky menu, menu-toggler, one page menu etc. -->
+        <script src="{{ url_for('static', filename='js/populateSelect.js')}}"></script>
 
     </body>
 </html>

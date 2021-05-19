@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 from jobby import db
-from sqlalchemy import or_
 from datetime import datetime
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 import math, unidecode
@@ -221,6 +220,7 @@ class Notification(db.Model):
 
 class Tasks(db.Model):
     __tablename__ = 'Tasks'
+    __searchable__ = ['project_name', 'description']
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50))
