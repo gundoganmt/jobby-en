@@ -128,11 +128,9 @@
                             <h5>Job Description: </h5>
                               {{ task.description|safe }}
                               <ul class="list-unstyled mt-3">
-                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">PHP</a></li>
-                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">WordPress</a></li>
-                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">Web Design</a></li>
-                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">CSS</a></li>
-                                  <li class="list-inline-item m-1"><a href="jvascript:void(0)" class="rounded bg-light py-1 px-2 text-muted small">JS</a></li>
+                                {% for sk in task.get_all_skills() %}
+                                  <li class="list-inline-item m-1"><a href="{{ url_for('public.browseTasks', tag=sk )}}" class="rounded bg-light py-1 px-2 text-muted small">{{ sk }}</a></li>
+                                {% endfor %}
                               </ul>
 
                             <div class="mt-4 pt-2">

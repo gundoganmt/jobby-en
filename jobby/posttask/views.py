@@ -3,8 +3,10 @@ from flask_login import login_required, current_user
 from jobby import db, last_updated
 from jobby.models import Users, Tasks, TaskSkills
 import bleach, uuid, os
+from PIL import Image
 from werkzeug.utils import secure_filename
-from utils import allowed_img_file, get_extension, UPLOAD_TASK_FOLDER
+from datetime import datetime
+from utils import allowed_img_file, get_extension, UPLOAD_TASK_FOLDER, crop_max_square
 
 posttask = Blueprint('posttask',__name__)
 
@@ -17,10 +19,14 @@ def post_task():
         budget_min = request.form["budget_min"] or 0
         budget_max = request.form["budget_max"] or 0
         category = request.form["category"]
-        skills_list = request.form.getlist('skills_list')
+        skills_list = request.form.getlist('skills_list')[0].split(',')
+
+        if len(skills_list) > 5 or len(skills_list) < 1:
+            return jsonify({'success': False, 'msg': 'Add at least 1 at most 5 skills!'})
+
         description = bleach.clean(request.form["description"], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
 
-        task = Tasks(project_name=project_name, location=location, budget_min=budget_min,
+        task = Tasks(project_name=project_name, location=location, budget_min=budget_min, time_posted=datetime.now(),
                      budget_max=budget_max, category=category, description=description, user_id=current_user.id)
 
         if 'file' in request.files:
@@ -30,13 +36,15 @@ def post_task():
             filename = secure_filename(filename)
             unique_filename = str(uuid.uuid4())+get_extension(filename)
             task.task_pic = unique_filename
-            file.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename))
+            image = Image.open(file)
+            i = crop_max_square(image).resize((356, 200), Image.LANCZOS)
+            i.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename), quality=95)
 
         db.session.add(task)
         db.session.commit()
 
-        for skill in skills_list[0].split(','):
-            tskills = TaskSkills(skill=skill, task_id=task.id)
+        for skill in skills_list:
+            tskills = TaskSkills(skill=skill.capitalize(), task_id=task.id)
             db.session.add(tskills)
         db.session.commit()
         return jsonify({'success': True, 'msg': url_for('public.task_page', task_url=task.generate_task_link())})

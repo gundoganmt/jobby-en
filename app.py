@@ -18,7 +18,7 @@ class MyModelView(sqla.ModelView):
         if not current_user.is_active or not current_user.is_authenticated:
             return False
 
-        if current_user.email == 'gundoganm@itu.edu.tr':
+        if current_user:
             return True
 
         return False
@@ -60,6 +60,7 @@ class CustomView(BaseView):
 
 app = create_app()
 wa.whoosh_index(app, Tasks)
+wa.whoosh_index(app, Users)
 
 admin = Admin(
     app,
@@ -77,6 +78,7 @@ admin.add_view(MyModelView(Reviews, db.session, menu_icon_type='fa', menu_icon_v
 admin.add_view(MyModelView(Messages, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-envelope', name="Messages"))
 admin.add_view(MyModelView(TaskSkills, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-briefcase', name="TaskSkills"))
 admin.add_view(MyModelView(Offers, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-briefcase', name="Offers"))
+admin.add_view(MyModelView(Views, db.session, menu_icon_type='fa', menu_icon_value='fa-bar-chart', name="Views"))
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

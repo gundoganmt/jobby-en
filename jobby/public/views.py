@@ -5,7 +5,7 @@ from jobby.models import (
     Tasks, Bids, Users,
     WorkExperiences, Educations,
     Views, Notification, Reviews, Offers,
-    Notification, TaskSkills
+    Notification, TaskSkills, Skills
     )
 from jobby import db
 from datetime import datetime, timedelta
@@ -19,7 +19,7 @@ public = Blueprint('public',__name__)
 def index():
     return render_template('public/index.html')
 
-@public.route('/search/<where>', methods=['POST'])
+@public.route('/search/<where>', methods=['GET','POST'])
 def search(where):
     if where == 'index':
         keyword = request.form['keyword'] or None
@@ -28,24 +28,33 @@ def search(where):
 
         return redirect(url_for('.browseTasks', lc=location, kw=keyword, ct=category))
     elif where == 'tasklist':
-        keyword = request.form['keyword'] or None
+        keyword = request.form['task_search'] or None
         location = request.form['location'] or None
         category = request.form['category'] or None
         budget_min = request.form['budget_min'] or None
         budget_max = request.form['budget_max'] or None
         checks = request.form.getlist('flexRadioDefault')
-        print(checks)
-        print(type(checks))
 
         return redirect(url_for('.browseTasks', lc=location, kw=keyword, ct=category,
             bn=budget_min, bx=budget_max, cx=checks))
 
-@public.route('/proje/<task_url>', methods=['GET', 'POST'])
+    elif where == 'freelist':
+        keyword = request.form['free_search'] or None
+        location = request.form['location'] or None
+        category = request.form['category'] or None
+        skill = request.form['skill'] or None
+        rating = request.form.getlist('rating')
+        print(rating)
+
+        return redirect(url_for('.browseFreelancers', lc=location, kw=keyword, ct=category, rt=rating, sk=skill))
+
+@public.route('/project/<task_url>', methods=['GET', 'POST'])
 def task_page(task_url):
     task_id = task_url.split('-')[-1]
     task = Tasks.query.filter_by(id=task_id).first_or_404()
     taskbids = Bids.query.filter_by(task_id=task_id).all()
     if request.method == 'GET':
+        task.addView()
         sk = TaskSkills.query.filter_by(task_id=task.id).all()
         return render_template('tasks/single-task-page.html',task=task, sk=sk, taskbids=taskbids)
     else:
@@ -72,15 +81,21 @@ def browseTasks():
     budget_min = request.args.get('bn', type=str)
     budget_max = request.args.get('bx', type=str)
     checks = request.args.get('cx', type=str)
+    tag = request.args.get('tag', type=str)
 
     if request.args:
         tasks = db.session.query(Tasks)
+
         if keyword:
             tasks = Tasks.query.whoosh_search(keyword)
+
+        if tag:
+            tasks = tasks.filter(Tasks.TSkills.any(TaskSkills.skill==tag))
 
         if checks:
             if checks == 'lasthour':
                 lasthour = datetime.now() - timedelta(hours = 1)
+                print(lasthour)
                 tasks = tasks.filter(Tasks.time_posted >= lasthour)
             elif checks == 'oneday':
                 oneday = datetime.now() - timedelta(1)
@@ -137,7 +152,37 @@ def freelancer(user_id):
 
 @public.route('/freelancers')
 def browseFreelancers():
-    freelancers = Users.query.filter_by(status='freelancer').all()
+    keyword = request.args.get('kw', type=str)
+    location = request.args.get('lc', type=str)
+    category = request.args.get('ct', type=str)
+    rating = request.args.get('rt', type=str)
+    skill = request.args.get('sk', type=str)
+    tag = request.args.get('tag', type=str)
+    freelancers = db.session.query(Users).filter(Users.status=='freelancer')
+
+    if request.args:
+
+        if keyword:
+            freelancers = Users.query.whoosh_search(keyword)
+
+        if tag:
+            freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==tag))
+
+        if rating:
+            freelancers = freelancers.filter(Users.rating >= float(rating))
+
+        if location:
+            freelancers = freelancers.filter(Users.country==location)
+
+        if category:
+            freelancers = freelancers.filter(Users.field_of_work==category)
+
+        if skill:
+            freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==skill))
+
+        freelancers = freelancers.all()
+    else:
+        freelancers = freelancers.all()
     return render_template('public/freelancers-list.html', freelancers=freelancers)
 
 @public.app_errorhandler(404)

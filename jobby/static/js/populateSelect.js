@@ -9,5 +9,4 @@ document.addEventListener('DOMContentLoaded', () =>{
     country.text = value;
     lct.add(country);
   }
-  $('.selectpicker').selectpicker('refresh');
 })

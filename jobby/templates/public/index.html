@@ -138,15 +138,15 @@
 
                 <div class="row">
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
-                        <div class="card categories overflow-hidden rounded shadow border-0">
-                            <img src="{{ url_for('static', filename='images/software.jpg')}}" class="img-fluid" style="height: 150px;">
-                            <div class="card-body">
-                                <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Programming</a></li>
-                                    <li class="h6 mb-0 jobs">125 Jobs</li>
-                                </ul>
-                            </div>
+                      <div class="card categories overflow-hidden rounded shadow border-0">
+                        <img src="{{ url_for('static', filename='images/software.jpg')}}" class="img-fluid" style="height: 150px;">
+                        <div class="card-body">
+                            <ul class="list-unstyled d-flex justify-content-between mb-0">
+                                <li><a href="{{ url_for('public.browseTasks', ct='1')}}" class="title h6 text-dark">Programming</a></li>
+                                <li class="h6 mb-0 jobs">125 Jobs</li>
+                            </ul>
                         </div>
+                      </div>
                     </div><!--end col-->
 
                     <div class="col-lg-3 col-md-6 col-12 mt-4 pt-2">
@@ -154,7 +154,7 @@
                             <img src="{{ url_for('static', filename='images/writing.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Writing</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='2')}}" class="title h6 text-dark">Writing</a></li>
                                     <li class="h6 mb-0 jobs">125 Jobs</li>
                                 </ul>
                             </div>
@@ -166,7 +166,7 @@
                             <img src="{{ url_for('static', filename='images/graphics.png')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Graphics & Design</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='3')}}" class="title h6 text-dark">Graphics & Design</a></li>
                                     <li class="h6 mb-0 jobs">10 Jobs</li>
                                 </ul>
                             </div>
@@ -178,7 +178,7 @@
                             <img src="{{ url_for('static', filename='images/marketing.png')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Digital Marketing</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='4')}}" class="title h6 text-dark">Digital Marketing</a></li>
                                     <li class="h6 mb-0 jobs">10 Jobs</li>
                                 </ul>
                             </div>
@@ -190,7 +190,7 @@
                             <img src="{{ url_for('static', filename='images/data.jpeg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Data Science</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='5')}}" class="title h6 text-dark">Data Science</a></li>
                                     <li class="h6 mb-0 jobs">125 Jobs</li>
                                 </ul>
                             </div>
@@ -202,7 +202,7 @@
                             <img src="{{ url_for('static', filename='images/animation.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Video & Animation</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='6')}}" class="title h6 text-dark">Video & Animation</a></li>
                                     <li class="h6 mb-0 jobs">10 Jobs</li>
                                 </ul>
                             </div>
@@ -214,7 +214,7 @@
                             <img src="{{ url_for('static', filename='images/lifestyle.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Lifestyle</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='7')}}" class="title h6 text-dark">Lifestyle</a></li>
                                     <li class="h6 mb-0 jobs">15 Jobs</li>
                                 </ul>
                             </div>
@@ -226,7 +226,7 @@
                             <img src="{{ url_for('static', filename='images/finance.jpg')}}" class="img-fluid" style="height: 150px;">
                             <div class="card-body">
                                 <ul class="list-unstyled d-flex justify-content-between mb-0">
-                                    <li><a href="javascript:void(0)" class="title h6 text-dark">Finance</a></li>
+                                    <li><a href="{{ url_for('public.browseTasks', ct='8')}}" class="title h6 text-dark">Finance</a></li>
                                     <li class="h6 mb-0 jobs">5 Jobs</li>
                                 </ul>
                             </div>

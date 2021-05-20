@@ -49,6 +49,9 @@
             <ul class="navigation-menu">
                 <li><a href="{{ url_for('public.browseTasks') }}" class="sub-menu-item">Projects</a></li>
                 <li><a href="{{ url_for('public.browseFreelancers') }}" class="sub-menu-item">Freelancers</a></li>
+                {% if current_user.is_authenticated %}
+                  <li><a href="{{ url_for('manage.dashboard') }}" class="sub-menu-item">Dashboard</a></li>
+                {% endif %}
             </ul><!--end navigation menu-->
         </div><!--end navigation-->
     </div><!--end container-->

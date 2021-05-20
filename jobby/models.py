@@ -15,6 +15,7 @@ BookmarksUsers = db.Table('BookmarksUsers',
 )
 
 class Users(UserMixin, db.Model):
+    __searchable__ = ['name', 'surname', 'tagline', 'introduction']
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=True, default="")
@@ -207,7 +208,9 @@ class Views(db.Model):
     friday = db.Column(db.Integer, default=0)
     saturday = db.Column(db.Integer, default=0)
     sunday = db.Column(db.Integer, default=0)
+    week_num = db.Column(db.Integer, default=0)
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
 
 class Notification(db.Model):
     __tablename__ = 'Notification'
@@ -235,6 +238,7 @@ class Tasks(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
     winner_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
     review = db.relationship('Reviews', backref='reviewed', cascade='all, delete-orphan')
+    views = db.relationship('Views', backref='viewedTask', cascade='all, delete-orphan')
     bids = db.relationship('Bids', backref='bidded', lazy='dynamic', cascade='all, delete-orphan')
     TSkills = db.relationship('TaskSkills', backref='TSkilled', lazy='dynamic', cascade='all, delete-orphan')
 
@@ -255,6 +259,41 @@ class Tasks(db.Model):
 
     def get_all_skills(self):
         return TaskSkills.query.filter_by(task_id=self.id).all()
+
+    def addView(self):
+        today = datetime.today()
+        year, week_num, weekday = today.isocalendar()
+
+        view = Views.query.filter_by(viewedTask=self).first()
+        if not view:
+            view = Views(viewedTask=self,monday=0,tuesday=0,wednesday=0,thursday=0,friday=0,saturday=0,sunday=0,week_num=week_num)
+            db.session.add(view)
+        else:
+            if week_num == view.week_num:
+                if weekday == 1:
+                    view.monday +=1
+                elif weekday == 2:
+                    view.tuesday +=1
+                elif weekday == 3:
+                    view.wednesday +=1
+                elif weekday == 4:
+                    view.thursday +=1
+                elif weekday == 5:
+                    view.friday +=1
+                elif weekday == 6:
+                    view.saturday +=1
+                elif weekday == 7:
+                    view.sunday +=1
+            else:
+                view.week_num = week_num
+                view.monday = 0
+                view.tuesday = 0
+                view.wednesday = 0
+                view.thursday = 0
+                view.friday = 0
+                view.saturday = 0
+                view.sunday = 0
+        db.session.commit()
 
     def __repr__(self):
         return self.project_name

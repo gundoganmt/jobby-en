@@ -12,9 +12,35 @@ manage = Blueprint('manage',__name__)
 def dashboard():
     tasks = Tasks.query.filter_by(poster=current_user).all()
     if len(tasks) == 0:
-        flash("Proje ilanlarınızın göruntuleme sayıları burada görunur.")
+        flash("Your projects and views will be here.")
     views = Views.query.filter_by(viewed=current_user).first()
-    return render_template('dashboard.html', views=views, tasks=tasks, last_updated=last_updated)
+    return render_template('dashboard/dashboard.html', views=views, tasks=tasks, last_updated=last_updated)
+
+@manage.route('/get-view-data/<int:task_id>')
+@login_required
+def getViewData(task_id):
+    views = Views.query.filter_by(task_id=task_id).first()
+    if views.viewedTask.poster == current_user:
+        return jsonify({'success': True, 'monday': views.monday, 'tuesday': views.tuesday, 'wednesday': views.wednesday,
+            'thursday': views.thursday, 'friday': views.friday, 'saturday': views.saturday, 'sunday': views.sunday,
+            'project_name': views.viewedTask.project_name})
+    else:
+        return jsonify({'success': False, 'msg': 'something bad happened!'})
+
+@manage.route('/delete-notif/<notif_id>')
+@login_required
+def deleteNotif(notif_id):
+    if notif_id == 'all':
+        notifs = Notification.query.filter_by(notification_to=current_user).all()
+        for notif in notifs:
+            db.session.delete(notif)
+        db.session.commit()
+        return jsonify({'success': True, 'all': True})
+    else:
+        notif = Notification.query.filter_by(notification_to=current_user, id=int(notif_id)).first()
+        db.session.delete(notif)
+        db.session.commit()
+        return jsonify({'success': True, 'all': False})
 
 @csrf.exempt
 @manage.route('/reviews', methods=['GET', 'POST'])
