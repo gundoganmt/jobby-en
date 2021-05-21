@@ -151,18 +151,11 @@ def deleteItem():
 @setting.route('/setting')
 @login_required
 def setting_page():
-    with open("category.json", encoding='utf-8') as category:
-        categories = json.load(category)
-    with open("cities.json", encoding='utf-8') as city:
-        cities = json.load(city)
-    if current_user.status == 'company':
-        return render_template('setting/companySetting.html', last_updated=last_updated, categories=categories, cities=cities)
-    else:
-        skills = Skills.query.filter_by(user_id=current_user.id).all()
-        workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
-        edus = Educations.query.filter_by(student=current_user).all()
-        return render_template('setting/settings.html', last_updated=last_updated, skills=skills,
-            workExps=workExps, edus=edus, categories=categories, cities=cities)
+    skills = Skills.query.filter_by(user_id=current_user.id).all()
+    workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
+    edus = Educations.query.filter_by(student=current_user).all()
+    return render_template('setting/settings.html', last_updated=last_updated, skills=skills,
+        workExps=workExps, edus=edus)
 
 @setting.app_errorhandler(413)
 def file_too_large(e):

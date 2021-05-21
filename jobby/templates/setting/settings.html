@@ -149,13 +149,15 @@
 												<div class="submit-field">
 													<h5>Field of Work *</h5>
 													<select id="field_of_work" class="selectpicker with-border" data-size="7" title="Field of Work" data-live-search="true" value="">
-														{% for key, value in categories.items() %}
-															{% if current_user.field_of_work == key %}
-																<option value="{{ key }}" selected>{{ value }}</option>
-															{% else %}
-																<option value="{{ key }}">{{ value }}</option>
-															{% endif %}
-														{% endfor %}
+														<option value="1">Programming</option>
+														<option value="2">Writing</option>
+														<option value="3">Graphics Design</option>
+														<option value="4">Digital Marketing</option>
+														<option value="5">Data Science</option>
+														<option value="6">Video & Animation</option>
+														<option value="7">Lifestyle</option>
+														<option value="8">Finance</option>
+														<option value="9">Other</option>
 													</select>
 												</div>
 											</div>
