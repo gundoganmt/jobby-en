@@ -6,6 +6,7 @@ from sqlalchemy import or_, and_
 from datetime import datetime
 from flask_socketio import emit
 from .. import socketio
+
 message = Blueprint('message',__name__)
 
 @message.route('/get-message/<type_id>')

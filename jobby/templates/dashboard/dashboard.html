@@ -61,14 +61,14 @@
 					<div class="fun-fact" data-fun-fact-color="#b81b7f">
 						<div class="fun-fact-text">
 							<span>Total Job Posted</span>
-							<h4>{{ current_user.num_bids }}</h4>
+							<h4>{{ tasks|length }}</h4>
 						</div>
 						<div class="fun-fact-icon"><i class="icon-material-outline-business-center"></i></div>
 					</div>
 					<div class="fun-fact" data-fun-fact-color="#2a41e6">
 						<div class="fun-fact-text">
 							<span>Total Job Views</span>
-							<h4>987</h4>
+							<h4>{{ total_views }}</h4>
 						</div>
 						<div class="fun-fact-icon" style="background-color: rgba(42, 65, 230, 0.07);"><i class="icon-feather-trending-up" style="color: rgb(42, 65, 230);"></i></div>
 					</div>
@@ -115,10 +115,10 @@
 						<!-- Dashboard Box -->
 						<div class="dashboard-box main-box-in-row">
 							<div class="headline">
-								<h3 id="project_name"><i class="icon-feather-bar-chart-2"></i> Project Views</h3>
+								<h3 id="project_name"><i class="icon-feather-bar-chart-2"></i></h3>
 								<div class="sort-by">
 									<select class="selectpicker hide-tick">
-										<option>Last Week</option>
+										<option>This Week</option>
 									</select>
 								</div>
 							</div>

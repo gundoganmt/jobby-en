@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
       request.onload = () =>{
         if (request.status == 200){
           BidData = JSON.parse(request.responseText);
-          document.getElementById('bid_amount').innerText = BidData.bid_amount + ' TL';
-          document.getElementById('bidder').innerText = "Teklifi kabul et: " + BidData.bidder;
+          document.getElementById('bid_amount').innerText = BidData.bid_amount + ' $';
+          document.getElementById('bidder').innerText = "Accept bid from " + BidData.bidder;
         }
       }
       request.send();
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
           acceptButton.remove();
           document.getElementById('bid_amount').remove();
           msg = document.getElementById('bidder');
-          msg.innerText = "Teklif Kabul Edildi";
+          msg.innerText = "Bid Accepted!";
           msg.style.color = 'green';
           deleteButtons(bid_id);
         }
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function deleteButtons(bid_id){
     accept.forEach(function(a){
       if(parseInt(a.getAttribute('data')) == bid_id){
-        a.innerText = 'Kazandı';
+        a.innerText = 'Won';
         a.style.background = 'green';
         a.parentNode.lastElementChild.remove();
       }

@@ -11,7 +11,7 @@ rate.forEach(function(r){
     request.onload = () =>{
       if (request.status == 200){
         const reviewData = JSON.parse(request.responseText);
-        document.getElementById('rateWho').innerHTML = "<b>Profesyonel</b>: " + "<strong style='color: blue;'>" + reviewData.winner + "</strong>" + " <b>Proje</b>: " + "<strong style='color: blue;'>" + reviewData.reviewed + "</strong>";
+        document.getElementById('rateWho').innerHTML = "<span>Rate <a href='#'>"  + reviewData.winner + " </a> for the project <a href='#'>" + reviewData.reviewed + "</a></span>";
       }
     }
     request.send();

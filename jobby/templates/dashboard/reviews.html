@@ -4,7 +4,7 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>Jobby</title>
+<title>Jobby - Reviews</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -43,14 +43,14 @@
 
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
-				<h3>Değerlendirmeler</h3>
+				<h3>Reviews</h3>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="{{ url_for('public.index') }}">Anasayfa</a></li>
-						<li><a href="{{ url_for('manage.dashboard') }}">Hesabım</a></li>
-						<li>Değerlendirmeler</li>
+						<li><a href="{{ url_for('public.index') }}">Home</a></li>
+						<li><a href="{{ url_for('manage.dashboard') }}">Dashboard</a></li>
+						<li>Reviews</li>
 					</ul>
 				</nav>
 			</div>
@@ -61,13 +61,12 @@
 				{% if current_user.status == 'freelancer' %}
 				<!-- Dashboard Box -->
 					{% if i_review %}
-					<div class="row">
 						<div class="col-xl-6">
 							<div class="dashboard-box margin-top-0">
 
 								<!-- Headline -->
 								<div class="headline">
-									<h3><i class="icon-material-outline-business"></i> Değerlendirilmeler</h3>
+									<h3><i class="icon-material-outline-business"></i> Reviews</h3>
 								</div>
 
 								<div class="content">
@@ -79,7 +78,7 @@
 														<!-- Content -->
 														<div class="item-content">
 															<h4>{{ rv.reviewed }}</h4>
-															<span class="company-not-rated margin-bottom-5">Değerlendirilmediniz</span>
+															<span class="company-not-rated margin-bottom-5">Not yet reviewed</span>
 														</div>
 													</div>
 												</li>
@@ -95,22 +94,9 @@
 															</div>
 															<div class="item-description">
 																<p>{{ rv.body }}</p>
-																<!-- {% if rv.reply %}
-																	<div class="replyReview">
-																		<h4>{{ rv.reviewed_pro }}</h4>
-																		<p>{{ rv.reply }}<p>
-																	</div>
-																	{% else %}
-																	<div class="replyReview">
-																		<h4></h4>
-																		<p id="{{ rv.id }}"><p>
-																	</div>
-																{% endif %} -->
 															</div>
 														</div>
 													</div>
-													<!-- <textarea class="with-border" placeholder="Cevabınız" cols="7" style="min-height: 90px;"></textarea>
-													<a class="button gray ripple-effect margin-top-5 margin-bottom-10" data="{{ rv.id }}" name="reply"><i class="icon-line-awesome-reply"></i> Cevapla</a> -->
 												</li>
 											{% endif %}
 										{% endfor %}
@@ -123,7 +109,7 @@
 
 								<!-- Headline -->
 								<div class="headline">
-									<h3><i class="icon-material-outline-face"></i> Değerlendir</h3>
+									<h3><i class="icon-material-outline-face"></i> Review</h3>
 								</div>
 
 								<div class="content">
@@ -135,11 +121,11 @@
 														<!-- Content -->
 														<div class="item-content">
 															<h4>{{ rv.reviewed }}</h4>
-															<span class="company-not-rated margin-bottom-5">Değerlendirmediniz</span>
+															<span class="company-not-rated margin-bottom-5">Not yet reviewed</span>
 														</div>
 													</div>
 
-													<a href="#small-dialog-2" name="rate" data="{{ rv.id }}" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Değerlendir</a>
+													<a href="#small-dialog-2" name="rate" data="{{ rv.id }}" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Review</a>
 												</li>
 											{% else %}
 												<li>
@@ -163,73 +149,59 @@
 								</div>
 							</div>
 						</div>
-					</div>
 					{% else %}
 						<div class="col-xl-12">
-						<div class="dashboard-box margin-top-0">
+							<div class="dashboard-box margin-top-0">
 
-							<!-- Headline -->
-							<div class="headline">
-								<h3><i class="icon-material-outline-business"></i> Değerlendirilmeler</h3>
-							</div>
+								<!-- Headline -->
+								<div class="headline">
+									<h3><i class="icon-material-outline-business"></i> Reviews</h3>
+								</div>
 
-							<div class="content">
-								<ul class="dashboard-box-list">
-									{% for rv in my_reviews %}
-										{% if not rv.rating %}
-											<li>
-												<div class="boxed-list-item">
-													<!-- Content -->
-													<div class="item-content">
-														<h4>{{ rv.reviewed }}</h4>
-														<span class="company-not-rated margin-bottom-5">Değerlendirilmediniz</span>
-													</div>
-												</div>
-											</li>
-										{% else %}
-											<li>
-												<div class="boxed-list-item">
-													<!-- Content -->
-													<div class="item-content">
-														<h4>{{ rv.reviewed }}</h4>
-														<div class="item-details margin-top-10">
-															<div class="star-rating" data-rating="{{ rv.rating }}"></div>
-															<div class="detail-item"><i class="icon-feather-user"></i> {{ rv.reviewed_emp }}</div>
-														</div>
-														<div class="item-description">
-															<p>{{ rv.body }}</p>
-															<!-- {% if rv.reply %}
-																<div class="replyReview">
-																	<h4>{{ rv.reviewed_pro }}</h4>
-																	<p>{{ rv.reply }}<p>
-																</div>
-																{% else %}
-																<div class="replyReview">
-																	<h4></h4>
-																	<p id="{{ rv.id }}"><p>
-																</div>
-															{% endif %} -->
+								<div class="content">
+									<ul class="dashboard-box-list">
+										{% for rv in my_reviews %}
+											{% if not rv.rating %}
+												<li>
+													<div class="boxed-list-item">
+														<!-- Content -->
+														<div class="item-content">
+															<h4>{{ rv.reviewed }}</h4>
+															<span class="company-not-rated margin-bottom-5">Not yet reviewed</span>
 														</div>
 													</div>
-												</div>
-												<!-- <textarea class="with-border" placeholder="Cevabınız" cols="7" style="min-height: 90px;"></textarea>
-												<a class="button gray ripple-effect margin-top-5 margin-bottom-10" data="{{ rv.id }}" name="reply"><i class="icon-line-awesome-reply"></i> Cevapla</a> -->
-											</li>
-										{% endif %}
-									{% endfor %}
-								</ul>
+												</li>
+											{% else %}
+												<li>
+													<div class="boxed-list-item">
+														<!-- Content -->
+														<div class="item-content">
+															<h4>{{ rv.reviewed }}</h4>
+															<div class="item-details margin-top-10">
+																<div class="star-rating" data-rating="{{ rv.rating }}"></div>
+																<div class="detail-item"><i class="icon-feather-user"></i> {{ rv.reviewed_emp }}</div>
+															</div>
+															<div class="item-description">
+																<p>{{ rv.body }}</p>
+															</div>
+														</div>
+													</div>
+												</li>
+											{% endif %}
+										{% endfor %}
+									</ul>
+								</div>
 							</div>
 						</div>
-					</div>
 					{% endif %}
 				{% else %}
-				<!-- Dashboard Box -->
+					<!-- Dashboard Box -->
 					<div class="col-xl-12">
 						<div class="dashboard-box margin-top-0">
 
 							<!-- Headline -->
 							<div class="headline">
-								<h3><i class="icon-material-outline-face"></i> Değerlendir</h3>
+								<h3><i class="icon-material-outline-face"></i> Review</h3>
 							</div>
 
 							<div class="content">
@@ -241,11 +213,11 @@
 													<!-- Content -->
 													<div class="item-content">
 														<h4>{{ rv.reviewed }}</h4>
-														<span class="company-not-rated margin-bottom-5">Değerlendirmediniz</span>
+														<span class="company-not-rated margin-bottom-5">Not reviewed yet</span>
 													</div>
 												</div>
 
-												<a href="#small-dialog-2" name="rate" data="{{ rv.id }}" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Değerlendir</a>
+												<a href="#small-dialog-2" name="rate" data="{{ rv.id }}" class="popup-with-zoom-anim button ripple-effect margin-top-5 margin-bottom-10"><i class="icon-material-outline-thumb-up"></i> Review</a>
 											</li>
 										{% else %}
 											<li>
@@ -278,7 +250,7 @@
 			<div class="dashboard-footer-spacer"></div>
 			<div class="small-footer margin-top-15">
 				<div class="small-footer-copyrights">
-					© 2020 <strong>Jobby</strong>. Butun hakları saklıdır.
+					© 2021 <strong>Jobby</strong>. All Rights Reserved.
 				</div>
 				<ul class="footer-social-links">
 					<li>
@@ -324,7 +296,7 @@
 	<div class="sign-in-form">
 
 		<ul class="popup-tabs-nav">
-			<li><a href="#tab2">Değerlendir</a></li>
+			<li><a href="#tab2">Leave a Review</a></li>
 		</ul>
 
 		<div class="popup-tabs-container">
@@ -334,7 +306,7 @@
 
 				<!-- Welcome Text -->
 				<div class="welcome-text">
-					<h3>Değerlendir</h3>
+					<h3>Leave a Review</h3>
 					<span id="rateWho"></span>
 				</div>
 
@@ -342,33 +314,33 @@
 				<form method="post" action="{{ url_for('manage.reviews') }}" id="leave-review-form">
 
 					<div class="feedback-yes-no">
-						<strong>Başkasına tavsiye eder misiniz?</strong>
+						<strong>Do you recommend this freelancer to others?</strong>
 						<div class="radio">
 							<input id="radio-1" name="radio" type="radio" required>
-							<label for="radio-1"><span class="radio-label"></span> Evet</label>
+							<label for="radio-1"><span class="radio-label"></span> Yes</label>
 						</div>
 
 						<div class="radio">
 							<input id="radio-2" name="radio" type="radio" required>
-							<label for="radio-2"><span class="radio-label"></span> Hayır</label>
+							<label for="radio-2"><span class="radio-label"></span> No</label>
 						</div>
 					</div>
 
 					<div class="feedback-yes-no">
-						<strong>Zamanında bitirildi mi?</strong>
+						<strong>Was this delivered on time?</strong>
 						<div class="radio">
 							<input id="radio-3" name="radio2" type="radio" required>
-							<label for="radio-3"><span class="radio-label"></span> Evet</label>
+							<label for="radio-3"><span class="radio-label"></span> Yes</label>
 						</div>
 
 						<div class="radio">
 							<input id="radio-4" name="radio2" type="radio" required>
-							<label for="radio-4"><span class="radio-label"></span> Hayır</label>
+							<label for="radio-4"><span class="radio-label"></span> No</label>
 						</div>
 					</div>
 
 					<div class="feedback-yes-no">
-						<strong>Puanınız?</strong>
+						<strong>Your Rating?</strong>
 						<div class="leave-rating">
 							<input type="radio" name="rating" id="rating-radio-1" value="1" required>
 							<label for="rating-radio-1" class="icon-material-outline-star"></label>
@@ -383,12 +355,12 @@
 						</div><div class="clearfix"></div>
 					</div>
 					<input type='hidden' id="RadioValues" name="RadioValues" value=""/>
-					<textarea class="with-border" placeholder="Yorumunuz" name="comment" cols="7" required></textarea>
+					<textarea class="with-border" placeholder="Your Comment" name="comment" cols="7" required></textarea>
 
 				</form>
 
 				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="leave-review-form">Değerlendir <i class="icon-material-outline-arrow-right-alt"></i></button>
+				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="leave-review-form">Leave a Review <i class="icon-material-outline-arrow-right-alt"></i></button>
 
 			</div>
 
@@ -396,8 +368,6 @@
 	</div>
 </div>
 <!-- Leave a Review Popup / End -->
-
-
 
 <!-- Scripts
 ================================================== -->

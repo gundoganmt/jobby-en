@@ -21,7 +21,7 @@
             <li><a href="{{ url_for('message.messages') }}"><i class="icon-material-outline-question-answer"></i> Messages</a></li>
             <li class="active-submenu"><a href="#"><i class="icon-material-outline-star-border"></i> Bookmarks</a>
               <ul>
-                <li><a href="{{ url_for('manage.bookmarkedTasks') }}">Bookmarked Tasks</a></li>
+                <li><a href="{{ url_for('manage.bookmarkedTasks') }}">Bookmarked Projects</a></li>
                 <li><a href="{{ url_for('manage.bookmarkedUsers') }}">Bookmarked Users</a></li>
               </ul>
             </li>
@@ -35,7 +35,9 @@
                   <li><a href="{{ url_for('manage.manageOffers') }}">Recieved Offers</a></li>
                 {% endif %}
                 <li><a href="{{ url_for('manage.manageTasks') }}">Posted Projects</a></li>
-                <li><a href="{{ url_for('manage.activeBids') }}">Active Bids</a></li>
+                {% if current_user.status == 'freelancer' %}
+                  <li><a href="{{ url_for('manage.activeBids') }}">Active Bids</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('posttask.post_task') }}">Post a Project</a></li>
               </ul>
             </li>

@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             msgResult.style.color = "black"
             formData.firstElementChild.value = ""
           }
-          msgResult.innerText = "mesaj gönder: " + username.username;
+          msgResult.innerText = "Send Message to " + username.username;
         })
         document.getElementById('sendButton').onclick = () =>{
           body = document.getElementById('body').value;
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             socket.emit("send message", {"to": recipient_id, "body": body})
           }
           else{
-            err.innerText = "* Hiçbirşey Yazmadınız";
+            err.innerText = "* You didn't write anything";
             err.style.color = "red";
           }
         }
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   socket.on('message success', data => {
     if(data.success){
       formData.style.display = "none";
-      msgResult.innerText = "Mesajınız Gönderildi";
+      msgResult.innerText = "Message has been sent!";
       msgResult.style.color = "green";
       err.style.display = "none";
     }

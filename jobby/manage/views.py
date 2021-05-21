@@ -11,10 +11,15 @@ manage = Blueprint('manage',__name__)
 @login_required
 def dashboard():
     tasks = Tasks.query.filter_by(poster=current_user).all()
-    if len(tasks) == 0:
+    total_views = 0
+    if len(tasks) > 0:
+        for task in tasks:
+            views = Views.query.filter_by(viewedTask=task).first()
+            total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
+    else:
         flash("Your projects and views will be here.")
-    views = Views.query.filter_by(viewed=current_user).first()
-    return render_template('dashboard/dashboard.html', views=views, tasks=tasks, last_updated=last_updated)
+    return render_template('dashboard/dashboard.html', views=views, tasks=tasks, last_updated=last_updated,
+        total_views=total_views)
 
 @manage.route('/get-view-data/<int:task_id>')
 @login_required
@@ -56,7 +61,7 @@ def reviews():
             my_reviews = Reviews.query.filter_by(reviewed_pro=current_user).all()
         else:
             my_reviews = Reviews.query.filter_by(reviewed_emp=current_user).all()
-        return render_template('reviews.html', my_reviews=my_reviews, i_review=i_review)
+        return render_template('dashboard/reviews.html', my_reviews=my_reviews, i_review=i_review)
     else:
         review_id, recom, intime, rating = request.form['RadioValues'].split()
         comment = request.form['comment']
@@ -102,7 +107,7 @@ def activeBids():
     bids = Bids.query.filter_by(bidder=current_user).all()
     if len(bids) == 0:
         flash('Henuz bir işe teklifiniz bulunmuyor')
-    return render_template('my-active-bids.html', bids=bids, last_updated=last_updated)
+    return render_template('dashboard/my-active-bids.html', bids=bids, last_updated=last_updated)
 
 @manage.route('/delete-bid/<int:bid_id>')
 @login_required
@@ -143,8 +148,8 @@ def acceptBid(bid_id):
 def manageTasks():
     tasks = Tasks.query.filter_by(poster=current_user).all()
     if len(tasks) == 0:
-        flash('Henuz bir proje ilanınız bulunmuyor')
-    return render_template('manage-tasks.html', tasks=tasks, last_updated=last_updated)
+        flash('You do not have a project yet!')
+    return render_template('dashboard/manage-tasks.html', tasks=tasks, last_updated=last_updated)
 
 @manage.route('/manage-offers')
 @login_required
@@ -166,7 +171,7 @@ def manageBidders(task_id):
     bids = Bids.query.filter_by(task_id=task_id).all()
     task = Tasks.query.filter_by(id=task_id).first_or_404()
     winner_bid = Bids.query.filter_by(bidder=task.winner, bidded=task).first()
-    return render_template('manage-bidders.html', bids=bids, task=task, winner_bid=winner_bid, last_updated=last_updated)
+    return render_template('dashboard/manage-bidders.html', bids=bids, task=task, winner_bid=winner_bid, last_updated=last_updated)
 
 @csrf.exempt
 @manage.route('/bookmark/<int:bookmark_id>', methods=['POST'])
@@ -203,13 +208,13 @@ def unmark(bookmark_id):
 @login_required
 def bookmarkedTasks():
     bookmarked_tasks = current_user.BookmarksTasks.all()
-    return render_template('bookmark-tasks.html', bookmarked_tasks=bookmarked_tasks, last_updated=last_updated)
+    return render_template('dashboard/bookmark-tasks.html', bookmarked_tasks=bookmarked_tasks, last_updated=last_updated)
 
 @manage.route('/bookmarked-users')
 @login_required
 def bookmarkedUsers():
     bookmarked_users = current_user.BookmarksUser.all()
-    return render_template('bookmark-users.html', bookmarked_users=bookmarked_users, last_updated=last_updated)
+    return render_template('dashboard/bookmark-users.html', bookmarked_users=bookmarked_users, last_updated=last_updated)
 
 @manage.route('/download/<filename>')
 def download(filename):

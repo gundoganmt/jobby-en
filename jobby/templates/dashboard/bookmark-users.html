@@ -4,7 +4,7 @@
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>Jobby</title>
+<title>Jobby - Bookmarked Freelancers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -25,7 +25,6 @@
 <div class="clearfix"></div>
 <!-- Header Container / End -->
 
-
 <!-- Dashboard Container -->
 <div class="dashboard-container">
 
@@ -34,7 +33,6 @@
 	{% include 'sidebar.html' %}
 	<!-- Dashboard Sidebar / End -->
 
-
 	<!-- Dashboard Content
 	================================================== -->
 	<div class="dashboard-content-container" data-simplebar>
@@ -42,14 +40,14 @@
 
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
-				<h3>Kayıtlı Kişilerim</h3>
+				<h3>Bookmarked Freelancers</h3>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs" class="dark">
 					<ul>
-						<li><a href="{{ url_for('public.index') }}">Anasayfa</a></li>
-						<li><a href="#">hesabım</a></li>
-						<li>Kayıtlı Kişilerim</li>
+						<li><a href="{{ url_for('public.index') }}">Home</a></li>
+						<li><a href="{{ url_for('manage.dashboard') }}">Dashboard</a></li>
+						<li>Bookmarked Freelancers</li>
 					</ul>
 				</nav>
 			</div>
@@ -63,7 +61,7 @@
 
 						<!-- Headline -->
 						<div class="headline">
-							<h3><i class="icon-material-outline-business-center"></i> Kayıtlı Kişilerim</h3>
+							<h3><i class="icon-material-outline-business-center"></i> Bookmarked Freelancers</h3>
 						</div>
 
 						<div class="content">
@@ -94,7 +92,7 @@
 
 									<!-- Buttons -->
 									<div data="{{ user.id }}" data-type="1" class="buttons-to-right deleteBookmark">
-										<a href="#" class="button red ripple-effect ico" title="Sil" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
+										<a href="#" class="button red ripple-effect ico" title="Delete" data-tippy-placement="left"><i class="icon-feather-trash-2"></i></a>
 									</div>
 								</li>
 								{% endfor %}
@@ -112,7 +110,7 @@
 			<div class="dashboard-footer-spacer"></div>
 			<div class="small-footer margin-top-15">
 				<div class="small-footer-copyrights">
-					© 2020 <strong>Jobby</strong>. Butun Hakları Saklıdır.
+					© 2021 <strong>Jobby</strong>. All Rights Reserved.
 				</div>
 				<ul class="footer-social-links">
 					<li>
@@ -150,52 +148,6 @@
 </div>
 <!-- Wrapper / End -->
 
-
-<!-- Apply for a job popup
-================================================== -->
-<div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
-
-	<!--Tabs -->
-	<div class="sign-in-form">
-
-		<ul class="popup-tabs-nav">
-			<li><a href="#tab">Add Note</a></li>
-		</ul>
-
-		<div class="popup-tabs-container">
-
-			<!-- Tab -->
-			<div class="popup-tab-content" id="tab">
-
-				<!-- Welcome Text -->
-				<div class="welcome-text">
-					<h3>Do Not Forget 😎</h3>
-				</div>
-
-				<!-- Form -->
-				<form method="post" id="add-note">
-
-					<select class="selectpicker with-border default margin-bottom-20" data-size="7" title="Priority">
-						<option>Low Priority</option>
-						<option>Medium Priority</option>
-						<option>High Priority</option>
-					</select>
-
-					<textarea name="textarea" cols="10" placeholder="Note" class="with-border"></textarea>
-
-				</form>
-
-				<!-- Button -->
-				<button class="button full-width button-sliding-icon ripple-effect" type="submit" form="add-note">Add Note <i class="icon-material-outline-arrow-right-alt"></i></button>
-
-			</div>
-
-		</div>
-	</div>
-</div>
-<!-- Apply for a job popup / End -->
-
-
 <!-- Scripts
 ================================================== -->
 <script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js')}}"></script>
@@ -217,7 +169,7 @@
 // Snackbar for user status switcher
 $('#snackbar-user-status label').click(function() {
 	Snackbar.show({
-		text: 'Statunuz değiştirildi!',
+		text: 'Your status has been changed!',
 		pos: 'bottom-center',
 		showAction: false,
 		actionText: "Dismiss",

@@ -103,6 +103,11 @@ class Users(UserMixin, db.Model):
             return False
         return self.bids.filter(Bids.task_id == task.id).count() > 0
 
+    def is_poster(self, task):
+        if task.user_id == self.id:
+            return True
+        return False
+
     def canBid(self):
         if self.setting_completed:
             return True
@@ -187,7 +192,7 @@ class Users(UserMixin, db.Model):
         return self.name + " " + self.surname
 
     def __repr__(self):
-        return self.email
+        return self.name + " " + self.surname
 
 class Offers(db.Model):
     __tablename__ = 'Offers'
@@ -304,7 +309,6 @@ class Reviews(db.Model):
     recommendation = db.Column(db.Boolean, nullable=True)
     in_time = db.Column(db.Boolean, nullable=True)
     body = db.Column(db.String(300), nullable=True)
-    reply = db.Column(db.String(300), nullable=True)
     rating = db.Column(db.Float)
     task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
     freelancer = db.Column(db.Integer, db.ForeignKey('Users.id'))
