@@ -13,6 +13,7 @@
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <link rel="stylesheet" href="/static/css/style.css?u={{ last_updated }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/colors/blue.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
 <body class="gray">
@@ -148,22 +149,20 @@
 										</div>
 										<div class="submit-field" id="toolbar"></div>
 										<div class="submit-field" id="editor"></div>
-									  <input type='hidden' id="description" id="quillField" value=""/>
+									  <input type='hidden' id="description" value=""/>
 										<div class="uploadButton margin-top-30">
-											<input class="uploadButton-input" type="file" accept="image/*" id="upload">
+											<input class="uploadButton-input" type="file" accept=".png, .jpg, .jpeg" id="upload">
 											<label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
-											<span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
+											<span class="uploadButton-file-name">Image for display purpose. Allowed jpeg, png, jpg</span>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 					<div class="col-xl-12">
-						<button type="button" class="button ripple-effect big margin-top-30" id="send_post"><i class="icon-feather-plus"></i> Post Project</button>
+						<button type="button" class="button ripple-effect big margin-top-30" id="send_post"> Post Project</button>
 					</div>
-
 				</div>
 			</form>
 

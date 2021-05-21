@@ -91,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () =>{
       form_data.append("skills_list", skills_list);
       form_data.append("description", description);
       form_data.append("file", document.getElementById('upload').files[0]);
-      send_post.innerText = 'Posting...';
+      send_post.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Posting';
+      send_post.disabled = true;
 
       xhr.open('POST', url)
       xhr.setRequestHeader("X-CSRFToken", csrf_token);
@@ -106,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () =>{
       xhr.send(form_data);
       return false;
     }
-    send_post.innerText = 'Post Project';
+    send_post.innerHTML = 'Post Project';
+    send_post.disabled = false;
   })
 
 })

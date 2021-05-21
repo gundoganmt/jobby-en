@@ -49,8 +49,8 @@ def signup():
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
-        name = request.form['name']
-        surname = request.form['surname']
+        name = request.form['name'].capitalize()
+        surname = request.form['surname'].capitalize()
         email = request.form['email']
         password = request.form['password']
         hashed_password = generate_password_hash(password, method='sha256')

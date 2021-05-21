@@ -14,7 +14,7 @@ posttask = Blueprint('posttask',__name__)
 @login_required
 def post_task():
     if request.method == 'POST':
-        project_name = request.form["project_name"]
+        project_name = request.form["project_name"].capitalize()
         location = request.form["location"]
         budget_min = request.form["budget_min"] or 0
         budget_max = request.form["budget_max"] or 0
@@ -32,13 +32,17 @@ def post_task():
         if 'file' in request.files:
             file = request.files['file']
             filename = file.filename
-        if allowed_img_file(filename):
-            filename = secure_filename(filename)
-            unique_filename = str(uuid.uuid4())+get_extension(filename)
-            task.task_pic = unique_filename
-            image = Image.open(file)
-            i = crop_max_square(image).resize((356, 200), Image.LANCZOS)
-            i.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename), quality=95)
+            if allowed_img_file(filename):
+                filename = secure_filename(filename)
+                unique_filename = str(uuid.uuid4())+get_extension(filename)
+                task.task_pic = unique_filename
+                image = Image.open(file)
+                i = crop_max_square(image).resize((356, 200), Image.LANCZOS)
+                i.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename), quality=95)
+            else:
+                return jsonify({'success': False, 'msg': 'Allowed image files jpeg, png, jpg'})
+        else:
+            return jsonify({'success': False, 'msg': 'Please add an image relevant to your project!'})
 
         db.session.add(task)
         db.session.commit()

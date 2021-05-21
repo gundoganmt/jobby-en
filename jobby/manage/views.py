@@ -18,7 +18,7 @@ def dashboard():
             total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
     else:
         flash("Your projects and views will be here.")
-    return render_template('dashboard/dashboard.html', views=views, tasks=tasks, last_updated=last_updated,
+    return render_template('dashboard/dashboard.html', tasks=tasks, last_updated=last_updated,
         total_views=total_views)
 
 @manage.route('/get-view-data/<int:task_id>')
