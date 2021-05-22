@@ -11,7 +11,7 @@ from jobby import db
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import uuid, os, json
-from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER
+from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER, get_category
 
 public = Blueprint('public',__name__)
 
@@ -52,11 +52,11 @@ def search(where):
 def task_page(task_url):
     task_id = task_url.split('-')[-1]
     task = Tasks.query.filter_by(id=task_id).first_or_404()
-    taskbids = Bids.query.filter_by(task_id=task_id).all()
+    category = get_category(task.category)
     if request.method == 'GET':
         task.addView()
         sk = TaskSkills.query.filter_by(task_id=task.id).all()
-        return render_template('tasks/single-task-page.html',task=task, sk=sk, taskbids=taskbids)
+        return render_template('tasks/single-task-page.html',task=task, sk=sk, category=category)
     else:
         bid_amount = request.form['bid_amount']
         qtyInput = request.form['qtyInput']

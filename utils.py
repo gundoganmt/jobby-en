@@ -12,7 +12,7 @@ def send_async_email(app, msg):
 def send_confirmation_email(user):
     app = current_app._get_current_object()
     token = user.get_confirmation_token()
-    msg = Message(subject='Email doğrulama linki',
+    msg = Message(subject='Confirmation email',
         sender="destek@jobby.net",
         recipients=[user.email])
     msg.html = render_template('account/email_confirmation.html', token=token)
@@ -49,3 +49,18 @@ def crop_center(pil_img, crop_width, crop_height):
 
 def crop_max_square(pil_img):
     return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
+
+def get_category(categor_num):
+    categories = {
+        '1': 'Programming',
+        '2': 'Writing',
+        '3': 'Graphics Design',
+        '4': 'Digital Marketing',
+        '5': 'Data Science',
+        '6': 'Video & Animation',
+        '7': 'Lifestyle',
+        '8': 'Finance',
+        '9': 'Other'
+    }
+
+    return categories.get(categor_num)

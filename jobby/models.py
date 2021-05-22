@@ -185,6 +185,9 @@ class Users(UserMixin, db.Model):
                 total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
         return total_views
 
+    def all_reviews(self):
+        return Reviews.query.filter_by(reviewed_pro=self).all()
+
     def recom(self):
         total_success = Reviews.query.filter_by(reviewed_pro=self, recommendation=True).count()
         if self.total_reviews() == 0:
@@ -289,6 +292,14 @@ class Tasks(db.Model):
     def get_all_skills(self):
         return TaskSkills.query.filter_by(task_id=self.id).all()
 
+    def total_bids(self):
+        return Bids.query.filter_by(task_id=self.id).count()
+
+    def total_views(self):
+        views = Views.query.filter_by(viewedTask=self).first()
+        total_views = views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
+        return total_views
+
     def addView(self):
         today = datetime.today()
         year, week_num, weekday = today.isocalendar()
@@ -337,6 +348,10 @@ class Reviews(db.Model):
     task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
     freelancer = db.Column(db.Integer, db.ForeignKey('Users.id'))
     employer = db.Column(db.Integer, db.ForeignKey('Users.id'))
+
+    def __repr__(self):
+        return self.body
+
 
 class Bids(db.Model):
     __tablename__ = 'Bids'
