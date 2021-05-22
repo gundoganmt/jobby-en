@@ -55,6 +55,13 @@
 				</nav>
 			</div>
 
+			{% for message in get_flashed_messages() %}
+				<div class="notification success closeable">
+					<p>{{ message }}</p>
+					<a class="close" href="#"></a>
+				</div>
+			{% endfor %}
+
 			<!-- Fun Facts Container -->
 			<div class="fun-facts-container">
 				{% if current_user.status == 'employer' %}

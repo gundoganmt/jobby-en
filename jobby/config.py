@@ -11,5 +11,5 @@ class Config:
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = "destek@jobby.net"
-    MAIL_PASSWORD = "WulIgtM5zk"
+    MAIL_USERNAME = "support@jobby.net"
+    MAIL_PASSWORD = "WulIgtM5zk."

@@ -157,7 +157,7 @@ def manageOffers():
         notif.seen = True
     db.session.commit()
     offers = Offers.query.filter_by(offered=current_user).all()
-    return render_template('manage-offers.html', offers=offers, last_updated=last_updated)
+    return render_template('dashboard/manage-offers.html', offers=offers, last_updated=last_updated)
 
 @manage.route('/manage-bidders/<int:task_id>')
 @login_required

@@ -23,7 +23,7 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
-                return redirect(url_for('public.index'))
+                return redirect(url_for('manage.dashboard'))
             else:
                 flash('Wrong Credentials! Check your spelling.')
                 return render_template('account/login.html')
@@ -41,8 +41,8 @@ def confirm_email(token):
     db.session.delete(notif)
     user.email_approved = True
     db.session.commit()
-    flash('Tebrikler Email Adresiniz Doğrulandı!')
-    return render_template('setting/settings.html')
+    flash('Your email address has been confirmed!')
+    return render_template('dashboard/dashboard.html')
 
 @account.route('/signup', methods=['GET','POST'])
 def signup():

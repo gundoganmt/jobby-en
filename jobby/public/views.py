@@ -147,6 +147,7 @@ def freelancer(user_id):
         db.session.add(offer)
         db.session.add(notif)
         db.session.commit()
+        flash('Your offer has been succesfully sent!')
         return redirect(request.url)
 
 

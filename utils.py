@@ -13,9 +13,9 @@ def send_confirmation_email(user):
     app = current_app._get_current_object()
     token = user.get_confirmation_token()
     msg = Message(subject='Confirmation email',
-        sender="destek@jobby.net",
+        sender="support@jobby.net",
         recipients=[user.email])
-    msg.html = render_template('account/email_confirmation.html', token=token)
+    msg.html = render_template('account/email_confirmation.html', token=token, name=user.name)
     thr = Thread(target=send_async_email, args=[app, msg])
     thr.start()
 
