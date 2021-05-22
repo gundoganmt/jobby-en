@@ -1,99 +1,9 @@
-from flask import render_template, Blueprint, request, flash, redirect, url_for, abort, jsonify
+from flask import render_template, Blueprint, request, url_for, jsonify
 from flask_login import current_user, login_required
-from jobby.models import Users, Skills, WorkExperiences, Educations
-from jobby import db, last_updated, csrf
-import os, uuid, re, json, bleach
-from PIL import Image
-from utils import crop_max_square, allowed_img_file, get_extension, UPLOAD_IMG_FOLDER
-from werkzeug.utils import secure_filename
+from jobby import db, last_updated
 from werkzeug.security import check_password_hash, generate_password_hash
 
 setting = Blueprint('setting',__name__)
-
-@setting.route('/setting', methods=['POST'])
-@login_required
-def setting_personel():
-    name = request.form['name']
-    surname = request.form['surname']
-    email = request.form['email']
-    phone_number = request.form['phone_number']
-
-    if len(name) < 5 or len(name) > 30 or len(surname) < 5 or len(surname) > 30:
-        flash("The length of name and surname should be between 5 and 30")
-        return redirect(request.url)
-
-    if len(email) > 50:
-        flash("Incorrect Email!")
-        return redirect(request.url)
-
-    if email != current_user.email:
-        flash("Confirmation email has been sent!")
-
-    current_user.name = name
-    current_user.surname = surname
-    current_user.email = email
-    current_user.phone_number = phone_number
-
-    if 'file' in request.files:
-        file = request.files['file']
-        filename = file.filename
-    if file and allowed_img_file(filename):
-        filename = secure_filename(filename)
-        unique_filename = str(uuid.uuid4())+get_extension(filename)
-        current_user.profile_picture = unique_filename
-        image = Image.open(file)
-        i = crop_max_square(image).resize((300, 300), Image.LANCZOS)
-        i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
-    db.session.commit()
-    return redirect(request.url)
-
-@setting.route('/setting/profile', methods=['POST'])
-@login_required
-def setting_profile():
-    data = request.get_json(force=True)
-    current_user.field_of_work = data['field_of_work']
-    current_user.tagline = data['tagline']
-    current_user.country = data['location']
-    current_user.introduction = bleach.clean(data['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-    current_user.check_status()
-    db.session.commit()
-    return jsonify({"success": True, "settingType": "p"})
-
-@setting.route('/setting/skill', methods=['POST'])
-@login_required
-def setting_skill():
-    data = request.get_json(force=True)
-    skill = data['skill']
-    level = data['level']
-    new_skill = Skills(skill=skill, level=level, user_id=current_user.id)
-    db.session.add(new_skill)
-    db.session.commit()
-    current_user.check_status()
-    return jsonify({"success": True, "settingType": 's', "skill_id": new_skill.id, "skill": new_skill.skill, 'level': new_skill.level})
-
-@setting.route('/setting/workExp', methods=['POST'])
-@login_required
-def setting_workExp():
-    data = request.get_json(force=True)
-    description = bleach.clean(data['desc_work'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-    workExp = WorkExperiences(position=data['position'], company=data['company'], start_month=data['start_month_job'],
-        start_year=data['start_year_job'], end_month=data['end_month_job'], end_year=data['end_year_job'],
-        description=description, user_id=current_user.id)
-    db.session.add(workExp)
-    db.session.commit()
-    return jsonify({"success": True, "settingType": 'w', 'workExp_id': workExp.id, "workExp": workExp.position, 'company': workExp.company})
-
-@setting.route('/setting/education', methods=['POST'])
-@login_required
-def setting_education():
-    data = request.get_json(force=True)
-    description = bleach.clean(data['desc_edu'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-    edu = Educations(field=data['field'], school=data['school'], start_month=data['start_month_edu'],
-        start_year=data['start_year_edu'], end_month=data['end_month_edu'], end_year=data['end_year_edu'],
-        description=description, user_id=current_user.id)
-    db.session.add(edu)
-    db.session.commit()
-    return jsonify({"success": True, "settingType": 'e', "edu_id": edu.id, "field": edu.field, 'school': edu.school})
 
 @setting.route('/setting/security', methods=['POST'])
 @login_required
@@ -102,62 +12,15 @@ def setting_security():
     password = data['password']
     new_password = data['new_password']
     confirm_password = data['confirm_password']
-    if len(new_password) < 6 or new_password != confirm_password or not check_password_hash(current_user.password, password):
-        return jsonify({"success": False, "msg": "Hata oluştu"})
+    if len(new_password.strip()) < 6 or new_password != confirm_password or not check_password_hash(current_user.password, password):
+        return jsonify({"success": False, "msg": "Some thing went wrong. Reason might be your password length is less than 6, or passwords didn't match or your password is not on our systems!"})
     else:
         current_user.password = generate_password_hash(new_password, method='sha256')
         db.session.commit()
-        return jsonify({"success": True, "msg": "Guvenlik ayarlarınız değişti."})
+        return jsonify({"success": True, "msg": "Your password has been changed!"})
 
-@setting.route('/setting/social', methods=['POST'])
-@login_required
-def setting_social():
-    data = request.get_json(force=True)
-
-    current_user.facebook = data['facebook']
-    current_user.twitter = data['twitter']
-    current_user.instagram = data['instagram']
-    current_user.github = data['github']
-    current_user.youtube = data['youtube']
-    current_user.linkedin = data['linkedin']
-
-    db.session.commit()
-
-    return jsonify({"success": True, 'settingType': 'so'})
-
-
-@setting.route('/deleteItem', methods=['POST'])
-@login_required
-def deleteItem():
-    data = request.get_json(force=True)
-    itemType, itemId = data['type_id'].split('_')
-    if itemType == 'w':
-        item = WorkExperiences.query.filter_by(id=itemId, user_id=current_user.id).first()
-        db.session.delete(item)
-        db.session.commit()
-        return jsonify({"success": True, 'currentField': 'w'})
-    elif itemType == 's':
-        item = Skills.query.filter_by(id=itemId, user_id=current_user.id).first()
-        db.session.delete(item)
-        current_user.check_status()
-        db.session.commit()
-        return jsonify({"success": True, 'currentField': 's'})
-    elif itemType == 'e':
-        item = Educations.query.filter_by(id=itemId, user_id=current_user.id).first()
-        db.session.delete(item)
-        db.session.commit()
-        return jsonify({"success": True, 'currentField': 'e'})
 
 @setting.route('/setting')
 @login_required
 def setting_page():
-    skills = Skills.query.filter_by(user_id=current_user.id).all()
-    workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
-    edus = Educations.query.filter_by(student=current_user).all()
-    return render_template('setting/settings.html', last_updated=last_updated, skills=skills,
-        workExps=workExps, edus=edus)
-
-@setting.app_errorhandler(413)
-def file_too_large(e):
-    flash('The file size is too big! At most 2Mb.')
-    return redirect(request.url)
+    return render_template('setting/settings.html', last_updated=last_updated)

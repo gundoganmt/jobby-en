@@ -19,11 +19,11 @@
 
    $('.saveSetting').on('click', function(e){
    	const xhr = new XMLHttpRequest();
-   	var settingType = $(this).attr('data');
+   	var editProfileType = $(this).attr('data');
    	var csrf_token = document.getElementById('csrf_token').value;
 
-   	if(settingType == "profile"){
-   		var url = '/setting/profile';
+   	if(editProfileType == "profile"){
+   		var url = '/editProfile/profile';
       var editor = document.querySelector('#editor3');
    		var field_of_work = document.getElementById('field_of_work');
    		var tagline = document.getElementById('tagline');
@@ -34,15 +34,24 @@
    		'location': location.value, "introduction": introduction.value};
    	}
 
-   	else if(settingType == "skill"){
-   		var url = '/setting/skill';
+   	else if(editProfileType == "skill"){
+   		var url = '/editProfile/skill';
    		var skill = document.getElementById('skill').value;
    		var level = document.getElementById('level').value;
+      if (parseInt(level) > 100 || parseInt(level) < 0 || !level) {
+        alert("level should be a number between 0 and 100");
+        return false;
+      }
+
+      if (!skill || skill.length > 50) {
+        alert("skill length should be between 0 and 100");
+        return false;
+      }
    		var data = {'skill': skill, "level": level};
    	}
 
-   	else if(settingType == "workExp"){
-      var url = '/setting/workExp';
+   	else if(editProfileType == "workExp"){
+      var url = '/editProfile/workExp';
       var editor = document.querySelector('#editor2');
       var position = document.getElementById('position').value;
       var company = document.getElementById('company').value;
@@ -57,8 +66,8 @@
       "desc_work": desc_work.value};
    	}
 
-   	else if(settingType == "education"){
-      var url = '/setting/education';
+   	else if(editProfileType == "education"){
+      var url = '/editProfile/education';
       var editor = document.querySelector('#editor');
       var field = document.getElementById('field').value;
       var school = document.getElementById('school').value;
@@ -73,16 +82,8 @@
       "desc_edu": desc_edu.value};
    	}
 
-   	else if (settingType == "security"){
-   		var url = '/setting/security';
-   		var password = document.getElementById('password');
-   		var new_password = document.getElementById('new_password');
-   		var confirm_password = document.getElementById('confirm_password');
-   		var data = {'password': password.value, "new_password": new_password.value, "confirm_password": confirm_password.value};
-   	}
-
-    else if (settingType == "social"){
-   		var url = '/setting/social';
+    else if (editProfileType == "social"){
+   		var url = '/editProfile/social';
    		var facebook = document.getElementById('facebook').value;
    		var twitter = document.getElementById('twitter').value;
    		var youtube = document.getElementById('youtube').value;
@@ -100,32 +101,34 @@
    		if(xhr.status == 200){
    			const result = JSON.parse(xhr.responseText);
    			if(result.success){
-          if(result.settingType == 's'){
+          if(result.editProfileType == 's'){
             saveSkill(result.skill,result.level, result.skill_id);
           }
-          else if(result.settingType == 'w'){
+          else if(result.editProfileType == 'w'){
             saveWorkExp(result.workExp, result.company, result.workExp_id);
           }
-          else if(result.settingType == 'so'){
+          else if(result.editProfileType == 'so'){
             Swal.fire({
-            title: "Good job!",
-            text: "Saved successfully!",
-            type: "success",
-            confirmButtonClass: 'btn btn-primary',
-            buttonsStyling: false,
-           });
+              icon: 'success',
+              title: "Good job!",
+              text: "Saved successfully!",
+              type: "success",
+              confirmButtonClass: 'btn btn-primary',
+              buttonsStyling: false,
+            });
           }
-          else if(result.settingType == 'e'){
+          else if(result.editProfileType == 'e'){
             saveEdu(result.field, result.school, result.edu_id);
           }
-          else if(result.settingType == 'p'){
+          else if(result.editProfileType == 'p'){
             Swal.fire({
-            title: "Good job!",
-            text: "Saved successfully!",
-            type: "success",
-            confirmButtonClass: 'btn btn-primary',
-            buttonsStyling: false,
-           });
+              icon: 'success',
+              title: "Good job!",
+              text: "Saved successfully!",
+              type: "success",
+              confirmButtonClass: 'btn btn-primary',
+              buttonsStyling: false,
+            });
           }
    			}
    			else{
@@ -269,7 +272,7 @@
         row.style.display = '';
       }
       else{
-        alert("Lutfen açık formu kaydedin");
+        alert("Please save the open form first!");
       }
     }
   })

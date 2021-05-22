@@ -128,7 +128,7 @@ def browseTasks():
 def freelancer(user_id):
     user = Users.query.filter_by(id=user_id, status='freelancer').first_or_404()
     if request.method == 'GET':
-        #user.add_view()
+        user.addView()
         return render_template('public/freelancer-profile.html', user=user)
     else:
         offer = Offers(offered=user, offers=current_user)

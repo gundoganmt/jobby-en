@@ -20,24 +20,21 @@
 
     </head>
     <body>
-        <!-- Loader -->
-        <!-- <div id="preloader">
-            <div id="status">
-                <div class="spinner">
-                    <div class="double-bounce1"></div>
-                    <div class="double-bounce2"></div>
-                </div>
-            </div>
-        </div> -->
-        <!-- Loader -->
 
         {% include 'header-public.html' %}
 
         <!-- Hero Start -->
-        <section class="bg-half-260 d-table w-100" style="background: url({{ url_for('static', filename='images/bg-freelancer.png') }}); background-size: auto 100%;">
+        <section class="bg-half-260 w-100 hideMobile" style="background: url({{ url_for('static', filename='images/bg-freelancer.png') }}); background-size: auto 100%;">
             <div class="bg-overlay"></div>
         </section><!--end section-->
         <!-- Hero End -->
+        <style media="screen">
+          @media (max-width: 750px) {
+            .hideMobile{
+              display: none;
+            }
+          }
+        </style>
 
         <!-- Candidate Detail Start -->
         <section class="section" style="padding: 20 0;">
@@ -163,46 +160,60 @@
                                       </div>
 
                                       <div class="card border-0 tab-pane fade" id="education" role="tabpanel" aria-labelledby="education-info">
-                                        <!-- Education Start -->
-                                        <h4 class="mt-lg-5 mt-4">Education</h4>
-                                        <div class="row">
-                                          {% for edu in user.edus() %}
-                                            <div class="col-lg-12 mt-4 pt-2">
-                                              <div class="d-flex">
-                                                <div class="company-logo text-muted h6 me-3 text-center">
-                                                    <img src="{{ url_for('static', filename='images/campus.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ edu.start_year }}-{{ edu.end_year }}
+                                        {% if user.edus() %}
+                                          <!-- Education Start -->
+                                          <h4 class="mt-lg-5 mt-4">Education</h4>
+                                          <div class="row">
+                                            {% for edu in user.edus() %}
+                                              <div class="col-lg-12 mt-4 pt-2">
+                                                <div class="d-flex">
+                                                  <div class="company-logo text-muted h6 me-3 text-center">
+                                                      <img src="{{ url_for('static', filename='images/campus.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ edu.start_year }}-{{ edu.end_year }}
+                                                  </div>
+                                                  <div class="flex-1">
+                                                      <h5 class="title mb-0">{{ edu.field }}</h5>
+                                                      <small class="text-muted company-university">{{ edu.school }}</small>
+                                                      <p class="text-muted mt-2 mb-0">{{ edu.description|safe }} </p>
+                                                  </div>
                                                 </div>
-                                                <div class="flex-1">
-                                                    <h5 class="title mb-0">{{ edu.field }}</h5>
-                                                    <small class="text-muted company-university">{{ edu.school }}</small>
-                                                    <p class="text-muted mt-2 mb-0">{{ edu.description|safe }} </p>
-                                                </div>
-                                              </div>
-                                            </div><!--end col-->
-                                          {% endfor %}
-                                        </div><!--end row-->
+                                              </div><!--end col-->
+                                            {% endfor %}
+                                          </div><!--end row-->
+                                        {% else %}
+                                          <div id="message-box" style="padding-top: 20px;">
+                                            <div class="error_message">No education record yet!</div>
+                                          </div>
+                                        {% endif %}
+
                                         <!-- Education End -->
                                       </div>
 
                                       <div class="card border-0 tab-pane fade" id="experience" role="tabpanel" aria-labelledby="experience-info">
-                                        <!-- Education Start -->
-                                        <h4 class="mt-lg-5 mt-4">Work Experience</h4>
-                                        <div class="row">
-                                          {% for workexp in user.workexps() %}
-                                            <div class="col-lg-12 mt-4 pt-2">
-                                              <div class="d-flex">
-                                                <div class="company-logo text-muted h6 me-3 text-center">
-                                                    <img src="{{ url_for('static', filename='images/enterprise.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ workexp.start_year }}-{{ workexp.end_year }}
+                                        {% if user.workexps() %}
+                                          <!-- Education Start -->
+                                          <h4 class="mt-lg-5 mt-4">Work Experience</h4>
+                                          <div class="row">
+
+                                            {% for workexp in user.workexps() %}
+                                              <div class="col-lg-12 mt-4 pt-2">
+                                                <div class="d-flex">
+                                                  <div class="company-logo text-muted h6 me-3 text-center">
+                                                      <img src="{{ url_for('static', filename='images/enterprise.svg')}}" class="avatar avatar-md-sm mx-auto d-block mb-2">{{ workexp.start_year }}-{{ workexp.end_year }}
+                                                  </div>
+                                                  <div class="flex-1">
+                                                      <h5 class="title mb-0">{{ workexp.position }}</h5>
+                                                      <small class="text-muted company-university">{{ workexp.company }}</small>
+                                                      <p class="text-muted mt-2 mb-0">{{ workexp.description|safe }} </p>
+                                                  </div>
                                                 </div>
-                                                <div class="flex-1">
-                                                    <h5 class="title mb-0">{{ workexp.position }}</h5>
-                                                    <small class="text-muted company-university">{{ workexp.company }}</small>
-                                                    <p class="text-muted mt-2 mb-0">{{ workexp.description|safe }} </p>
-                                                </div>
-                                              </div>
-                                            </div><!--end col-->
-                                          {% endfor %}
-                                        </div><!--end row-->
+                                              </div><!--end col-->
+                                            {% endfor %}
+                                          </div><!--end row-->
+                                        {% else %}
+                                          <div id="message-box" style="padding-top: 20px;">
+                                            <div class="error_message">No education record yet!</div>
+                                          </div>
+                                        {% endif %}
                                         <!-- Education End -->
                                       </div>
 

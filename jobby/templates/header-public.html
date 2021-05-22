@@ -17,9 +17,12 @@
               <div class="dropdown dropdown-primary">
                   <button type="button" class="btn btn-icon btn-soft-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="uil uil-user align-middle icons"></i></button>
                   <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow rounded border-0 mt-3 py-3" style="width: 200px;">
-                      <a class="dropdown-item text-dark" href="#"><i class="uil uil-user align-middle me-1"></i> Account</a>
-                      <a class="dropdown-item text-dark" href="#"><i class="uil uil-clipboard-notes align-middle me-1"></i> Order History</a>
-                      <a class="dropdown-item text-dark" href="#"><i class="uil uil-arrow-circle-down align-middle me-1"></i> Download</a>
+                      <a class="dropdown-item text-dark" href="{{ url_for('editProfile.editProfile_page') }}"><i class="uil uil-user align-middle me-1"></i> Edit Profile</a>
+                      {% if current_user.status == 'freelancer' %}
+                        <a class="dropdown-item text-dark" href="{{ url_for('manage.activeBids') }}"><i class="uil uil-clipboard-notes align-middle me-1"></i> Active Bids</a>
+                      {% else %}
+                        <a class="dropdown-item text-dark" href="{{ url_for('manage.manageTasks') }}"><i class="uil uil-clipboard-notes align-middle me-1"></i> Projects</a>
+                      {% endif %}
                       <div class="dropdown-divider my-3 border-top"></div>
                       <a class="dropdown-item text-dark" href="{{ url_for('account.logout') }}"><i class="uil uil-sign-out-alt align-middle me-1"></i> Logout</a>
                   </div>

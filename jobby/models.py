@@ -124,27 +124,39 @@ class Users(UserMixin, db.Model):
     def num_not(self):
         return Notification.query.filter_by(notification_to=self, seen=False).count()
 
-    def add_view(self):
-        weekday = datetime.today().weekday()
+    def addView(self):
+        today = datetime.today()
+        year, week_num, weekday = today.isocalendar()
+
         view = Views.query.filter_by(viewed=self).first()
         if not view:
-            view = Views(viewed=self,monday=0,tuesday=0,wednesday=0,thursday=0,friday=0,saturday=0,sunday=0)
+            view = Views(viewed=self,monday=0,tuesday=0,wednesday=0,thursday=0,friday=0,saturday=0,sunday=0,week_num=week_num)
             db.session.add(view)
         else:
-            if weekday == 0:
-                view.monday +=1
-            elif weekday == 1:
-                view.tuesday +=1
-            elif weekday == 2:
-                view.wednesday +=1
-            elif weekday == 3:
-                view.thursday +=1
-            elif weekday == 4:
-                view.friday +=1
-            elif weekday == 5:
-                view.saturday +=1
-            elif weekday == 6:
-                view.sunday +=1
+            if week_num == view.week_num:
+                if weekday == 1:
+                    view.monday +=1
+                elif weekday == 2:
+                    view.tuesday +=1
+                elif weekday == 3:
+                    view.wednesday +=1
+                elif weekday == 4:
+                    view.thursday +=1
+                elif weekday == 5:
+                    view.friday +=1
+                elif weekday == 6:
+                    view.saturday +=1
+                elif weekday == 7:
+                    view.sunday +=1
+            else:
+                view.week_num = week_num
+                view.monday = 0
+                view.tuesday = 0
+                view.wednesday = 0
+                view.thursday = 0
+                view.friday = 0
+                view.saturday = 0
+                view.sunday = 0
         db.session.commit()
 
     def addRating(self, rating):

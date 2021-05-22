@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () =>{
           }
         }
         else{
-          alert("Please Sign In!");
+          alert(result.msg);
         }
       }
     }

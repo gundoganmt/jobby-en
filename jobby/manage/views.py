@@ -178,13 +178,17 @@ def manageBidders(task_id):
 def bookmark(bookmark_id):
     type = request.get_json(force=True)
     if current_user.is_anonymous:
-        return jsonify({"result": False})
+        return jsonify({"result": False, 'msg': 'Please sign in to bookmark'})
     #if it is user
-    if type["bookmarkType"] == 1:
+    elif type["bookmarkType"] == 1:
         user = Users.query.filter_by(id=bookmark_id).first()
+        if user == current_user:
+            return jsonify({"result": False, 'msg': 'This is your page!'})
         current_user.BookmarksUser.append(user)
     else:
         task = Tasks.query.filter_by(id=bookmark_id).first()
+        if task.poster == current_user:
+            return jsonify({"result": False, 'msg': 'This is your posting'})
         current_user.BookmarksTasks.append(task)
     db.session.commit()
     return jsonify({"success": True, "bookmark": True})
