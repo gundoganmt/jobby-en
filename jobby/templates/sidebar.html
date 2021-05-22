@@ -19,7 +19,7 @@
           <ul data-submenu-title="Start">
             <li><a href="{{ url_for('manage.dashboard') }}"><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
             <li><a href="{{ url_for('message.messages') }}"><i class="icon-material-outline-question-answer"></i> Messages</a></li>
-            <li class="active-submenu"><a href="#"><i class="icon-material-outline-star-border"></i> Bookmarks</a>
+            <li><a href="#"><i class="icon-material-outline-star-border"></i> Bookmarks</a>
               <ul>
                 <li><a href="{{ url_for('manage.bookmarkedTasks') }}">Bookmarked Projects</a></li>
                 <li><a href="{{ url_for('manage.bookmarkedUsers') }}">Bookmarked Users</a></li>
@@ -29,7 +29,7 @@
           </ul>
 
           <ul data-submenu-title="Manage">
-            <li class="active-submenu"><a href="#"><i class="icon-material-outline-assignment"></i>Manage Projects</a>
+            <li><a href="#"><i class="icon-material-outline-assignment"></i>Manage Projects</a>
               <ul>
                 {% if current_user.is_there_offer() %}
                   <li><a href="{{ url_for('manage.manageOffers') }}">Recieved Offers</a></li>

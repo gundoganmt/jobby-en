@@ -51,14 +51,11 @@
                                 <h5 class="card-title">Personal Details :</h5>
 
                                 <ul class="list-unstyled">
-                                    <li class="h6"><i data-feather="mail" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Email :</span> {{ user.email }}</li>
-                                    <li class="h6"><i data-feather="gift" class="fea icon-sm text-warning me-3"></i><span class="text-muted">D.O.B. :</span> 31st Dec, 1996</li>
-                                    <li class="h6"><i data-feather="home" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Address :</span> 15 Razy street</li>
-                                    <li class="h6"><i data-feather="map-pin" class="fea icon-sm text-warning me-3"></i><span class="text-muted">City :</span> London</li>
+                                    <li class="h6"><i data-feather="briefcase" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Project Finished :</span> {{ user.total_win() }}</li>
+                                    <li class="h6"><i data-feather="clock" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Finished Intime : </span> {{ user.intime() }}%</li>
+                                    <li class="h6"><i data-feather="thumbs-up" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Recommended :</span> {{ user.recom() }}%</li>
                                     <li class="h6"><i data-feather="globe" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Country :</span> {{ user.country }}</li>
-                                    <li class="h6"><i data-feather="server" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Postal Code :</span> 521452</li>
-                                    <li class="h6"><i data-feather="phone" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Mobile :</span> (+125) 1542-8452</li>
-
+                                    <li class="h6"><i data-feather="award" class="fea icon-sm text-warning me-3"></i><span class="text-muted">Member Since :</span> {{ user.member_since.strftime("%d %b, %Y") }}</li>
                                     <li>
                                         <ul class="list-unstyled social-icon mb-0 mt-4">
                                           {% if user.facebook %}

@@ -11,15 +11,13 @@ manage = Blueprint('manage',__name__)
 @login_required
 def dashboard():
     tasks = Tasks.query.filter_by(poster=current_user).all()
-    total_views = 0
-    if len(tasks) > 0:
-        for task in tasks:
-            views = Views.query.filter_by(viewedTask=task).first()
-            total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
-    else:
-        flash("Your projects and views will be here.")
-    return render_template('dashboard/dashboard.html', tasks=tasks, last_updated=last_updated,
-        total_views=total_views)
+    if current_user.status == 'freelancer':
+        views = Views.query.filter_by(viewed=current_user).first()
+        if not views:
+            current_user.addView()
+            views = Views.query.filter_by(viewed=current_user).first()
+        return render_template('dashboard/dashboard.html', views=views, tasks=tasks, last_updated=last_updated)
+    return render_template('dashboard/dashboard.html', tasks=tasks, last_updated=last_updated)
 
 @manage.route('/get-view-data/<int:task_id>')
 @login_required
@@ -106,7 +104,7 @@ def activeBids():
     db.session.commit()
     bids = Bids.query.filter_by(bidder=current_user).all()
     if len(bids) == 0:
-        flash('Henuz bir işe teklifiniz bulunmuyor')
+        flash("You don't have any active bids!")
     return render_template('dashboard/my-active-bids.html', bids=bids, last_updated=last_updated)
 
 @manage.route('/delete-bid/<int:bid_id>')
@@ -118,7 +116,7 @@ def deleteBid(bid_id):
         current_user.num_bids -= 1
         db.session.delete(data)
         db.session.commit()
-        flash("Teklifiniz Silindi")
+        flash("Bid Deleted")
         return redirect(url_for('.activeBids'))
     #here i should return 500 forbidden
     else:

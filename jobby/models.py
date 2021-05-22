@@ -173,6 +173,18 @@ class Users(UserMixin, db.Model):
     def total_reviews(self):
         return Reviews.query.filter_by(reviewed_pro=self).count()
 
+    def total_bids(self):
+        return Bids.query.filter_by(bidder=self).count()
+
+    def total_job_views(self):
+        tasks = Tasks.query.filter_by(poster=self).all()
+        total_views = 0
+        if len(tasks) > 0:
+            for task in tasks:
+                views = Views.query.filter_by(viewedTask=task).first()
+                total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
+        return total_views
+
     def recom(self):
         total_success = Reviews.query.filter_by(reviewed_pro=self, recommendation=True).count()
         if self.total_reviews() == 0:
