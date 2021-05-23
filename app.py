@@ -80,5 +80,5 @@ admin.add_view(MyModelView(TaskSkills, db.session, menu_icon_type='glyph', menu_
 admin.add_view(MyModelView(Offers, db.session, menu_icon_type='glyph', menu_icon_value='glyphicon-briefcase', name="Offers"))
 admin.add_view(MyModelView(Views, db.session, menu_icon_type='fa', menu_icon_value='fa-bar-chart', name="Views"))
 
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
+# if __name__ == '__main__':
+#     socketio.run(app, debug=True)
