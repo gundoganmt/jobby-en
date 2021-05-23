@@ -53,7 +53,11 @@
                             <!-- SEARCH -->
                             <div class="widget">
                               <div class="input-group mb-3 border rounded">
+                                {% if kw %}
+                                  <input type="text" name="task_search" class="form-control border-0" placeholder="Search Projects..." value="{{ kw }}">
+                                {% else %}
                                   <input type="text" name="task_search" class="form-control border-0" placeholder="Search Projects...">
+                                {% endif %}
                               </div>
                             </div>
                             <!-- SEARCH -->
@@ -61,7 +65,11 @@
                             <div class="widget">
                               <div class="input-group mb-3 border rounded">
                                 <select class="form-control custom-select" name="location" id="location" title="Select Location">
-                                  <option selected value="">Location</option>
+                                  {% if lc %}
+                                    <option selected value="{{lc}}">{{ lc }}</option>
+                                  {% else %}
+                                    <option selected value="">Location</option>
+                                  {% endif %}
                                 </select>
                               </div>
                             </div>
@@ -70,7 +78,11 @@
                             <div class="widget mb-4 pb-4 border-bottom">
                                 <div class="mt-4 mb-0">
                                   <select class="form-control custom-select" name="category">
+                                    {% if ct %}
+                                      <option selected value="{{ct}}">{{ str_cat }}</option>
+                                    {% else %}
                                       <option selected value="">Category</option>
+                                    {% endif %}
                                       <option value="1">Programming</option>
                                       <option value="2">Writing</option>
                                       <option value="3">Graphics Design</option>
@@ -94,27 +106,47 @@
                                         <label class="form-check-label" for="all">All</label>
                                     </div>
                                     <div class="form-check mb-0">
+                                      {% if cx == 'lasthour' %}
+                                        <input class="form-check-input" checked type="radio" name="flexRadioDefault" value="lasthour">
+                                      {% else %}
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" value="lasthour">
+                                      {% endif %}
                                         <label class="form-check-label" for="lasthour">Last Hour</label>
                                     </div>
 
                                     <div class="form-check mb-0">
+                                      {% if cx == 'oneday' %}
+                                        <input class="form-check-input" checked type="radio" name="flexRadioDefault" value="oneday">
+                                      {% else %}
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" value="oneday">
+                                      {% endif %}
                                         <label class="form-check-label" for="oneday">Last 24 hours</label>
                                     </div>
 
                                     <div class="form-check mb-0">
+                                      {% if cx == 'threedays' %}
+                                        <input class="form-check-input" checked type="radio" name="flexRadioDefault" value="threedays">
+                                      {% else %}
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" value="threedays">
+                                      {% endif %}
                                         <label class="form-check-label" for="sevenday">Last 3 days</label>
                                     </div>
 
                                     <div class="form-check mb-0">
+                                      {% if cx == 'sevendays' %}
+                                        <input class="form-check-input" checked type="radio" name="flexRadioDefault" value="sevendays">
+                                      {% else %}
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" value="sevendays">
+                                      {% endif %}
                                         <label class="form-check-label" for="fourteenhour">Last 7 days</label>
                                     </div>
 
                                     <div class="form-check mb-0">
+                                      {% if cx == 'fourteendays' %}
+                                        <input class="form-check-input" checked type="radio" name="flexRadioDefault" value="fourteendays">
+                                      {% else %}
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" value="fourteendays">
+                                      {% endif %}
                                         <label class="form-check-label" for="onemonth">Last 14 days</label>
                                     </div>
                                 </div>
@@ -125,10 +157,10 @@
                             <div class="widget">
                               <h5 class="widget-title">Budget</h5>
                               <div class="input-group mb-3 border rounded">
-                                  <input type="number" class="form-control border-0" placeholder="Budget Min" name="budget_min">
+                                  <input type="number" class="form-control border-0" placeholder="Budget Min" name="budget_min" value="{{ bn }}">
                               </div>
                               <div class="input-group mb-3 border rounded">
-                                  <input type="number" class="form-control border-0" placeholder="Budget Max" name="budget_max">
+                                  <input type="number" class="form-control border-0" placeholder="Budget Max" name="budget_max" value="{{ bx }}">
                               </div>
                             </div>
                             <!-- Job Type -->
@@ -143,8 +175,8 @@
 
                     <div class="col-lg-8 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <div class="row">
-                          {% if tasks %}
-                            {% for task in tasks %}
+                          {% if tasks.items %}
+                            {% for task in tasks.items %}
                               <div class="col-lg-6 col-12 mb-4 pb-2">
                                   <div class="card job-box rounded shadow border-0 overflow-hidden">
                                       <div class="border-bottom">
@@ -177,6 +209,25 @@
                           {% endif %}
                         </div><!--end row-->
 
+                        <div class="col-12">
+                            <ul class="pagination justify-content-center mb-0">
+                              {% if tasks.has_prev %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('public.browseTasks', page=tasks.page-1, kw=kw, lc=lc, ct=ct, bn=bn, bx=bx, cx=cx, tag=tag) }}" aria-label="Previous">Prev</a></li>
+                              {% endif %}
+                              {% for page_num in tasks.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+                                {% if page_num %}
+                                  {% if tasks.page == page_num %}
+                                    <li class="page-item active"><a class="page-link" href="{{ url_for('public.browseTasks', page=page_num, kw=kw, lc=lc, ct=ct, bn=bn, bx=bx, cx=cx, tag=tag) }}">{{ page_num }}</a></li>
+                                  {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('public.browseTasks', page=page_num, kw=kw, lc=lc, ct=ct, bn=bn, bx=bx, cx=cx, tag=tag) }}">{{ page_num }}</a></li>
+                                  {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                              {% if tasks.has_next %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('public.browseTasks', page=tasks.page+1, kw=kw, lc=lc, ct=ct, bn=bn, bx=bx, cx=cx, tag=tag) }}" aria-label="Next">Next</a></li>
+                              {% endif %}
+                            </ul>
+                        </div>
 
                     </div><!--end col-->
                 </div><!--end row-->

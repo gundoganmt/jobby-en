@@ -87,4 +87,4 @@ def messages():
     as_a_recipient = db.session.query(Messages.sender_id).filter(Messages.recipient_id==current_user.id).distinct().all()
     as_a_sender = db.session.query(Messages.recipient_id).filter(Messages.sender_id==current_user.id).distinct().all()
 
-    return render_template('messages.html',c=get_users(set(as_a_recipient+as_a_sender)), last_updated=last_updated)
+    return render_template('message/messages.html',c=get_users(set(as_a_recipient+as_a_sender)), last_updated=last_updated)

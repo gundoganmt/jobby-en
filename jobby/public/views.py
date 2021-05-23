@@ -82,6 +82,8 @@ def browseTasks():
     budget_max = request.args.get('bx', type=str)
     checks = request.args.get('cx', type=str)
     tag = request.args.get('tag', type=str)
+    page = request.args.get('page', type=int)
+    str_cat = get_category(request.args.get('ct', type=str))
 
     if request.args:
         tasks = db.session.query(Tasks)
@@ -119,10 +121,12 @@ def browseTasks():
         if budget_max:
             tasks = tasks.filter(Tasks.budget_max <= int(budget_max))
 
-        tasks = tasks.all()
+        tasks = tasks.paginate(page=page, per_page=2)
     else:
-        tasks = Tasks.query.all()
-    return render_template('public/tasks-list.html', tasks=tasks)
+        tasks = Tasks.query.paginate(page=page, per_page=2)
+    return render_template('public/tasks-list.html', tasks=tasks,
+        kw=keyword, lc=location, ct=category, str_cat=str_cat,
+        bn=budget_min, bx=budget_max, cx=checks, tag=tag)
 
 @public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
 def freelancer(user_id):
@@ -150,7 +154,6 @@ def freelancer(user_id):
         flash('Your offer has been succesfully sent!')
         return redirect(request.url)
 
-
 @public.route('/freelancers')
 def browseFreelancers():
     keyword = request.args.get('kw', type=str)
@@ -159,12 +162,13 @@ def browseFreelancers():
     rating = request.args.get('rt', type=str)
     skill = request.args.get('sk', type=str)
     tag = request.args.get('tag', type=str)
+    page = request.args.get('page', type=int)
+    str_cat = get_category(request.args.get('ct', type=str))
     freelancers = db.session.query(Users).filter(Users.status=='freelancer')
 
     if request.args:
-
         if keyword:
-            freelancers = Users.query.whoosh_search(keyword)
+            freelancers = Users.query.whoosh_search(keyword).filter(Users.status=='freelancer')
 
         if tag:
             freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==tag))
@@ -181,10 +185,12 @@ def browseFreelancers():
         if skill:
             freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==skill))
 
-        freelancers = freelancers.all()
+        freelancers = freelancers.paginate(page=page, per_page=10)
     else:
-        freelancers = freelancers.all()
-    return render_template('public/freelancers-list.html', freelancers=freelancers)
+        freelancers = freelancers.paginate(page=page, per_page=10)
+    return render_template('public/freelancers-list.html', freelancers=freelancers,
+        kw=keyword, lc=location, ct=category, str_cat=str_cat,
+        rt=rating, sk=skill, tag=tag, page=page)
 
 @public.app_errorhandler(404)
 def page_not_found(e):

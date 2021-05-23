@@ -61,7 +61,7 @@ def signup():
             db.session.add(user)
             db.session.add(notif)
             db.session.commit()
-            send_confirmation_email(user)
+            #send_confirmation_email(user)
             login_user(user)
             return render_template('account/welcome.html')
         flash('This email already being used!')

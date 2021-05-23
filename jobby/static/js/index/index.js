@@ -96,9 +96,11 @@ document.addEventListener('DOMContentLoaded', () =>{
         e.preventDefault();
       }
 
-      if ( !ext.includes(document.getElementById('formFile').value.split('.').pop()) ) {
-        alert('Invalid file type! Only pdf, doc, docx are allowed');
-        e.preventDefault();
+      if (document.getElementById('formFile').value) {
+        if ( !ext.includes(document.getElementById('formFile').value.split('.').pop()) ) {
+          alert('Invalid file type! Only pdf, doc, docx are allowed');
+          e.preventDefault();
+        }
       }
     })
   }

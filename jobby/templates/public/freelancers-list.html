@@ -17,6 +17,7 @@
         <!-- Main Css -->
         <link href="{{ url_for('static', filename='css/index/style.min.css')}}" rel="stylesheet" type="text/css" id="theme-opt" />
         <link href="{{ url_for('static', filename='css/index/default.css')}}" rel="stylesheet" id="color-opt">
+        <link href="{{ url_for('static', filename='css/index/star.css')}}" rel="stylesheet">
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-F5M4VB1Y1Y"></script>
         <script>
@@ -53,7 +54,11 @@
                             <!-- SEARCH -->
                             <div class="widget">
                               <div class="input-group mb-3 border rounded">
+                                {% if kw %}
+                                  <input type="text" name="free_search" class="form-control border-0" placeholder="Search for Freelancers..." value="{{kw}}">
+                                {% else %}
                                   <input type="text" name="free_search" class="form-control border-0" placeholder="Search for Freelancers...">
+                                {% endif %}
                               </div>
                             </div>
                             <!-- SEARCH -->
@@ -61,7 +66,11 @@
                             <div class="widget">
                               <div class="input-group mb-3 border rounded">
                                 <select class="form-control custom-select" name="location" id="location" title="Select Location">
-                                  <option selected value="">Location</option>
+                                  {% if lc %}
+                                    <option selected value="{{lc}}">{{lc}}</option>
+                                  {% else %}
+                                    <option selected value="">Location</option>
+                                  {% endif %}
                                 </select>
                               </div>
                             </div>
@@ -70,7 +79,11 @@
                             <div class="widget mb-4 pb-4 border-bottom">
                                 <div class="mt-4 mb-0">
                                   <select class="form-control custom-select" name="category">
+                                    {% if ct %}
+                                      <option selected value="{{ct}}">{{str_cat}}</option>
+                                    {% else %}
                                       <option selected value="">Category</option>
+                                    {% endif %}
                                       <option value="1">Programming</option>
                                       <option value="2">Writing</option>
                                       <option value="3">Graphics Design</option>
@@ -102,7 +115,11 @@
                             <div class="widget">
                               <h5 class="widget-title">Skills</h5>
                                 <div class="input-group mb-3 border rounded">
-                                    <input type="text" name="skill" class="form-control border-0" placeholder="Search by Skills">
+                                   {% if sk %}
+                                      <input type="text" name="skill" class="form-control border-0" placeholder="Search by Skills" value="{{sk}}">
+                                   {% else %}
+                                      <input type="text" name="skill" class="form-control border-0" placeholder="Search by Skills">
+                                   {% endif %}
                                 </div>
                             </div>
                             <!-- Job Type -->
@@ -117,8 +134,8 @@
 
                     <div class="col-lg-8 col-md-6 col-12 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <div class="row">
-                          {% if freelancers %}
-                            {% for freelancer in freelancers %}
+                          {% if freelancers.items %}
+                            {% for freelancer in freelancers.items %}
                               <div class="col-lg-6 col-md-6 col-12">
                                   <div class="candidate-list card rounded border-0 shadow">
                                       <div class="card-body">
@@ -165,6 +182,26 @@
                             </div>
                           {% endif %}
                         </div><!--end row-->
+
+                        <div class="col-12" style="margin-top: 20px;">
+                            <ul class="pagination justify-content-center mb-0">
+                              {% if freelancers.has_prev %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('public.browseFreelancers', page=freelancers.page-1, kw=kw, lc=lc, ct=ct, rt=rt, sk=sk, tag=tag) }}" aria-label="Previous">Prev</a></li>
+                              {% endif %}
+                              {% for page_num in freelancers.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=3) %}
+                                {% if page_num %}
+                                  {% if freelancers.page == page_num %}
+                                    <li class="page-item active"><a class="page-link" href="{{ url_for('public.browseFreelancers', page=page_num, kw=kw, lc=lc, ct=ct, rt=rt, sk=sk, tag=tag) }}">{{ page_num }}</a></li>
+                                  {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{ url_for('public.browseFreelancers', page=page_num, kw=kw, lc=lc, ct=ct, rt=rt, sk=sk, tag=tag) }}">{{ page_num }}</a></li>
+                                  {% endif %}
+                                {% endif %}
+                              {% endfor %}
+                              {% if freelancers.has_next %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('public.browseFreelancers', page=freelancers.page+1, kw=kw, lc=lc, ct=ct, rt=rt, sk=sk, tag=tag) }}" aria-label="Next">Next</a></li>
+                              {% endif %}
+                            </ul>
+                        </div>
 
                     </div><!--end col-->
                 </div><!--end row-->
