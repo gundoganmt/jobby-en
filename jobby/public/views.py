@@ -126,7 +126,7 @@ def browseTasks():
         else:
             tasks = tasks.paginate(page=page, per_page=4)
     else:
-        tasks = Tasks.query.paginate(page=page, per_page=6)
+        tasks = Tasks.query.paginate(page=page, per_page=4)
     return render_template('public/tasks-list.html', tasks=tasks,
         kw=keyword, lc=location, ct=category, str_cat=str_cat,
         bn=budget_min, bx=budget_max, cx=checks, tag=tag)
@@ -194,7 +194,7 @@ def browseFreelancers():
         else:
             freelancers = freelancers.paginate(page=page, per_page=4)
     else:
-        freelancers = freelancers.paginate(page=page, per_page=6)
+        freelancers = freelancers.paginate(page=page, per_page=4)
     return render_template('public/freelancers-list.html', freelancers=freelancers,
         kw=keyword, lc=location, ct=category, str_cat=str_cat,
         rt=rating, sk=skill, tag=tag, page=page)
