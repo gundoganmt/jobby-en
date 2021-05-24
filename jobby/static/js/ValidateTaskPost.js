@@ -33,28 +33,40 @@ document.addEventListener('DOMContentLoaded', () =>{
 
     if (skills.length == 0 || skills.length > 5){
       createErrField("Add at least 1 at most 5 skills!");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
 
     if (project_name.length < 5){
       createErrField("Project name is too short");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
 
     if (!category){
       createErrField("Please choose a category!");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
     if (!location){
       createErrField("Please enter a location!");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
-    if (budget_min > budget_max){
+    if (parseInt(budget_min) > parseInt(budget_max)){
       createErrField("Minimum budget cannot exceed maximum budget!");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
     if (description.length < 30){
       createErrField("Please explain your project. At least 30 character.");
+      send_post.innerHTML = 'Post Project';
+      send_post.disabled = false;
       e.preventDefault();
     }
     else {
@@ -67,6 +79,8 @@ document.addEventListener('DOMContentLoaded', () =>{
 
       if(ins == 0) {
         alert("Please add an image relevant to your project!")
+        send_post.innerHTML = 'Post Project';
+        send_post.disabled = false;
         e.preventDefault();
         return false;
       }
@@ -74,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () =>{
         var size = document.getElementById('upload').files[0].size;
         if (size > 2*1024*1024) {
           alert("Picture size is too big! Max 2Mb")
+          send_post.innerHTML = 'Post Project';
+          send_post.disabled = false;
           e.preventDefault();
           return false;
         }
@@ -101,6 +117,10 @@ document.addEventListener('DOMContentLoaded', () =>{
           const result = JSON.parse(xhr.responseText);
           if(result.success){
             window.location.href = result.msg;
+          }
+          else {
+            send_post.innerHTML = 'Post Project';
+            send_post.disabled = false;
           }
         }
       }

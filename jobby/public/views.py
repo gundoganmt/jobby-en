@@ -121,7 +121,10 @@ def browseTasks():
         if budget_max:
             tasks = tasks.filter(Tasks.budget_max <= int(budget_max))
 
-        tasks = tasks.paginate(page=page, per_page=6)
+        if keyword:
+            tasks = tasks.paginate(page=page, per_page=10)
+        else:
+            tasks = tasks.paginate(page=page, per_page=4)
     else:
         tasks = Tasks.query.paginate(page=page, per_page=6)
     return render_template('public/tasks-list.html', tasks=tasks,
@@ -186,7 +189,10 @@ def browseFreelancers():
         if skill:
             freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==skill))
 
-        freelancers = freelancers.paginate(page=page, per_page=6)
+        if keyword:
+            freelancers = freelancers.paginate(page=page, per_page=10)
+        else:
+            freelancers = freelancers.paginate(page=page, per_page=4)
     else:
         freelancers = freelancers.paginate(page=page, per_page=6)
     return render_template('public/freelancers-list.html', freelancers=freelancers,
