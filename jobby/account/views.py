@@ -60,17 +60,17 @@ def signup():
                 user = Users(name=name, surname=surname, email=email,
                     password=hashed_password, member_since=datetime.utcnow(),
                     status='employer', email_approved=True)
-                    db.session.add(user)
-                    db.session.commit()
+                db.session.add(user)
+                db.session.commit()
             else:
                 user = Users(name=name, surname=surname, email=email,
                     password=hashed_password, member_since=datetime.utcnow(),
                     status='employer')
-                    notif = Notification(notification_to=user, not_type=2)
-                    db.session.add(notif)
-                    db.session.add(user)
-                    db.session.commit()
-                    send_confirmation_email(user)
+                notif = Notification(notification_to=user, not_type=2)
+                db.session.add(user)
+                db.session.add(notif)
+                db.session.commit()
+                send_confirmation_email(user)
             login_user(user)
             return render_template('account/welcome.html')
         flash('This email already being used!')

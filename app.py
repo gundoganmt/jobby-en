@@ -1,4 +1,5 @@
 from jobby import create_app, socketio
+from flask import abort
 from flask_admin import Admin, expose, BaseView
 from flask_admin.contrib import sqla
 from flask_login import current_user
@@ -16,12 +17,12 @@ class MyModelView(sqla.ModelView):
 
     def is_accessible(self):
         if not current_user.is_active or not current_user.is_authenticated:
-            return False
+            abort(404)
 
         if current_user.is_authenticated and current_user.email == 'admin@jobby.net':
             return True
 
-        return False
+        return abort(404)
 
     # can_edit = True
     edit_modal = True
