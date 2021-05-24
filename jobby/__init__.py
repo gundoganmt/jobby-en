@@ -13,7 +13,7 @@ socketio = SocketIO()
 login_manager = LoginManager()
 login_manager.session_protection = 'basic'
 login_manager.login_view = 'account.login'
-login_manager.login_message = "Bu sayfayı görmek için giriş yapınız"
+login_manager.login_message = "Please login to see this page"
 last_updated = dir_last_updated('jobby/static')
 
 @login_manager.user_loader
