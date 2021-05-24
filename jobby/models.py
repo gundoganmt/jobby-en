@@ -188,6 +188,9 @@ class Users(UserMixin, db.Model):
     def all_reviews(self):
         return Reviews.query.filter_by(reviewed_pro=self).all()
 
+    def all_tasks(self):
+        return Tasks.query.filter_by(poster=self).all()
+
     def recom(self):
         total_success = Reviews.query.filter_by(reviewed_pro=self, recommendation=True).count()
         if self.total_reviews() == 0:
@@ -227,6 +230,7 @@ class Offers(db.Model):
     subject = db.Column(db.String(100), nullable=True)
     message = db.Column(db.String(300), nullable=True)
     filename = db.Column(db.String(50), nullable=True)
+    offered_task = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
     offered_user = db.Column(db.Integer, db.ForeignKey('Users.id'))
     offers_user = db.Column(db.Integer, db.ForeignKey('Users.id'))
 
@@ -271,6 +275,7 @@ class Tasks(db.Model):
     winner_id = db.Column(db.Integer, db.ForeignKey('Users.id'))
     review = db.relationship('Reviews', backref='reviewed', cascade='all, delete-orphan')
     views = db.relationship('Views', backref='viewedTask', cascade='all, delete-orphan')
+    offeredtask = db.relationship('Offers', backref='offeredTask', cascade='all, delete-orphan')
     bids = db.relationship('Bids', backref='bidded', lazy='dynamic', cascade='all, delete-orphan')
     TSkills = db.relationship('TaskSkills', backref='TSkilled', lazy='dynamic', cascade='all, delete-orphan')
 

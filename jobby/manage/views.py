@@ -141,6 +141,17 @@ def acceptBid(bid_id):
         db.session.commit()
         return jsonify({"success": True})
 
+@csrf.exempt
+@manage.route('/accept-offer/<int:offer_id>', methods=['GET', 'POST'])
+@login_required
+def acceptOffer(offer_id):
+    data = Offers.query.filter_by(id=offer_id, offered=current_user).first_or_404()
+    if request.method == 'GET':
+        return jsonify({"offers": data.offers.name, "offer_id": offer_id, "offers_id": data.offers.id})
+    else:
+        offer = Offers.query.get(offer_id)
+        return jsonify({"success": True})
+
 @manage.route('/manage-tasks')
 @login_required
 def manageTasks():

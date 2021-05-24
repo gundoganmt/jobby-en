@@ -121,9 +121,9 @@ def browseTasks():
         if budget_max:
             tasks = tasks.filter(Tasks.budget_max <= int(budget_max))
 
-        tasks = tasks.paginate(page=page, per_page=2)
+        tasks = tasks.paginate(page=page, per_page=6)
     else:
-        tasks = Tasks.query.paginate(page=page, per_page=2)
+        tasks = Tasks.query.paginate(page=page, per_page=6)
     return render_template('public/tasks-list.html', tasks=tasks,
         kw=keyword, lc=location, ct=category, str_cat=str_cat,
         bn=budget_min, bx=budget_max, cx=checks, tag=tag)
@@ -138,6 +138,7 @@ def freelancer(user_id):
         offer = Offers(offered=user, offers=current_user)
         offer.subject = request.form['subject']
         offer.message = request.form['offerMessage']
+        offer.offered_task = int(request.form['offeredTask'])
         if 'formFile' in request.files:
             file = request.files['formFile']
             filename = file.filename
@@ -185,9 +186,9 @@ def browseFreelancers():
         if skill:
             freelancers = freelancers.filter(Users.UserSkills.any(Skills.skill==skill))
 
-        freelancers = freelancers.paginate(page=page, per_page=10)
+        freelancers = freelancers.paginate(page=page, per_page=6)
     else:
-        freelancers = freelancers.paginate(page=page, per_page=10)
+        freelancers = freelancers.paginate(page=page, per_page=6)
     return render_template('public/freelancers-list.html', freelancers=freelancers,
         kw=keyword, lc=location, ct=category, str_cat=str_cat,
         rt=rating, sk=skill, tag=tag, page=page)

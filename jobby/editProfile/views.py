@@ -17,8 +17,8 @@ def editProfile_personel():
     email = request.form['email']
     phone_number = request.form['phone_number']
 
-    if len(name) < 5 or len(name) > 30 or len(surname) < 5 or len(surname) > 30:
-        flash("The length of name and surname should be between 5 and 30")
+    if len(name) < 3 or len(name) > 30 or len(surname) < 3 or len(surname) > 30:
+        flash("The length of name and surname should be between 3 and 30")
         return redirect(request.url)
 
     if len(email) > 50:

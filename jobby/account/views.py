@@ -56,10 +56,12 @@ def signup():
         hashed_password = generate_password_hash(password, method='sha256')
         existing_user = Users.query.filter_by(email=email).first()
         if existing_user is None:
-            user = Users(name=name, surname=surname, email=email, password=hashed_password, member_since=datetime.utcnow(), status='employer')
-            notif = Notification(notification_to=user, not_type=2)
+            user = Users(name=name, surname=surname, email=email, 
+                password=hashed_password, member_since=datetime.utcnow(),
+                status='employer', email_approved=True)
+            #notif = Notification(notification_to=user, not_type=2)
             db.session.add(user)
-            db.session.add(notif)
+            #db.session.add(notif)
             db.session.commit()
             #send_confirmation_email(user)
             login_user(user)

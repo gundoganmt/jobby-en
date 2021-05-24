@@ -9,7 +9,7 @@ from utils import dir_last_updated, mail
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
-socketio = SocketIO()
+socketio = SocketIO(cors_allowed_origins='*')
 login_manager = LoginManager()
 login_manager.session_protection = 'basic'
 login_manager.login_view = 'account.login'

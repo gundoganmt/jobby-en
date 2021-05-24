@@ -75,7 +75,11 @@
 												<!-- Avatar -->
 												<div class="freelancer-avatar">
 													<div class="verified-badge"></div>
+													{% if offer.offers.status == 'freelancer' %}
 													<a href="{{ url_for('public.freelancer', user_id=offer.offers.id) }}"><img src="{{ url_for('static', filename='images/'+offer.offers.profile_picture) }}" alt=""></a>
+													{% else %}
+													<a href="#"><img src="{{ url_for('static', filename='images/'+offer.offers.profile_picture) }}" alt=""></a>
+													{% endif %}
 												</div>
 
 												<!-- Name -->
@@ -93,12 +97,15 @@
 													{% endif %}
 
 													<div class="buttons-to-right always-visible margin-top-25 margin-bottom-0">
-														<a href="#small-dialog-1"  name="acceptOffer" class="popup-with-zoom-anim button ripple-effect"><i class="icon-material-outline-check"></i> Accept</a>
+														<a href="#small-dialog-1"  name="acceptOffer" data="{{offer.id}}" class="popup-with-zoom-anim button ripple-effect"><i class="icon-material-outline-check"></i> Accept</a>
 														<a href="#small-dialog-2" name="sendMessage" data="{{ offer.offers.id }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Send Message</a>
+														{% if offer.offeredTask %}
+														<a href="{{ url_for('public.task_page', task_url=offer.offeredTask.generate_task_link()) }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-globe"></i> Project Details</a>
+														{% endif %}
 														{% if offer.filename %}
 															<a href="{{ url_for('manage.download', filename=offer.filename)}}" data="{{offer.filename}}" class="button ripple-effect"><i class="icon-feather-file-text"></i> Download file</a>
 														{% endif %}
-														<a href="#small-dialog" name="getmessage" data="o_{{ offer.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Message" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
+														<a href="#small-dialog" name="getmessage" data="o_{{ offer.id }}" class="popup-with-zoom-anim button dark ripple-effect ico" title="Offer Message" data-tippy-placement="top"><i class="icon-material-baseline-mail-outline"></i></a>
 													</div>
 
 												</div>
@@ -118,7 +125,7 @@
 			<div class="dashboard-footer-spacer"></div>
 			<div class="small-footer margin-top-15">
 				<div class="small-footer-copyrights">
-					© 2020 <strong>Jobby</strong>. Butun Hakları Saklıdır.
+					© 2021 <strong>Jobby</strong>. All Rights Reserved.
 				</div>
 				<ul class="footer-social-links">
 					<li>
@@ -152,7 +159,7 @@
 				<div class="sign-in-form">
 
 					<ul class="popup-tabs-nav">
-						<li><a href="#tab1">Teklifi Kabul Et</a></li>
+						<li><a href="#tab1">Accept Offer</a></li>
 					</ul>
 
 					<div id="result" class="popup-tabs-container">
@@ -162,12 +169,12 @@
 
 							<!-- Welcome Text -->
 							<div class="welcome-text">
-								<h3 id="bidder"></h3>
-								<div id="bid_amount" class="bid-acceptance margin-top-15"></div>
+								<h3 id="offer"></h3>
 							</div>
 
 							<!-- Button -->
-							<button id="acceptButton" class="margin-top-15 button full-width button-sliding-icon ripple-effect" type="submit" form="terms">Kabul Et <i class="icon-material-outline-arrow-right-alt"></i></button>
+							<button id="acceptButton" class="margin-top-15 full-width button-sliding-icon ripple-effect" style="float: left; width:48% !important; height: 48px; background-color: green; color: white; border-radius: 4px;">Accept <i class="icon-material-outline-arrow-right-alt"></i></button>
+							<button id="rejectButton" class="margin-top-15 full-width button-sliding-icon ripple-effect" style="float: right; width: 48% !important; height: 48px; background-color: red; color: white; border-radius: 4px;">Reject <i class="icon-material-outline-arrow-right-alt"></i></button>
 
 						</div>
 
@@ -212,7 +219,7 @@
 							</div>
 							<p id="errorBody"></p>
 							<div id="formData">
-								<textarea id="body" cols="10" placeholder="Mesaj" class="with-border" required></textarea>
+								<textarea id="body" cols="10" placeholder="Message" class="with-border" required></textarea>
 								<button id="sendButton" class="button full-width button-sliding-icon ripple-effect" type="submit" form="send-pm">Send <i class="icon-material-outline-arrow-right-alt"></i></button>
 							</div>
 
@@ -252,6 +259,7 @@
 <script src="{{ url_for('static', filename='js/getMessage.js')}}"></script>
 <script src="{{ url_for('static', filename='js/instantMessaging.js')}}"></script>
 <script src="{{ url_for('static', filename='js/socket.io.min.js')}}"></script>
+<script src="{{ url_for('static', filename='js/acceptOffer.js')}}"></script>
 
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>

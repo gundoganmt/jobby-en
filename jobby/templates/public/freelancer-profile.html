@@ -104,6 +104,11 @@
                                   {% endif %}
                                 </div>
                             </div>
+                            {% for message in get_flashed_messages() %}
+                              <div id="message-box">
+                                <div id="success_page" style="margin-bottom: 0;">{{ message }}</div>
+                              </div>
+                      			{% endfor %}
                         </div>
                     </div><!--end col-->
 
@@ -347,8 +352,23 @@
 
                                     <div class="col-md-12">
                                       <div class="mb-3">
+                                        <label for="formFile" class="form-label">Choose Project :<span class="text-danger">*</span></label>
+                                        <select class="form-control custom-select" id="offeredTask" name="offeredTask" required>
+                                          {% if current_user.all_tasks() %}
+                                            {% for task in current_user.all_tasks() %}
+                                              <option value="{{ task.id }}">{{ task }}</option>
+                                            {% endfor %}
+                                          {% else %}
+                                            <option disabled value="">Select Project</option>
+                                          {% endif %}
+                                        </select>
+                                      </div>
+                                    </div>
+
+                                    <div class="col-md-12">
+                                      <div class="mb-3">
                                         <label for="formFile" class="form-label">Upload file :</label>
-                                        <input class="form-control" type="file" id="formFile" name="formFile" accept="application/pdf, application/msword">
+                                        <input class="form-control" type="file" id="formFile" name="formFile" accept=".pdf, .doc, .docx">
                                       </div>
                                     </div>
 

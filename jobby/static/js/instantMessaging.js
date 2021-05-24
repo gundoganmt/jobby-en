@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var imgSrcSender;
   var imgSrcReciever;
 
-  socket = io.connect(location.protocol + '//' + document.domain);
+  socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
   socket.on('connect', () =>{
     msg = document.getElementsByName('sendMessage');
     msg.forEach(function(m){

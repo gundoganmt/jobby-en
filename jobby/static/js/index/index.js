@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () =>{
     offerForm.addEventListener('submit', (e) =>{
       var subject = document.getElementById('subject').value;
       var offerMessage = document.getElementById('offerMessage').value;
+      var offeredTask = document.getElementById('offeredTask').value;
       var ins = document.getElementById('formFile').files.length;
       var ext = ['pdf', 'doc', 'docx'];
 
@@ -83,7 +84,12 @@ document.addEventListener('DOMContentLoaded', () =>{
       }
 
       if(offerMessage.length < 15 || offerMessage.length > 500){
-        alert("subjec length should be between 15 and 500.");
+        alert("message length should be between 15 and 500.");
+        e.preventDefault();
+      }
+
+      if(!offeredTask){
+        alert("You have to choose a project!");
         e.preventDefault();
       }
 
