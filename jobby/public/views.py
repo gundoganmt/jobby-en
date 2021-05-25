@@ -11,7 +11,7 @@ from jobby import db
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import uuid, os, json
-from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER, get_category
+from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER, get_category, send_email
 
 public = Blueprint('public',__name__)
 
@@ -203,10 +203,22 @@ def browseFreelancers():
 def page_not_found(e):
     return render_template('404.html'), 404
 
-@public.route('/welcome')
-def welcome():
-    return render_template('account/welcome.html')
 
-@public.route('/confirm')
-def confirm():
-    return render_template('account/email_confirmation.html')
+@public.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'GET':
+        flash("This website is for sale. If you interested in buying this website just send message. We will get back to you soon")
+        return render_template('public/contact.html')
+    else:
+        name = request.form['name']
+        email = request.form['email']
+        subject = request.form['subject']
+        comment = request.form['comment']
+        honey = request.form['honey']
+        if honey:
+            flash('something went wrong try again')
+            return render_template('public/contact.html')
+        else:
+            send_email(name, email, subject, comment)
+            flash("Thanks. Your message has been sent.")
+            return redirect(request.url)

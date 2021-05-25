@@ -9,6 +9,15 @@ def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
+def send_email(name, email, subject, message):
+    app = current_app._get_current_object()
+    msg = Message(subject='Jobby Contact',
+        sender="support@jobby.net",
+        recipients=["mahmut_gundogan@hotmail.com"])
+    msg.body = "name: {}, email: {}, subject: {}, message: {}".format(name, email, subject, message)
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+
 def send_confirmation_email(user):
     app = current_app._get_current_object()
     token = user.get_confirmation_token()
