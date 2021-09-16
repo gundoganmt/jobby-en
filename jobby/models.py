@@ -19,6 +19,7 @@ class Users(UserMixin, db.Model):
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=True, default="")
+    username = db.Column(db.String(50), nullable=True)
     surname = db.Column(db.String(50), nullable=True, default="")
     status = db.Column(db.String(50), default="employer")
     email = db.Column(db.String(50), unique=True, nullable=False)
@@ -222,7 +223,7 @@ class Users(UserMixin, db.Model):
         return self.name + " " + self.surname
 
     def __repr__(self):
-        return self.name + " " + self.surname
+        return self.username
 
 class Offers(db.Model):
     __tablename__ = 'Offers'

@@ -131,9 +131,9 @@ def browseTasks():
         kw=keyword, lc=location, ct=category, str_cat=str_cat,
         bn=budget_min, bx=budget_max, cx=checks, tag=tag)
 
-@public.route('/freelancer/<int:user_id>', methods=['GET', 'POST'])
-def freelancer(user_id):
-    user = Users.query.filter_by(id=user_id, status='freelancer').first_or_404()
+@public.route('/u/<username>', methods=['GET', 'POST'])
+def freelancer(username):
+    user = Users.query.filter_by(username=username, status='freelancer').first_or_404()
     if request.method == 'GET':
         user.addView()
         return render_template('public/freelancer-profile.html', user=user)
@@ -202,7 +202,6 @@ def browseFreelancers():
 @public.app_errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
-
 
 @public.route('/contact', methods=['GET', 'POST'])
 def contact():

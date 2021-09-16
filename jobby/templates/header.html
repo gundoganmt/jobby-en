@@ -201,7 +201,7 @@
 										{% if current_user.name %}
 											{{ current_user.get_full_name() }}
 										{% else %}
-											{{ current_user.email }}
+											{{ current_user }}
 										{% endif %}
 
 										{% if current_user.status == 'employer' %}
@@ -223,7 +223,7 @@
 
 						<ul class="user-menu-small-nav">
 							{% if current_user.status == 'freelancer' %}
-								<li><a href="{{ url_for('public.freelancer', user_id=current_user.id) }}"><i class="icon-material-outline-account-circle"></i> My Profile</a></li>
+								<li><a href="{{ url_for('public.freelancer', username=current_user) }}"><i class="icon-material-outline-account-circle"></i> My Profile</a></li>
 							{% else %}
 								<li><a href="{{ url_for('editProfile.editProfile_page') }}"><i class="icon-material-outline-account-circle"></i> Edit Profile</a></li>
 							{% endif %}

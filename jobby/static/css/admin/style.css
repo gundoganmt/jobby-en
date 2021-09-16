@@ -1,0 +1,46 @@
+.mb-75 {
+    margin-bottom: .25rem!important;
+}
+
+.pt-75 {
+  padding-top: .75rem!important;
+}
+
+.my-2 {
+  margin-bottom: 1.5rem!important;
+}
+
+.fw-bolder {
+    font-weight: 600!important;
+}
+
+.pb-50 {
+    padding-bottom: .5rem!important;
+}
+
+.bg-light-secondary {
+    background: rgba(130,134,139,.12)!important;
+    color: #82868B!important;
+}
+
+.bg-light-primary {
+    background: rgba(115,103,240,.12)!important;
+    color: #7367F0!important;
+}
+
+.p-75 {
+    padding: .75rem!important;
+}
+
+.pt-75 {
+    padding-top: .75rem!important;
+}
+
+.ms-75 {
+    margin-left: .75rem!important;
+}
+
+.badge.bg-light-success {
+    background: rgba(40,199,111,.12)!important;
+    color: #28C76F!important;
+}

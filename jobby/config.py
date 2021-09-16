@@ -12,4 +12,4 @@ class Config:
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
     MAIL_USERNAME = "support@jobby.net"
-    MAIL_PASSWORD = "WulIgtM5zk."
+    MAIL_PASSWORD = "2U8IJi6qI4H2"

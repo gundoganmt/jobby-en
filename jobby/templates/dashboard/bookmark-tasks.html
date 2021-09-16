@@ -77,7 +77,7 @@
 										<div class="job-listing-details">
 
 											<!-- Logo -->
-											<a href="{{ url_for('public.freelancer', user_id=task.poster.id) }}" class="job-listing-company-logo">
+											<a href="{{ url_for('public.freelancer', username=task.poster) }}" class="job-listing-company-logo">
 												<img src="{{ url_for('static', filename='images/taskpics/'+task.task_pic) }}" style="height: 50px;">
 											</a>
 

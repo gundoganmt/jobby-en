@@ -17,9 +17,14 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
-        email = request.form['email']
+        login_eu = request.form['login_eu']
         password = request.form['password']
-        user = Users.query.filter_by(email=email).first()
+
+        if "@" in login_eu:
+            user = Users.query.filter_by(email=login_eu).first()
+        else:
+            user = Users.query.filter_by(username=login_eu).first()
+
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
@@ -31,6 +36,42 @@ def login():
             flash('Wrong Credentials! Check your spelling.')
             return render_template('account/login.html')
     return render_template('account/login.html')
+
+@account.route('/signup', methods=['GET','POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect(url_for('public.index'))
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        password = request.form['password']
+        confirm = request.form['confirm']
+
+        if password != confirm:
+            flash('Passwords not matched! Try again')
+            return render_template('account/signup.html')
+        if not username.isalnum():
+            flash('username should be alpha numeric!')
+            return render_template('account/signup.html')
+
+        hashed_password = generate_password_hash(password, method='sha256')
+        existing_username = Users.query.filter_by(username=username).first()
+        if existing_username is not None:
+            flash('Username already being used!')
+            return render_template('account/signup.html')
+        else:
+            existing_email = Users.query.filter_by(email=email).first()
+            if existing_email is not None:
+                flash('Email already being used')
+                return render_template('account/signup.html')
+            else:
+                new_user = Users(username=username, email=email, password=hashed_password,
+                    member_since=datetime.utcnow(), status='employer', email_approved=True)
+                db.session.add(new_user)
+                db.session.commit()
+                login_user(new_user)
+                return render_template('account/welcome.html')
+    return render_template('account/signup.html')
 
 @account.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -44,39 +85,6 @@ def confirm_email(token):
     flash('Your email address has been confirmed!')
     return render_template('dashboard/dashboard.html')
 
-@account.route('/signup', methods=['GET','POST'])
-def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('public.index'))
-    if request.method == 'POST':
-        name = request.form['name'].capitalize()
-        surname = request.form['surname'].capitalize()
-        email = request.form['email']
-        password = request.form['password']
-        hashed_password = generate_password_hash(password, method='sha256')
-        existing_user = Users.query.filter_by(email=email).first()
-        if existing_user is None:
-            if email.startswith('demo'):
-                user = Users(name=name, surname=surname, email=email,
-                    password=hashed_password, member_since=datetime.utcnow(),
-                    status='employer', email_approved=True)
-                db.session.add(user)
-                db.session.commit()
-            else:
-                user = Users(name=name, surname=surname, email=email,
-                    password=hashed_password, member_since=datetime.utcnow(),
-                    status='employer')
-                notif = Notification(notification_to=user, not_type=2)
-                db.session.add(user)
-                db.session.add(notif)
-                db.session.commit()
-                send_confirmation_email(user)
-            login_user(user)
-            return render_template('account/welcome.html')
-        flash('This email already being used!')
-        return render_template('account/signup.html')
-
-    return render_template('account/signup.html')
 
 @account.route('/logout')
 @login_required

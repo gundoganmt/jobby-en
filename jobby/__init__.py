@@ -44,6 +44,8 @@ def create_app(config_class=Config):
     from jobby.message.views import message
     from jobby.setting.views import setting
     from jobby.editProfile.views import editProfile
+    from jobby.admin.views import admin
+
     app.register_blueprint(account)
     app.register_blueprint(public)
     app.register_blueprint(posttask)
@@ -51,5 +53,6 @@ def create_app(config_class=Config):
     app.register_blueprint(message)
     app.register_blueprint(setting)
     app.register_blueprint(editProfile)
+    app.register_blueprint(admin)
 
     return app

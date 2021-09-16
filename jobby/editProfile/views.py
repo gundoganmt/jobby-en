@@ -43,9 +43,6 @@ def editProfile_personel():
             image = Image.open(file)
             i = crop_max_square(image).resize((300, 300), Image.LANCZOS)
             i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
-        else:
-            flash("Error: Allowed files are jpeg, jpg, png")
-            return redirect(request.url)
     db.session.commit()
     return redirect(request.url)
 

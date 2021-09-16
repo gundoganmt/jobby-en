@@ -327,7 +327,7 @@
                           </div>
                           <div class="modal-body p-4">
                               <div class="custom-form mt-3">
-                                <form id="offerForm" method="post" action="{{ url_for('public.freelancer', user_id= user.id) }}" enctype="multipart/form-data">
+                                <form id="offerForm" method="post" action="{{ url_for('public.freelancer', username=user) }}" enctype="multipart/form-data">
                                   <input type='hidden' name="csrf_token" id="csrf_token" value="{{ csrf_token() }}"/>
                                   <div class="row" id="formField">
                                     <div class="col-12">
