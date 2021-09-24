@@ -13,7 +13,17 @@
       </li>
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
-        Features
+        Create Admin
+      </div>
+      <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Create Admin</span>
+        </a>
+      </li>
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Database Crud
       </div>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap" aria-expanded="true" aria-controls="collapseBootstrap">
@@ -26,6 +36,7 @@
             <a class="collapse-item" href="{{ url_for('admin.dbop', table='users') }}">All Users</a>
             <a class="collapse-item" href="buttons.html">Employers</a>
             <a class="collapse-item" href="dropdowns.html">Freelancers</a>
+            <a class="collapse-item" href="dropdowns.html">Create User</a>
           </div>
         </div>
       </li>
@@ -40,26 +51,50 @@
             <a class="collapse-item" href="{{ url_for('admin.dbop', table='projects') }}">All Projects</a>
             <a class="collapse-item active" href="form_advanceds.html">Active Projects</a>
             <a class="collapse-item" href="form_basics.html">Pending Projects</a>
+            <a class="collapse-item" href="form_basics.html">Create Project</a>
           </div>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true" aria-controls="collapseTable">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Settings</span>
+        <a class="nav-link" href="{{ url_for('admin.dbop', table='bids') }}">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Bids</span>
         </a>
-        <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Settings</h6>
-            <a class="collapse-item" href="simple-tables.html">Email Settings</a>
-            <a class="collapse-item" href="datatables.html">Some settings</a>
-          </div>
-        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="ui-colors.html">
           <i class="fas fa-fw fa-palette"></i>
-          <span>Support Tickets</span>
+          <span>Offers</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.dbop', table='messages')}}">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Messages</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Countries</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Categories</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Testimonials</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Reviews</span>
         </a>
       </li>
       <hr class="sidebar-divider">
@@ -67,25 +102,36 @@
         Examples
       </div>
       <li class="nav-item">
+        <a class="nav-link" href="ui-colors.html">
+          <i class="fas fa-fw fa-palette"></i>
+          <span>Support Tickets</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true" aria-controls="collapsePage">
           <i class="fas fa-fw fa-columns"></i>
-          <span>Pages</span>
+          <span>Settings</span>
         </a>
         <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Example Pages</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
+            <h6 class="collapse-header">Settings</h6>
+            <a class="collapse-item" href="login.html">Email Settings</a>
+            <a class="collapse-item" href="register.html">Site Settings</a>
           </div>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseViews" aria-expanded="true" aria-controls="collapsePage">
+          <i class="fas fa-fw fa-columns"></i>
+          <span>Views</span>
         </a>
+        <div id="collapseViews" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Views</h6>
+            <a class="collapse-item" href="login.html">Project Views</a>
+            <a class="collapse-item" href="register.html">User Views</a>
+          </div>
+        </div>
       </li>
       <hr class="sidebar-divider">
     </ul>

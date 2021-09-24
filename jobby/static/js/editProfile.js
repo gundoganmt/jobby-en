@@ -1,10 +1,10 @@
  document.addEventListener('DOMContentLoaded', () => {
    $('.collapse').on('click', function(e){
      if($(this).next().css("display") == 'none'){
-       $(this).next().show('slow');
+       $(this).next().show();
      }
      else {
-       $(this).next().hide('slow');
+       $(this).next().hide();
      }
    })
 

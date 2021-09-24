@@ -358,7 +358,6 @@ class Reviews(db.Model):
     def __repr__(self):
         return self.body
 
-
 class Bids(db.Model):
     __tablename__ = 'Bids'
     id = db.Column(db.Integer, primary_key=True)
