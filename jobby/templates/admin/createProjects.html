@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/logo/logo.png" rel="icon">
+  <title>RuangAdmin - DataTables</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        {% include 'admin/_navbar.html' %}
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom">
+                  <h5 style="margin-top: 10px;">Create Project</h5>
+                </div>
+                <div class="card-body py-2 my-25">
+                  <!-- form -->
+                  <form id="form_edu">
+                    <div class="row">
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Project Name</label>
+                                <input type="text" class="form-control" placeholder="Field of Study" id="field" >
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Category</label>
+                                <input type="text" class="form-control" placeholder="School Name" id="school">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Location</label>
+                                <input type="text" class="form-control" placeholder="School Name" id="school">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Month</label>
+                                    <input type='text' class="form-control" placeholder="Start Month" id="start_month_edu"/>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Year</label>
+                                    <input type='text' class="form-control" placeholder="Start Year" id="start_year_edu"/>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Skills Required</label>
+                                    <input type='text' class="form-control" placeholder="End Month" id="end_month_edu"/>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-group">
+                          <label>Description</label>
+                          <textarea class="form-control" id="desc_edu" rows="5" placeholder="Comment.."></textarea>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                          <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                          <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="edu">Save
+                              Changes</button>
+                          <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
+                      </div>
+                    </div>
+                  </form>
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                  <a href="login.html" class="btn btn-primary">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+
+</body>
+
+</html>

@@ -25,14 +25,14 @@ def dbop(table, item_id):
             return render_template('admin/projects.html', project=project)
         else:
             projects = Tasks.query.all()
-            return render_template('admin/tables.html', projects=projects)
+            return render_template('admin/projectsTable.html', projects=projects)
     elif table == 'email-settings':
         return render_template('admin/email-settings.html')
     elif table == 'create-admin':
         return render_template('admin/create-admin.html')
     elif table == 'bids':
         bids = Bids.query.all()
-        return render_template('admin/tables.html', bids=bids)
+        return render_template('admin/bidsTable.html', bids=bids)
     elif table == "messages":
         msgs = Messages.query.all()
         return render_template('admin/messagesTable.html', msgs=msgs)
@@ -43,12 +43,20 @@ def create(table):
         if table == 'messages':
             users = Users.query.all()
             return render_template('admin/createMessage.html', users=users)
-        if table == 'users':
+        elif table == 'users':
             return render_template('admin/createUser.html')
+        elif table == 'categories':
+            return render_template('admin/createCategories.html')
+        elif table == 'projects':
+            return render_template('admin/createProjects.html')
     else:
         if table == 'messages':
             return "success"
 
+@admin.route('/adminpanel/chart/<view_type>')
+def views(view_type):
+    users = Users.query.all()
+    return render_template('admin/views.html', users=users)
 
 @admin.route('/delete-user/<user_id>')
 def deleteUser(user_id):

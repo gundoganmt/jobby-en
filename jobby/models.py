@@ -264,6 +264,7 @@ class Tasks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     project_name = db.Column(db.String(50), nullable=False)
     category = db.Column(db.String(50))
+    is_active = db.Column(db.Boolean, default=False)
     task_pic = db.Column(db.String(80))
     budget_min = db.Column(db.Integer, nullable=True, default=10)
     budget_max = db.Column(db.Integer, nullable=True, default=100000)
@@ -427,3 +428,19 @@ class TaskSkills(db.Model):
 
     def __repr__(self):
         return self.skill
+
+class Countries(db.Model):
+    __tablename__ = 'Countries'
+    id = db.Column(db.Integer, primary_key=True)
+    country = db.Column(db.String(50), nullable=False)
+
+    def __repr__(self):
+        return self.country
+
+class Categories(db.Model):
+    __tablename__ = 'Categories'
+    id = db.Column(db.Integer, primary_key=True)
+    category = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return self.category

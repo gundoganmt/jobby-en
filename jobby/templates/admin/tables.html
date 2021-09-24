@@ -35,15 +35,6 @@
                     {% if users %}
                       <h6 class="m-0 font-weight-bold text-primary">Users</h6>
                       <a class="m-0 float-right btn btn-primary btn-sm" href="#">Create User <i class="fas fa-chevron-right"></i></a>
-                    {% elif projects %}
-                      <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                      <a class="m-0 float-right btn btn-primary btn-sm" href="#">Create Project <i class="fas fa-chevron-right"></i></a>
-                    {% elif bids %}
-                      <h6 class="m-0 font-weight-bold text-primary">Bids</h6>
-                      <a class="m-0 float-right btn btn-primary btn-sm" href="#">Create Bid <i class="fas fa-chevron-right"></i></a>
-                    {% elif msgs %}
-                      <h6 class="m-0 font-weight-bold text-primary">Messages</h6>
-                      <a class="m-0 float-right btn btn-primary btn-sm" href="#">Create Message <i class="fas fa-chevron-right"></i></a>
                     {% endif %}
                   </div>
                   {% if users %}
@@ -86,111 +77,6 @@
                         </tbody>
                       </table>
                     </div>
-                  {% elif projects %}
-                    <div class="table-responsive p-3">
-                      <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Action</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                          {% for p in projects %}
-                            <tr id="{{ p.id }}">
-                              <td>{{ p.project_name }}</td>
-                              <td>{{ p.category }}</td>
-                              <td>{{ p.location }}</td>
-                              <td>
-                                <a href="{{ url_for('admin.dbop', table='users', user_id=p.id) }}"><i class="fas fa-edit"></i></a>
-                                <a class="delUser" data="{{ p.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  {% elif bids %}
-                    <div class="table-responsive p-3">
-                      <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Action</th>
-                          </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Action</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                          {% for p in bids %}
-                            <tr id="{{ p.id }}">
-                              <td>{{ p.bidder }}</td>
-                              <td>{{ p.bidded }}</td>
-                              <td>{{ p.num_delivery }}</td>
-                              <td>
-                                <a href="{{ url_for('admin.dbop', table='users', user_id=p.id) }}"><i class="fas fa-edit"></i></a>
-                                <a class="delUser" data="{{ p.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  {% elif msgs %}
-                    <div class="table-responsive p-3">
-                      <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Sender</th>
-                            <th>Recipient</th>
-                            <th>Message</th>
-                            <th>Time</th>
-                          </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>Sender</th>
-                            <th>Recipient</th>
-                            <th>Message</th>
-                            <th>Time</th>
-                            <th>Action</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                          {% for m in msgs %}
-                            <tr id="{{ m.id }}">
-                              <td>{{ m.sender }}</td>
-                              <td>{{ m.recipient }}</td>
-                              <td>{{ m.message }}</td>
-                              <td>{{ m.timestamp }}</td>
-                              <td>
-                                <a href="{{ url_for('admin.dbop', table='users', user_id=m.id) }}"><i class="fas fa-edit"></i></a>
-                                <a class="delUser" data="{{ m.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  {% endif %}
                 </div>
               </div>
             </div>
