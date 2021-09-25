@@ -14,6 +14,7 @@
   <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
 
@@ -88,7 +89,8 @@
                             <div class="form-group">
                                 <div class="controls">
                                     <label>Skills Required</label>
-                                    <input type='text' class="form-control" placeholder="End Month" id="end_month_edu"/>
+                                    <select class="form-control" name="tags" id="tags" multiple="multiple">
+                                    </select>
                                 </div>
                             </div>
                           </div>
@@ -159,6 +161,14 @@
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <script type="text/javascript">
+  $("#tags").select2({
+    tags: true,
+    tokenSeparators: [',']
+  })
+  </script>
 
 </body>
 

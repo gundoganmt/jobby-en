@@ -129,7 +129,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Views</h6>
             <a class="collapse-item" href="login.html">Project Views</a>
-            <a class="collapse-item" href="register.html">User Views</a>
+            <a class="collapse-item" href="{{ url_for('admin.views', view_type='users') }}">User Views</a>
           </div>
         </div>
       </li>

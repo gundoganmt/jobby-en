@@ -21,17 +21,36 @@ document.addEventListener('DOMContentLoaded', () => {
    const xhr = new XMLHttpRequest();
    var editProfileType = $(this).attr('data');
    var csrf_token = document.getElementById('csrf_token').value;
+   var form_data = new FormData();
 
-   if(editProfileType == "profile"){
-     var url = '/editProfile/profile';
-     var editor = document.querySelector('#editor3');
-     var field_of_work = document.getElementById('field_of_work');
-     var tagline = document.getElementById('tagline');
-     var location = document.getElementById('location');
-     var introduction = document.querySelector('#profileQuill');
-     introduction.value = editor.children[0].innerHTML;
-     var data = {'field_of_work': field_of_work.value, "tagline": tagline.value,
-     'location': location.value, "introduction": introduction.value};
+   if(editProfileType == "personal"){
+     var url = '/createUser/personal';
+     var username = document.getElementById('accountUsername').value;
+     var email = document.getElementById('accountEmail').value;
+     var name = document.getElementById('accountFirstName').value;
+     var surname = document.getElementById('accountLastName').value;
+     var password = document.getElementById('accountPassword').value;
+     var phone = document.getElementById('accountPhoneNumber').value;
+     form_data.append("username", username);
+     form_data.append("email", email);
+     form_data.append("name", name);
+     form_data.append("surname", surname);
+     form_data.append("password", password);
+     form_data.append("phone", phone);
+     form_data.append("file", document.getElementById('file').files[0]);
+   }
+
+   else if(editProfileType == "profile"){
+     var url = '/createUser/profile';
+     var field_of_work = document.getElementById('field_of_work').value;
+     var tagline = document.getElementById('tagline').value;
+     var country = document.getElementById('country').value;
+     var editor = document.querySelector('#editor-profile');
+     var introduction = editor.children[0].innerHTML;
+     form_data.append("field_of_work", field_of_work);
+     form_data.append("tagline", tagline);
+     form_data.append("country", country);
+     form_data.append("introduction", introduction);
    }
 
    else if(editProfileType == "skill"){
@@ -95,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 
    xhr.open('POST', url)
-   xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
    xhr.setRequestHeader("X-CSRFToken", csrf_token);
    xhr.onload = () =>{
      if(xhr.status == 200){
@@ -136,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
        }
      }
    }
-   xhr.send(JSON.stringify(data));
+   xhr.send(form_data);
    return false;
   })
 

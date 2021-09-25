@@ -15,6 +15,7 @@
   <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 </head>
 
@@ -38,45 +39,46 @@
                 <div class="card-body py-2 my-25" style="display: none;">
                   <div class="media mb-2">
                     <div class="avatar-wrapper">
-                      <img class="profile-pic" src="{{ url_for('static', filename='images/'+current_user.profile_picture) }}" />
+                      <img class="profile-pic" src="{{ url_for('static', filename='images/guest.jfif') }}" />
                       <div class="upload-button"></div>
                       <input class="file-upload" type="file" id="file" name="file" accept="image/*"/>
                     </div>
                     <div class="media-body mt-50">
-                        <h4 class="media-heading">{{ current_user }}</h4>
+                        <h4 class="media-heading">Profile Picture</h4>
                         <p class="text-muted mt-50"><small>Allowed JPG, JPEG or PNG. Max size of 2Mb</small></p>
                     </div>
                   </div>
                   <!-- form -->
                   <form class="validate-form mt-2 pt-50" novalidate="novalidate">
+                    <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row">
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountUsername">Username</label>
                         <input type="text" class="form-control" id="accountUsername" name="username" placeholder="Username">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountFirstName">First Name</label>
-                        <input type="text" class="form-control" id="accountFirstName" name="FirstName" placeholder="First Name">
-                      </div>
-                      <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountLastName">First Name</label>
-                        <input type="text" class="form-control" id="accountLastName" name="LastName" placeholder="Last Name">
-                      </div>
-                      <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountEmail">Email</label>
                         <input type="email" class="form-control" id="accountEmail" name="email" placeholder="Email">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountPassword">Assign Password</label>
+                        <label class="form-label" for="accountFirstName">First Name</label>
+                        <input type="text" class="form-control" id="accountFirstName" name="FirstName" placeholder="First Name">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountLastName">Last Name</label>
+                        <input type="text" class="form-control" id="accountLastName" name="LastName" placeholder="Last Name">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountPassword">Password</label>
                         <input type="text" class="form-control" id="accountPassword" name="password" placeholder="Password">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control account-number-mask" id="accountPhoneNumber" name="phoneNumber" placeholder="Phone Number" value="457 657 1237">
+                        <input type="text" class="form-control" id="accountPhoneNumber" name="phoneNumber" placeholder="Phone Number">
                       </div>
                       <div class="col-12">
-                        <button type="submit" class="btn btn-primary mt-1 me-1 waves-effect waves-float waves-light">Save changes</button>
-                        <button type="reset" class="btn btn-outline-secondary mt-1 waves-effect">Discard</button>
+                        <button type="submit" data="personal" class="btn btn-primary mt-1 me-1 saveSetting">Save changes</button>
+                        <button type="reset" class="btn btn-outline-secondary mt-1">Discard</button>
                       </div>
                     </div>
                   </form>
@@ -109,10 +111,10 @@
                       </div>
                       <div class="col-12 col-sm-12 mb-2">
                         <label class="form-label" for="Introduction">Introduction</label>
-                        <textarea class="form-control" id="introduction" rows="5" placeholder="Introduction.."></textarea>
+                        <textarea class="form-control" id="editor-profile" rows="5" placeholder="Introduction.."></textarea>
                       </div>
                       <div class="col-12 mb-2">
-                        <button type="submit" class="btn btn-primary mt-1 me-1 waves-effect waves-float waves-light">Save changes</button>
+                        <button type="submit" data='profile' class="btn btn-primary mt-1 me-1">Save changes</button>
                         <button type="reset" class="btn btn-outline-secondary mt-1 waves-effect">Discard</button>
                       </div>
                     </div>
@@ -457,13 +459,25 @@
   <script src="{{ url_for('static', filename='js/admin/jquery.dataTables.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/dataTables.bootstrap4.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/adminCreateUser.js') }}"></script>
-
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
   <!-- Page level custom scripts -->
   <script>
     $(document).ready(function () {
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });
+
+    var quillIntro = new Quill('#editor-profile', {
+				modules: {
+					toolbar: [
+						['bold', 'italic', 'underline'],
+						[{ 'list': 'ordered'}, { 'list': 'bullet' }],
+					]
+				},
+				placeholder: 'Introduce Yourself',
+				theme: 'snow'  // or 'bubble'
+			});
 
     var readURL = function(input) {
       if (input.files && input.files[0]) {

@@ -32,10 +32,8 @@
               <div class="col-lg-12">
                 <div class="card mb-4">
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    {% if users %}
-                      <h6 class="m-0 font-weight-bold text-primary">Users</h6>
-                      <a class="m-0 float-right btn btn-primary btn-sm" href="#">Create User <i class="fas fa-chevron-right"></i></a>
-                    {% endif %}
+                    <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+                    <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.create', table='users') }}">Create User <i class="fas fa-chevron-right"></i></a>
                   </div>
                   {% if users %}
                     <div class="table-responsive p-3">
@@ -77,6 +75,7 @@
                         </tbody>
                       </table>
                     </div>
+                  {% endif %}
                 </div>
               </div>
             </div>
