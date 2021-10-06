@@ -1,0 +1,814 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/logo/logo.png" rel="icon">
+  <title>RuangAdmin - DataTables</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        {% include 'admin/_navbar.html' %}
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom">
+                  <h5 style="margin-top: 10px;">Basic Information</h5>
+                </div>
+                <div class="card-body py-2 my-25">
+                  <!-- form -->
+                  <form class="validate-form mt-2 pt-50" novalidate="novalidate">
+                    <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="media mb-2">
+                      <div class="avatar-wrapper">
+                        <img class="profile-pic" src="{{ url_for('static', filename='images/'+user.profile_picture) }}" />
+                        <div class="upload-button"></div>
+                        <input class="file-upload" type="file" id="file" name="file" accept="image/*"/>
+                      </div>
+                      <div class="media-body mt-50">
+                          <h4 class="media-heading">Profile Picture</h4>
+                          <p class="text-muted mt-50"><small>Allowed JPG, JPEG or PNG. Max size of 2Mb</small></p>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountUsername">Username*</label>
+                        <input type="text" class="form-control" id="accountUsername" name="username" placeholder="{{ user }}" value="{{ user }}">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountEmail">Email*</label>
+                        <input type="email" class="form-control" id="accountEmail" name="email" placeholder="{{ user.email }}" value="{{ user.email }}">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountFirstName">First Name</label>
+                        <input type="text" class="form-control" id="accountFirstName" name="FirstName" placeholder="First Name" value="{{ user.name }}">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountLastName">Last Name</label>
+                        <input type="text" class="form-control" id="accountLastName" name="LastName" placeholder="Last Name" value="{{ user.surname }}">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountPassword">Password <i class="fas fa-info-circle" title="We don't store raw passwords. If you change this field we use it as a password, otherwise password stays same. Also just remind you that you have to use real password to sign in. Not encripted one. "></i></label>
+                        <input type="text" class="form-control" id="accountPassword" name="password" placeholder="{{ user.password }}" value="{{ user.password }}">
+                      </div>
+                      <div class="col-12 col-sm-6 mb-1">
+                        <label class="form-label" for="accountPhoneNumber">Phone Number</label>
+                        <input type="text" class="form-control" id="accountPhoneNumber" name="phoneNumber" placeholder="Phone Number" value="{{ user.phone }}">
+                      </div>
+                      <div class="col-12">
+                        <button type="submit" data="personal" data-user-id="{{ user.id }}" class="btn btn-primary mt-1 me-1 saveSetting">Save changes</button>
+                        <button type="reset" class="btn btn-outline-secondary mt-1">Discard</button>
+                      </div>
+                    </div>
+                  </form>
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
+                  <h5 style="margin-top: 10px;">Profile Information</h5>
+                </div>
+                <div class="card-body py-2 my-25" style="display: none;">
+                  <!-- form -->
+                  <form class="validate-form mt-2 pt-50">
+                    <div class="row">
+                      <div class="col-4 col-sm-4 mb-4">
+                        <label class="form-label" for="field_of_work">Field of Work</label>
+                        <input type="text" class="form-control" id="field_of_work" name="field_of_work" placeholder="Field of work" value="{{ user.field_of_work }}">
+                      </div>
+                      <div class="col-4 col-sm-4 mb-1">
+                        <label class="form-label" for="tagline">Tagline</label>
+                        <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" value="{{ user.tagline }}">
+                      </div>
+                      <div class="col-4 col-sm-4 mb-1">
+                        <label class="form-label" for="country">country</label>
+                        <input type="email" class="form-control" id="country" name="country" placeholder="Country" value="{{ user.country }}">
+                      </div>
+                      <div class="col-12 col-sm-12 mb-2">
+                        <label class="form-label" for="Introduction">Introduction</label>
+                        <textarea class="form-control" id="editor-profile" rows="5" placeholder="introduction">{{ user.introduction }}</textarea>
+                      </div>
+                      <div class="col-12 mb-2">
+                        <button type="button" data='profile' data-user-id='{{ user.id }}' class="btn btn-primary mt-1 me-1 saveSetting">Save changes</button>
+                        <button type="reset" class="btn btn-outline-secondary mt-1 waves-effect">Discard</button>
+                      </div>
+                    </div>
+                  </form>
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
+                  <h5 style="margin-top: 10px;">Skills</h5>
+                </div>
+                <div class="card-body py-2 my-25" style="display: none;">
+                  <div class="table-responsive" style="margin-bottom: 15px;">
+                    {% if user.get_all_skills() %}
+                      <table class="table table-hover" id="skill_table">
+                        <thead>
+                          <tr>
+                            <th>Skill</th>
+                            <th>Level</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbody_skill">
+                      {% for skill in user.get_all_skills() %}
+                        <tr class="table-active" id="s_{{skill.id}}">
+                          <td><span class="font-weight-bold">{{ skill.skill }}</span></td>
+                          <td>{{ skill.level }}</td>
+                          <td><i class="fa fa-trash deleteItem" data="s_{{skill.id}}" aria-hidden="true"></i></td>
+                        </tr>
+                      {% endfor %}
+                      </tbody>
+                      </table>
+                    {% else %}
+                      <table class="table table-hover" id="skill_table" style="display: none;">
+                        <thead>
+                          <tr>
+                            <th>Skill</th>
+                            <th>Level</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody id="tbody_skill">
+
+                        </tbody>
+                      </table>
+                    {% endif %}
+                  </div>
+                  <!-- form -->
+                  <form id="form_skill">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Skill</label>
+                                    <input type='text' class="form-control" placeholder="Skill" id="skill"/>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Level</label>
+                                    <input type='number' class="form-control" placeholder="Level" id="level">
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                        <button class="btn btn-primary saveSetting" data="skill" data-user-id="{{ user.id }}">Save
+                            Changes</button>
+                        <button type="reset" class="btn btn-outline-warning">Reset</button>
+                    </div>
+                  </form>
+                  <a class="btn btn-google btn-block" id="addAnotherSkill" style="display: none; cursor: pointer;"><i class="fas fa-plus"></i> Add Another</a>                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
+                  <h5 style="margin-top: 10px;">Social Profile</h5>
+                </div>
+                <div class="card-body py-2 my-25" style="display: none;">
+                  <!-- form -->
+                  <form>
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        <fieldset>
+                            <label>Twitter</label>
+                            <div class="input-group mb-75 input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fab fa-twitter" id="basic-addon3"></span>
+                                </div>
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" style="color: #6e707e;">twitter.com/</span>
+                                </div>
+                                <input type="text" class="form-control" value="{{ user.twitter }}" id="twitter" maxlength="50">
+                            </div>
+
+                            <label>Facebook</label>
+                            <div class="input-group mb-75 input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fab fa-facebook" id="basic-addon4"></span>
+                                </div>
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" style="color: #6e707e;">facebook.com/</span>
+                                </div>
+                                <input type="text" class="form-control" value="{{ user.facebook }}" id="facebook" maxlength="50">
+                            </div>
+                            <label>Instagram</label>
+                            <div class="input-group mb-75 input-group-merge">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fab fa-instagram" id="basic-addon5"></span>
+                                </div>
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" style="color: #6e707e;">www.instagram.com/</span>
+                                </div>
+                                <input type="text" class="form-control" value="{{ user.instagram }}" id="instagram" maxlength="50">
+                            </div>
+                        </fieldset>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                          <label>Github</label>
+                          <div class="input-group mb-75 input-group-merge">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text fab fa-github" id="basic-addon9"></span>
+                              </div>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" style="color: #6e707e;">github.com/</span>
+                              </div>
+                              <input type="text" class="form-control" value="{{ user.github }}" id="github" maxlength="50">
+                          </div>
+                          <label>Youtube</label>
+                          <div class="input-group mb-75 input-group-merge">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text fab fa-youtube" id="basic-addon12"></span>
+                              </div>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" style="color: #6e707e;">youtube.com/</span>
+                              </div>
+                              <input type="text" class="form-control" value="{{ user.youtube }}" id="youtube" maxlength="50">
+                          </div>
+                          <label>Linkedin</label>
+                          <div class="input-group mb-75 input-group-merge">
+                              <div class="input-group-prepend">
+                                  <span class="input-group-text fab fa-linkedin" id="basic-addon11"></span>
+                              </div>
+                              <div class="input-group-prepend">
+                                <span class="input-group-text" style="color: #6e707e;">linkedin.com/</span>
+                              </div>
+                              <input type="text" class="form-control" value="{{ user.linkedin }}" id="linkedin" maxlength="50">
+                          </div>
+                      </div>
+                      <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                          <button class="btn btn-primary saveSetting" data="social" data-user-id="{{ user.id }}">Save Changes</button>
+                          <button type="reset" class="btn btn-outline-warning">Reset</button>
+                      </div>
+                    </div>
+                  </form>
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
+                  <h5 style="margin-top: 10px;">Work Experience</h5>
+                </div>
+                <div class="card-body py-2 my-25" style="display: none;">
+                  <div class="table-responsive" style="margin-bottom: 15px;">
+                  {% if user.workexps() %}
+                    <table class="table table-hover" id="workExp_table">
+                      <thead>
+                        <tr>
+                          <th>Position</th>
+                          <th>Company</th>
+                          <th>Duration</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody_work">
+                    {% for workExp in user.workexps() %}
+                      <tr class="table-active" id="w_{{workExp.id}}">
+                        <td><span class="font-weight-bold">{{ workExp.position }}</span></td>
+                        <td>{{ workExp.company }}</td>
+                        <td>{{ workExp.start_month }} {{ workExp.start_year }} - {{ workExp.end_month }} {{ workExp.end_year }}</td>
+                        <td><i class="fa fa-trash deleteItem" data="w_{{workExp.id}}" aria-hidden="true"></i></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                  {% else %}
+                    <table class="table table-hover" id="workExp_table" style="display: none;">
+                      <thead>
+                        <tr>
+                          <th>Position</th>
+                          <th>Company</th>
+                          <th>Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody_work">
+
+                      </tbody>
+                    </table>
+                  {% endif %}
+                  </div>
+                  <!-- form -->
+                  <form id="form_workexp">
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Position</label>
+                                <input type="text" class="form-control" placeholder="Ex: Web Developer" id="position"  >
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Company</label>
+                                <input type="text" class="form-control" placeholder="Company Name" id="company" >
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Month</label>
+                                    <select class="form-control" id="start_month_job" type="text">
+          														<option selected>Jan</option>
+          														<option>Feb</option>
+          														<option>Mar</option>
+          														<option>Apr</option>
+          														<option>May</option>
+          														<option>June</option>
+          														<option>July</option>
+          														<option>Aug</option>
+          														<option>Sep</option>
+          														<option>Oct</option>
+          														<option>Nov</option>
+          														<option>Dec</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Year</label>
+                                    <select class="form-control" id="start_year_job">
+          														<option value="2020">2020</option>
+          														<option value="2019">2019</option>
+          														<option value="2018">2018</option>
+          														<option value="2017">2017</option>
+          														<option value="2016">2016</option>
+          														<option value="2015">2015</option>
+          														<option value="2014">2014</option>
+          														<option value="2013">2013</option>
+          														<option value="2012">2012</option>
+          														<option value="2011">2011</option>
+          														<option value="2010">2010</option>
+          														<option value="2009">2009</option>
+          														<option value="2008">2008</option>
+          														<option value="2007">2007</option>
+          														<option value="2006">2006</option>
+          														<option value="2005">2005</option>
+          														<option value="2004">2004</option>
+          														<option value="2003">2003</option>
+          														<option value="2002">2002</option>
+          														<option value="2001">2001</option>
+          														<option value="2000">2000</option>
+          														<option value="1999">1999</option>
+          														<option value="1998">1998</option>
+          														<option value="1997">1997</option>
+          														<option value="1996">1996</option>
+          														<option value="1995">1995</option>
+          														<option value="1994">1994</option>
+          														<option value="1993">1993</option>
+          														<option value="1992">1992</option>
+          														<option value="1991">1991</option>
+          														<option value="1990">1990</option>
+          														<option value="1989">1989</option>
+          														<option value="1988">1988</option>
+          														<option value="1987">1987</option>
+          														<option value="1986">1986</option>
+          														<option value="1985">1985</option>
+          														<option value="1984">1984</option>
+          														<option value="1983">1983</option>
+          														<option value="1982">1982</option>
+          														<option value="1981">1981</option>
+          														<option value="1980">1980</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>End Month</label>
+                                    <select class="form-control" id="end_month_job" type="text">
+          														<option selected>Jan</option>
+          														<option>Feb</option>
+          														<option>Mar</option>
+          														<option>Apr</option>
+          														<option>May</option>
+          														<option>June</option>
+          														<option>July</option>
+          														<option>Aug</option>
+          														<option>Sep</option>
+          														<option>Oct</option>
+          														<option>Nov</option>
+          														<option>Dec</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>End Year</label>
+                                    <select class="form-control" id="end_year_job">
+          														<option value="2020">2020</option>
+          														<option value="2019">2019</option>
+          														<option value="2018">2018</option>
+          														<option value="2017">2017</option>
+          														<option value="2016">2016</option>
+          														<option value="2015">2015</option>
+          														<option value="2014">2014</option>
+          														<option value="2013">2013</option>
+          														<option value="2012">2012</option>
+          														<option value="2011">2011</option>
+          														<option value="2010">2010</option>
+          														<option value="2009">2009</option>
+          														<option value="2008">2008</option>
+          														<option value="2007">2007</option>
+          														<option value="2006">2006</option>
+          														<option value="2005">2005</option>
+          														<option value="2004">2004</option>
+          														<option value="2003">2003</option>
+          														<option value="2002">2002</option>
+          														<option value="2001">2001</option>
+          														<option value="2000">2000</option>
+          														<option value="1999">1999</option>
+          														<option value="1998">1998</option>
+          														<option value="1997">1997</option>
+          														<option value="1996">1996</option>
+          														<option value="1995">1995</option>
+          														<option value="1994">1994</option>
+          														<option value="1993">1993</option>
+          														<option value="1992">1992</option>
+          														<option value="1991">1991</option>
+          														<option value="1990">1990</option>
+          														<option value="1989">1989</option>
+          														<option value="1988">1988</option>
+          														<option value="1987">1987</option>
+          														<option value="1986">1986</option>
+          														<option value="1985">1985</option>
+          														<option value="1984">1984</option>
+          														<option value="1983">1983</option>
+          														<option value="1982">1982</option>
+          														<option value="1981">1981</option>
+          														<option value="1980">1980</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <label>Description</label>
+                    <textarea class="form-control" id="desc_work" rows="5" placeholder="Comment.."></textarea>
+                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                      <button class="btn btn-primary saveSetting" data="workExp" data-user-id="{{ user.id }}">Save Changes</button>
+                      <button type="reset" class="btn btn-outline-warning">Reset</button>
+                    </div>
+                  </form>
+                  <a class="btn btn-google btn-block" id="addAnotherWorkexp" style="display: none; cursor: pointer;"><i class="fas fa-plus"></i> Add Another</a>                  <!--/ form -->
+
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card mb-4">
+                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
+                  <h5 style="margin-top: 10px;">Education</h5>
+                </div>
+                <div class="card-body py-2 my-25" style="display: none;">
+                  <div class="table-responsive" style="margin-bottom: 15px;">
+                  {% if user.edus() %}
+                    <table class="table table-hover" id="edu_table">
+                      <thead>
+                        <tr>
+                          <th>Studied</th>
+                          <th>School</th>
+                          <th>Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody_edu">
+                    {% for edu in resume_site.edus() %}
+                      <tr class="table-active" id="e_{{edu.id}}">
+                        <td><span class="font-weight-bold">{{ edu.field }}</span></td>
+                        <td>{{ edu.school }}</td>
+                        <td>{{ edu.start_month }} {{ edu.start_year }} - {{ edu.end_month }} {{ edu.end_year }}</td>
+                        <td><i class="fa fa-trash deleteItem" data="e_{{edu.id}}" aria-hidden="true"></i></td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                    </table>
+                  {% else %}
+                    <table class="table table-hover" id="edu_table" style="display: none;">
+                      <thead>
+                        <tr>
+                          <th>Studied</th>
+                          <th>School</th>
+                          <th>Time</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tbody_edu">
+
+                      </tbody>
+                    </table>
+                  {% endif %}
+                  </div>
+                  <!-- form -->
+                  <form id="form_edu">
+                    <div class="row">
+                      <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Field of Study</label>
+                                <input type="text" class="form-control" placeholder="Field of Study" id="field" >
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>School</label>
+                                <input type="text" class="form-control" placeholder="School Name" id="school">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Month</label>
+                                    <select class="form-control" id="start_month_edu" type="text">
+          														<option selected>Jan</option>
+          														<option>Feb</option>
+          														<option>Mar</option>
+          														<option>Apr</option>
+          														<option>May</option>
+          														<option>June</option>
+          														<option>July</option>
+          														<option>Aug</option>
+          														<option>Sep</option>
+          														<option>Oct</option>
+          														<option>Nov</option>
+          														<option>Dec</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>Start Year</label>
+                                    <select class="form-control" id="start_year_edu">
+          														<option value="2020">2020</option>
+          														<option value="2019">2019</option>
+          														<option value="2018">2018</option>
+          														<option value="2017">2017</option>
+          														<option value="2016">2016</option>
+          														<option value="2015">2015</option>
+          														<option value="2014">2014</option>
+          														<option value="2013">2013</option>
+          														<option value="2012">2012</option>
+          														<option value="2011">2011</option>
+          														<option value="2010">2010</option>
+          														<option value="2009">2009</option>
+          														<option value="2008">2008</option>
+          														<option value="2007">2007</option>
+          														<option value="2006">2006</option>
+          														<option value="2005">2005</option>
+          														<option value="2004">2004</option>
+          														<option value="2003">2003</option>
+          														<option value="2002">2002</option>
+          														<option value="2001">2001</option>
+          														<option value="2000">2000</option>
+          														<option value="1999">1999</option>
+          														<option value="1998">1998</option>
+          														<option value="1997">1997</option>
+          														<option value="1996">1996</option>
+          														<option value="1995">1995</option>
+          														<option value="1994">1994</option>
+          														<option value="1993">1993</option>
+          														<option value="1992">1992</option>
+          														<option value="1991">1991</option>
+          														<option value="1990">1990</option>
+          														<option value="1989">1989</option>
+          														<option value="1988">1988</option>
+          														<option value="1987">1987</option>
+          														<option value="1986">1986</option>
+          														<option value="1985">1985</option>
+          														<option value="1984">1984</option>
+          														<option value="1983">1983</option>
+          														<option value="1982">1982</option>
+          														<option value="1981">1981</option>
+          														<option value="1980">1980</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-6">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>End Month</label>
+                                    <select class="form-control" id="end_month_edu" type="text">
+          														<option selected>Jan</option>
+          														<option>Feb</option>
+          														<option>Mar</option>
+          														<option>Apr</option>
+          														<option>May</option>
+          														<option>June</option>
+          														<option>July</option>
+          														<option>Aug</option>
+          														<option>Sep</option>
+          														<option>Oct</option>
+          														<option>Nov</option>
+          														<option>Dec</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                                <div class="controls">
+                                    <label>End Year</label>
+                                    <select class="form-control" id="end_year_edu">
+          														<option value="2020">2020</option>
+          														<option value="2019">2019</option>
+          														<option value="2018">2018</option>
+          														<option value="2017">2017</option>
+          														<option value="2016">2016</option>
+          														<option value="2015">2015</option>
+          														<option value="2014">2014</option>
+          														<option value="2013">2013</option>
+          														<option value="2012">2012</option>
+          														<option value="2011">2011</option>
+          														<option value="2010">2010</option>
+          														<option value="2009">2009</option>
+          														<option value="2008">2008</option>
+          														<option value="2007">2007</option>
+          														<option value="2006">2006</option>
+          														<option value="2005">2005</option>
+          														<option value="2004">2004</option>
+          														<option value="2003">2003</option>
+          														<option value="2002">2002</option>
+          														<option value="2001">2001</option>
+          														<option value="2000">2000</option>
+          														<option value="1999">1999</option>
+          														<option value="1998">1998</option>
+          														<option value="1997">1997</option>
+          														<option value="1996">1996</option>
+          														<option value="1995">1995</option>
+          														<option value="1994">1994</option>
+          														<option value="1993">1993</option>
+          														<option value="1992">1992</option>
+          														<option value="1991">1991</option>
+          														<option value="1990">1990</option>
+          														<option value="1989">1989</option>
+          														<option value="1988">1988</option>
+          														<option value="1987">1987</option>
+          														<option value="1986">1986</option>
+          														<option value="1985">1985</option>
+          														<option value="1984">1984</option>
+          														<option value="1983">1983</option>
+          														<option value="1982">1982</option>
+          														<option value="1981">1981</option>
+          														<option value="1980">1980</option>
+          													</select>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <label>Description</label>
+                    <textarea class="form-control" id="desc_edu" rows="5" placeholder="Comment.."></textarea>
+                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                      <button type="button" class="btn btn-primary saveSetting" data="education" data-user-id="{{ user.id }}">Save Changes</button>
+                      <button type="reset" class="btn btn-outline-warning">Reset</button>
+                    </div>
+                  </form>
+                  <a class="btn btn-google btn-block" id="addAnotherEdu" style="display: none; cursor: pointer;"><i class="fas fa-plus"></i> Add Another</a>                  <!--/ form -->
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                  <a href="login.html" class="btn btn-primary">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <!-- Page level plugins -->
+  <script src="{{ url_for('static', filename='js/admin/adminCreateUser.js') }}"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <!-- Page level custom scripts -->
+  <script>
+
+    var readURL = function(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              $('.profile-pic').attr('src', e.target.result);
+          }
+          reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    $(".file-upload").on('change', function(){
+        readURL(this);
+    });
+
+    $(".upload-button").on('click', function() {
+       $(".file-upload").click();
+    });
+  </script>
+
+</body>
+
+</html>

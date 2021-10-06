@@ -35,16 +35,20 @@
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form class="validate-form mt-2 pt-50" method="post" action="{{ url_for('admin.create', table='messages') }}">
-                    <input type='hidden' name="csrf_token" value="{{ csrf_token() }}"/>
+                  <form class="validate-form mt-2 pt-50">
+                    <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row mb-3">
         							<div class="col-md-10">
-        								<input id="todo-input" type="text" class="form-control" value="">
+        								<input id="category" type="text" class="form-control" value="">
         							</div>
         							<div class="col-md-2">
-        								<button type="button"  class="btn btn-primary">Add todo</button>
+        								<button type="button" class="btn btn-primary saveCategory">Create</button>
         							</div>
         						</div>
+                    <div class="row mb-3" id="catlist" style="display: none;">
+
+        						</div>
+
 
                   </form>
                   <!--/ form -->
@@ -53,6 +57,38 @@
             </div>
           </div>
 
+          <div class="card ecommerce-card" style="
+    display: grid;
+    grid-template-columns: 100px 2fr 200px;
+">
+    <div class="item-img text-center">
+      <a href="app-ecommerce-details.html">
+        <img class="img-fluid card-img-top" src="/static/images/finance.jpg" alt="img-placeholder">
+      </a>
+    </div>
+    <div class="card-body" style="
+    justify-content: center;
+">
+
+      <h6 class="item-name" style="
+">
+        <a class="text-body" href="app-ecommerce-details.html" style="font-weight: bold;">Apple iPhone 11 (64GB, Black)</a>
+
+      </h6>
+
+    </div>
+    <div class="item-options text-center" style="justify-content: center;">
+
+
+      <a href="#" class="btn btn-primary btn-cart waves-effect waves-float waves-light" style="
+    justify-content: center;
+    margin-top: 18px;
+">
+
+        <span class="add-to-cart">Delete</span>
+      </a>
+    </div>
+  </div>
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="ModalLogout"
             aria-hidden="true">
@@ -91,6 +127,8 @@
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/createCategories.js') }}"></script>
+
   <!-- Page level plugins -->
 
 

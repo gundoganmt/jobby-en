@@ -13,9 +13,7 @@
   <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
-  <link href="{{ url_for('static', filename='css/admin/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
   <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 </head>
 
@@ -33,382 +31,53 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Personel Information</h5>
+                <div class="card-header border-bottom">
+                  <h5 style="margin-top: 10px;">Basic Information</h5>
                 </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <div class="media mb-2">
-                    <div class="avatar-wrapper">
-                      <img class="profile-pic" src="{{ url_for('static', filename='images/guest.jfif') }}" />
-                      <div class="upload-button"></div>
-                      <input class="file-upload" type="file" id="file" name="file" accept="image/*"/>
-                    </div>
-                    <div class="media-body mt-50">
-                        <h4 class="media-heading">Profile Picture</h4>
-                        <p class="text-muted mt-50"><small>Allowed JPG, JPEG or PNG. Max size of 2Mb</small></p>
-                    </div>
-                  </div>
+                <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form class="validate-form mt-2 pt-50" novalidate="novalidate">
+                  <form method="post" action="{{ url_for('admin.createUser') }}" class="validate-form mt-2 pt-50">
                     <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="media mb-2">
+                      <div class="avatar-wrapper">
+                        <img class="profile-pic" src="{{ url_for('static', filename='images/guest.jfif') }}" />
+                        <div class="upload-button"></div>
+                        <input class="file-upload" type="file" id="file" name="file" accept="image/*"/>
+                      </div>
+                      <div class="media-body mt-50">
+                          <h4 class="media-heading">Profile Picture</h4>
+                          <p class="text-muted mt-50"><small>Allowed JPG, JPEG or PNG. Max size of 2Mb</small></p>
+                      </div>
+                    </div>
                     <div class="row">
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountUsername">Username</label>
+                        <label class="form-label" for="accountUsername">Username*</label>
                         <input type="text" class="form-control" id="accountUsername" name="username" placeholder="Username">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountEmail">Email</label>
+                        <label class="form-label" for="accountEmail">Email*</label>
                         <input type="email" class="form-control" id="accountEmail" name="email" placeholder="Email">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountFirstName">First Name</label>
-                        <input type="text" class="form-control" id="accountFirstName" name="FirstName" placeholder="First Name">
+                        <input type="text" class="form-control" id="accountFirstName" name="name" placeholder="First Name">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountLastName">Last Name</label>
-                        <input type="text" class="form-control" id="accountLastName" name="LastName" placeholder="Last Name">
+                        <input type="text" class="form-control" id="accountLastName" name="surname" placeholder="Last Name">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountPassword">Password</label>
+                        <label class="form-label" for="accountPassword">Password*</label>
                         <input type="text" class="form-control" id="accountPassword" name="password" placeholder="Password">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="accountPhoneNumber">Phone Number</label>
-                        <input type="text" class="form-control" id="accountPhoneNumber" name="phoneNumber" placeholder="Phone Number">
+                        <input type="text" class="form-control" id="accountPhoneNumber" name="phone" placeholder="Phone Number">
                       </div>
                       <div class="col-12">
-                        <button type="submit" data="personal" class="btn btn-primary mt-1 me-1 saveSetting">Save changes</button>
+                        <button type="submit" data="personal" class="btn btn-primary mt-1 me-1">Save changes</button>
                         <button type="reset" class="btn btn-outline-secondary mt-1">Discard</button>
                       </div>
-                    </div>
-                  </form>
-                  <!--/ form -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Profile Information</h5>
-                </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <!-- form -->
-                  <form class="validate-form mt-2 pt-50">
-                    <div class="row">
-                      <div class="col-4 col-sm-4 mb-4">
-                        <label class="form-label" for="field_of_work">Field of Work</label>
-                        <input type="text" class="form-control" id="field_of_work" name="field_of_work" placeholder="Username">
-                      </div>
-                      <div class="col-4 col-sm-4 mb-1">
-                        <label class="form-label" for="tagline">Tagline</label>
-                        <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline">
-                      </div>
-                      <div class="col-4 col-sm-4 mb-1">
-                        <label class="form-label" for="country">country</label>
-                        <input type="email" class="form-control" id="country" name="country" placeholder="Country">
-                      </div>
-                      <div class="col-12 col-sm-12 mb-2">
-                        <label class="form-label" for="Introduction">Introduction</label>
-                        <textarea class="form-control" id="editor-profile" rows="5" placeholder="Introduction.."></textarea>
-                      </div>
-                      <div class="col-12 mb-2">
-                        <button type="submit" data='profile' class="btn btn-primary mt-1 me-1">Save changes</button>
-                        <button type="reset" class="btn btn-outline-secondary mt-1 waves-effect">Discard</button>
-                      </div>
-                    </div>
-                  </form>
-                  <!--/ form -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Skills</h5>
-                </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <!-- form -->
-                  <form id="form_skill">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Skill</label>
-                                    <input type='text' class="form-control" placeholder="Skill" id="skill"/>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Level</label>
-                                    <input type='number' class="form-control" placeholder="Level" id="level">
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                        <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="skill">Save
-                            Changes</button>
-                        <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
-                    </div>
-                  </form>
-                  <!--/ form -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Social Profile</h5>
-                </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <!-- form -->
-                  <form>
-                    <div class="row">
-                      <div class="col-12 col-sm-6">
-                        <fieldset>
-                            <label>Twitter</label>
-                            <div class="input-group mb-75 input-group-merge">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fab fa-twitter" id="basic-addon3"></span>
-                                </div>
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text" style="color: black;">www.twitter.com/</span>
-                                </div>
-                                <input type="text" class="form-control" value="_site.twitter }}" aria-describedby="basic-addon3" id="twitter" maxlength="50">
-                            </div>
-
-                            <label>Facebook</label>
-                            <div class="input-group mb-75 input-group-merge">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fab fa-facebook" id="basic-addon4"></span>
-                                </div>
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text" style="color: black;">www.facebook.com/</span>
-                                </div>
-                                <input type="text" class="form-control" value="_site.facebook }}" aria-describedby="basic-addon4" id="facebook" maxlength="50">
-                            </div>
-                            <label>Instagram</label>
-                            <div class="input-group mb-75 input-group-merge">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text fab fa-instagram" id="basic-addon5"></span>
-                                </div>
-                                <div class="input-group-prepend">
-                                  <span class="input-group-text" style="color: black;">www.instagram.com/</span>
-                                </div>
-                                <input type="text" class="form-control" value="_site.instagram }}" aria-describedby="basic-addon5" id="instagram" maxlength="50">
-                            </div>
-                        </fieldset>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                          <label>Github</label>
-                          <div class="input-group mb-75 input-group-merge">
-                              <div class="input-group-prepend">
-                                  <span class="input-group-text fab fa-github" id="basic-addon9"></span>
-                              </div>
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" style="color: black;">www.github.com/</span>
-                              </div>
-                              <input type="text" class="form-control" value="_site.github }}" aria-describedby="basic-addon9" id="github" maxlength="50">
-                          </div>
-                          <label>Youtube</label>
-                          <div class="input-group mb-75 input-group-merge">
-                              <div class="input-group-prepend">
-                                  <span class="input-group-text fab fa-youtube" id="basic-addon12"></span>
-                              </div>
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" style="color: black;">www.youtube.com/</span>
-                              </div>
-                              <input type="text" class="form-control" value="_site.youtube }}" aria-describedby="basic-addon12" id="youtube" maxlength="50">
-                          </div>
-                          <label>Linkedin</label>
-                          <div class="input-group mb-75 input-group-merge">
-                              <div class="input-group-prepend">
-                                  <span class="input-group-text fab fa-linkedin" id="basic-addon11"></span>
-                              </div>
-                              <div class="input-group-prepend">
-                                <span class="input-group-text" style="color: black;">www.linkedin.com/</span>
-                              </div>
-                              <input type="text" class="form-control" value="_site.linkedin }}" aria-describedby="basic-addon11" id="linkedin" maxlength="50">
-                          </div>
-                      </div>
-                      <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                          <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="social">Save
-                              Changes</button>
-                          <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
-                      </div>
-                    </div>
-                  </form>
-                  <!--/ form -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Work Experience</h5>
-                </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <!-- form -->
-                  <form id="form_workexp">
-                    <div class="row">
-                      <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>Position</label>
-                                <input type="text" class="form-control" placeholder="Ex: Web Developer" id="position"  >
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>Company</label>
-                                <input type="text" class="form-control" placeholder="Company Name" id="company" >
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Start Month</label>
-                                    <input type='text' class="form-control" placeholder="Start Month" id="start_month_job"/>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Start Year</label>
-                                    <input type='text' class="form-control" placeholder="Start Year" id="start_year_job"/>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>End Month</label>
-                                    <input type='text' class="form-control" placeholder="End Month" id="end_month_job"/>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>End Year</label>
-                                    <input type='text' class="form-control" placeholder="End Year" id="end_year_job"/>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <label>Description</label>
-                    <textarea class="form-control" id="desc_work" rows="5" placeholder="Comment.."></textarea>
-                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                      <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="workExp">Save
-                          Changes</button>
-                      <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
-                    </div>
-                  </form>
-
-                  <!--/ form -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card mb-4">
-                <div class="card-header border-bottom collapse" style="display: block; cursor: pointer;">
-                  <h5 style="margin-top: 10px;">Education</h5>
-                </div>
-                <div class="card-body py-2 my-25" style="display: none;">
-                  <!-- form -->
-                  <form id="form_edu">
-                    <div class="row">
-                      <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>Field of Study</label>
-                                <input type="text" class="form-control" placeholder="Field of Study" id="field" >
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>School</label>
-                                <input type="text" class="form-control" placeholder="School Name" id="school">
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Start Month</label>
-                                    <input type='text' class="form-control" placeholder="Start Month" id="start_month_edu"/>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Start Year</label>
-                                    <input type='text' class="form-control" placeholder="Start Year" id="start_year_edu"/>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>End Month</label>
-                                    <input type='text' class="form-control" placeholder="End Month" id="end_month_edu"/>
-                                </div>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>End Year</label>
-                                    <input type='text' class="form-control" placeholder="End Month" id="end_year_edu"/>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <label>Description</label>
-                    <textarea class="form-control" id="desc_edu" rows="5" placeholder="Comment.."></textarea>
-                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                        <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="edu">Save
-                            Changes</button>
-                        <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
                     </div>
                   </form>
                   <!--/ form -->
@@ -456,28 +125,9 @@
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
   <!-- Page level plugins -->
-  <script src="{{ url_for('static', filename='js/admin/jquery.dataTables.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/admin/dataTables.bootstrap4.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/admin/adminCreateUser.js') }}"></script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
   <!-- Page level custom scripts -->
   <script>
-    $(document).ready(function () {
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
-    });
-
-    var quillIntro = new Quill('#editor-profile', {
-				modules: {
-					toolbar: [
-						['bold', 'italic', 'underline'],
-						[{ 'list': 'ordered'}, { 'list': 'bullet' }],
-					]
-				},
-				placeholder: 'Introduce Yourself',
-				theme: 'snow'  // or 'bubble'
-			});
 
     var readURL = function(input) {
       if (input.files && input.files[0]) {

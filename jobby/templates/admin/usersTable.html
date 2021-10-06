@@ -67,7 +67,7 @@
                               <td>{{ r.country }}</td>
                               <td>{{ r.member_since.strftime("%d %b, %Y") }}</td>
                               <td>
-                                <a href="{{ url_for('admin.dbop', table='users', user_id=r.id) }}"><i class="fas fa-edit"></i></a>
+                                <a href="{{ url_for('admin.editUser', user_id=r.id) }}"><i class="fas fa-edit"></i></a>
                                 <a class="delUser" data="{{ r.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                               </td>
                             </tr>

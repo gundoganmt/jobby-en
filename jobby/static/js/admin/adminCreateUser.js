@@ -20,11 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
   $('.saveSetting').on('click', function(e){
    const xhr = new XMLHttpRequest();
    var editProfileType = $(this).attr('data');
+   var user_id = $(this).attr('data-user-id');
    var csrf_token = document.getElementById('csrf_token').value;
    var form_data = new FormData();
 
    if(editProfileType == "personal"){
-     var url = '/createUser/personal';
+     var url = '/editUser/personel/' + user_id;
      var username = document.getElementById('accountUsername').value;
      var email = document.getElementById('accountEmail').value;
      var name = document.getElementById('accountFirstName').value;
@@ -41,12 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 
    else if(editProfileType == "profile"){
-     var url = '/createUser/profile';
+     var url = '/editUser/profile/' + user_id;
      var field_of_work = document.getElementById('field_of_work').value;
      var tagline = document.getElementById('tagline').value;
      var country = document.getElementById('country').value;
-     var editor = document.querySelector('#editor-profile');
-     var introduction = editor.children[0].innerHTML;
+     var introduction = document.getElementById('editor-profile').value;
      form_data.append("field_of_work", field_of_work);
      form_data.append("tagline", tagline);
      form_data.append("country", country);
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
    }
 
    else if(editProfileType == "skill"){
-     var url = '/editProfile/skill';
+     var url = '/editUser/skill/' + user_id;
      var skill = document.getElementById('skill').value;
      var level = document.getElementById('level').value;
      if (parseInt(level) > 100 || parseInt(level) < 0 || !level) {
@@ -66,51 +66,82 @@ document.addEventListener('DOMContentLoaded', () => {
        alert("skill length should be between 0 and 100");
        return false;
      }
-     var data = {'skill': skill, "level": level};
+     form_data.append("skill", skill);
+     form_data.append("level", level);
    }
 
    else if(editProfileType == "workExp"){
-     var url = '/editProfile/workExp';
-     var editor = document.querySelector('#editor2');
+     var url = '/editUser/workexp/' + user_id;
      var position = document.getElementById('position').value;
      var company = document.getElementById('company').value;
      var start_month_job = document.getElementById('start_month_job').value;
      var start_year_job = document.getElementById('start_year_job').value;
      var end_month_job = document.getElementById('end_month_job').value;
      var end_year_job = document.getElementById('end_year_job').value;
-     var desc_work = document.querySelector('#desc_work');
-     desc_work.value = editor.children[0].innerHTML;
-     var data = {'position': position, "company": company, "start_month_job": start_month_job,
-     "start_year_job": start_year_job, "end_month_job": end_month_job, "end_year_job": end_year_job,
-     "desc_work": desc_work.value};
+     var desc_work = document.getElementById('desc_work').value;
+
+     if (!position || position.length > 150) {
+       alert("Please provide valid position!");
+       return false;
+     }
+
+     if (!company || company.length > 150) {
+       alert("Please provide valid company!");
+       return false;
+     }
+
+     form_data.append("position", position);
+     form_data.append("company", company);
+     form_data.append("start_month_job", start_month_job);
+     form_data.append("start_year_job", start_year_job);
+     form_data.append("end_month_job", end_month_job);
+     form_data.append("end_year_job", end_year_job);
+     form_data.append("desc_work", desc_work);
    }
 
    else if(editProfileType == "education"){
-     var url = '/editProfile/education';
-     var editor = document.querySelector('#editor');
+     var url = '/editUser/education/' + user_id;
      var field = document.getElementById('field').value;
      var school = document.getElementById('school').value;
      var start_month_edu = document.getElementById('start_month_edu').value;
      var start_year_edu = document.getElementById('start_year_edu').value;
      var end_month_edu = document.getElementById('end_month_edu').value;
      var end_year_edu = document.getElementById('end_year_edu').value;
-     var desc_edu = document.querySelector('#desc_edu');
-     desc_edu.value = editor.children[0].innerHTML;
-     var data = {'field': field, "school": school, "start_month_edu": start_month_edu,
-     "start_year_edu": start_year_edu, "end_month_edu": end_month_edu, "end_year_edu": end_year_edu,
-     "desc_edu": desc_edu.value};
+     var desc_edu = document.getElementById('desc_edu').value;
+
+     if (!field || field.length > 150) {
+       alert("Please provide valid field of study!");
+       return false;
+     }
+
+     if (!school || school.length > 150) {
+       alert("Please provide valid school name!");
+       return false;
+     }
+
+     form_data.append("field", field);
+     form_data.append("school", school);
+     form_data.append("start_month_edu", start_month_edu);
+     form_data.append("start_year_edu", start_year_edu);
+     form_data.append("end_month_edu", end_month_edu);
+     form_data.append("end_year_edu", end_year_edu);
+     form_data.append("desc_edu", desc_edu);
    }
 
    else if (editProfileType == "social"){
-     var url = '/editProfile/social';
+     var url = '/editUser/social/' + user_id;
      var facebook = document.getElementById('facebook').value;
      var twitter = document.getElementById('twitter').value;
      var youtube = document.getElementById('youtube').value;
      var github = document.getElementById('github').value;
      var instagram = document.getElementById('instagram').value;
      var linkedin = document.getElementById('linkedin').value;
-     var data = {'facebook': facebook, "twitter": twitter, "youtube": youtube,
-       "github": github, "instagram": instagram, "linkedin": linkedin};
+     form_data.append("facebook", facebook);
+     form_data.append("twitter", twitter);
+     form_data.append("youtube", youtube);
+     form_data.append("github", github);
+     form_data.append("instagram", instagram);
+     form_data.append("linkedin", linkedin);
    }
 
    xhr.open('POST', url)
@@ -123,9 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
            saveSkill(result.skill,result.level, result.skill_id);
          }
          else if(result.editProfileType == 'w'){
-           saveWorkExp(result.workExp, result.company, result.workExp_id);
+           saveWorkExp(result.position, result.company, result.workExp_id, result.duration);
          }
-         else if(result.editProfileType == 'so'){
+         else if(result.editProfileType == 'pro'){
            Swal.fire({
              icon: 'success',
              title: "Good job!",
@@ -136,9 +167,19 @@ document.addEventListener('DOMContentLoaded', () => {
            });
          }
          else if(result.editProfileType == 'e'){
-           saveEdu(result.field, result.school, result.edu_id);
+           saveEdu(result.field, result.school, result.edu_id, result.duration);
          }
          else if(result.editProfileType == 'p'){
+           Swal.fire({
+             icon: 'success',
+             title: "Good job!",
+             text: "Saved successfully!",
+             type: "success",
+             confirmButtonClass: 'btn btn-primary',
+             buttonsStyling: false,
+           });
+         }
+         else if(result.editProfileType == 'so'){
            Swal.fire({
              icon: 'success',
              title: "Good job!",
@@ -160,7 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function saveSkill(skill, level, skill_id){
      var skill_table = document.getElementById('skill_table');
-     var form_skill = document.getElementById('skillForm');
+     var form_skill = document.getElementById('form_skill');
+     var addAnother = document.getElementById("addAnotherSkill");
      if (skill_table.style.display == 'none'){
        skill_table.style.display = "";
      }
@@ -172,39 +214,52 @@ document.addEventListener('DOMContentLoaded', () => {
        '</td>' +
        '<td>' + level + '</td>' +
        '<td>' +
-       '<button type="button" class="btn btn-danger deleteItem" data="s_' + skill_id + '"><i class="icon-feather-trash-2"></i></button>' +
+       '<i class="fa fa-trash deleteItem" data="s_' + skill_id + '"aria-hidden="true"></i>' +
        '</td>' +
      '</tr>';
 
      form_skill.style.display = 'none';
+     addAnother.style.display = "block";
+     addAnother.addEventListener('click', function(e){
+       form_skill.style.display = "block";
+       addAnother.style.display = "none";
+     })
      return false;
    }
 
-  function saveWorkExp(position, company, workExp_id){
+  function saveWorkExp(position, company, workExp_id, duration){
     var workExp_table = document.getElementById('workExp_table');
-    var form_workexp = document.getElementById('workExpForm');
+    var form_workexp = document.getElementById('form_workexp');
+    var addAnother = document.getElementById("addAnotherWorkexp");
     if (workExp_table.style.display == 'none'){
       workExp_table.style.display = "";
     }
 
-    var tbody = document.getElementById('tbody_workExp');
+    var tbody = document.getElementById('tbody_work');
     tbody.innerHTML += '<tr class="table-active" id=w_' + workExp_id + '>' +
       '<td>' +
         '<span class="font-weight-bold">' + position + '</span>' +
       '</td>' +
       '<td>' + company + '</td>' +
+      '<td>' + duration + '</td>' +
       '<td>' +
-      '<button type="button" class="btn btn-danger deleteItem" data="w_' + workExp_id + '"><i class="icon-feather-trash-2"></i></button>' +
+      '<i class="fa fa-trash deleteItem" data="w_' + workExp_id + '"aria-hidden="true"></i>' +
       '</td>' +
     '</tr>';
 
     form_workexp.style.display = 'none';
+    addAnother.style.display = "block";
+    addAnother.addEventListener('click', function(e){
+      form_workexp.style.display = "block";
+      addAnother.style.display = "none";
+    })
     return false;
   }
 
-  function saveEdu(field, school, edu_id){
+  function saveEdu(field, school, edu_id, duration){
     var edu_table = document.getElementById('edu_table');
-    var form_edu = document.getElementById('eduForm');
+    var form_edu = document.getElementById('form_edu');
+    var addAnother = document.getElementById("addAnotherEdu");
     if (edu_table.style.display == 'none'){
       edu_table.style.display = "";
     }
@@ -215,12 +270,18 @@ document.addEventListener('DOMContentLoaded', () => {
         '<span class="font-weight-bold">' + field + '</span>' +
       '</td>' +
       '<td>' + school + '</td>' +
+      '<td>' + duration + '</td>' +
       '<td>' +
-      '<button type="button" class="btn btn-danger deleteItem" data="e_' + edu_id + '"><i class="icon-feather-trash-2"></i></button>' +
+      '<i class="fa fa-trash deleteItem" data="e_' + edu_id + '"aria-hidden="true"></i>' +
       '</td>' +
     '</tr>';
 
     form_edu.style.display = 'none';
+    addAnother.style.display = "block";
+    addAnother.addEventListener('click', function(e){
+      form_edu.style.display = "block";
+      addAnother.style.display = "none";
+    })
     return false;
   }
 
@@ -229,14 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
  function deleteItem(e){
    if (e.target.matches('.deleteItem')){
      const request = new XMLHttpRequest();
-     var csrf_token = document.getElementById('csrf_token').value;
      var type_id = $(e.target).attr('data');
-     var data = {"type_id": type_id};
-     var url = '/deleteItem';
+     var url = '/deleteItem/' + type_id;
 
-     request.open('POST', url);
-     request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-     request.setRequestHeader("X-CSRFToken", csrf_token);
+     request.open('GET', url);
      request.onload = () =>{
        if (request.status == 200){
          const result = JSON.parse(request.responseText);
@@ -252,7 +309,7 @@ document.addEventListener('DOMContentLoaded', () => {
              e.preventDefault();
            }
            else if (result.currentField == 'w') {
-             var tbody = document.getElementById('tbody_workExp');
+             var tbody = document.getElementById('tbody_work');
              var item = document.getElementById(type_id);
              item.parentNode.removeChild(item);
              if (tbody.childElementCount == 0){
@@ -277,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
          }
        }
      }
-     request.send(JSON.stringify(data));
+     request.send();
      return false;
    }
  }
