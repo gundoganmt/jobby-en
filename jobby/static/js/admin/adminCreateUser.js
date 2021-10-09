@@ -339,17 +339,4 @@ document.addEventListener('DOMContentLoaded', () => {
    }
  }
 
- addButton = document.getElementsByName('addButton');
- addButton.forEach(function(btn){
-   btn.onclick = () =>{
-     var row = btn.previousElementSibling;
-     if(row.style.display == 'none'){
-       row.style.display = '';
-     }
-     else{
-       alert("Please save the open form first!");
-     }
-   }
- })
-
 })

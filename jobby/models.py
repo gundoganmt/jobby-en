@@ -440,6 +440,7 @@ class Countries(db.Model):
 class Categories(db.Model):
     __tablename__ = 'Categories'
     id = db.Column(db.Integer, primary_key=True)
+    cat_pic = db.Column(db.String(80))
     category = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):

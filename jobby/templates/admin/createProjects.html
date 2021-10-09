@@ -14,7 +14,7 @@
   <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
 </head>
 
@@ -37,13 +37,14 @@
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form id="form_edu">
+                  <form method="post" action="{{ url_for('admin.create', table='projects') }}" enctype="multipart/form-data">
+                    <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row">
                       <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <div class="controls">
                                 <label>Project Name</label>
-                                <input type="text" class="form-control" placeholder="Field of Study" id="field" >
+                                <input type="text" class="form-control" name="project_name" placeholder="Project Name" id="field">
                             </div>
                         </div>
                       </div>
@@ -51,7 +52,12 @@
                         <div class="form-group">
                             <div class="controls">
                                 <label>Category</label>
-                                <input type="text" class="form-control" placeholder="School Name" id="school">
+                                <select class="form-control" id="category" name="category" data-live-search="true">
+                                  <option selected disabled>Select Category</option>
+                                  {% for ctr in ctrs %}
+                                    <option>{{ ctr }}</option>
+                                  {% endfor %}
+                                </select>
                             </div>
                         </div>
                       </div>
@@ -59,7 +65,7 @@
                         <div class="form-group">
                             <div class="controls">
                                 <label>Location</label>
-                                <input type="text" class="form-control" placeholder="School Name" id="school">
+                                <input type="number" class="form-control" name="location" placeholder="Location" id="school">
                             </div>
                         </div>
                       </div>
@@ -68,16 +74,16 @@
                           <div class="col">
                             <div class="form-group">
                                 <div class="controls">
-                                    <label>Start Month</label>
-                                    <input type='text' class="form-control" placeholder="Start Month" id="start_month_edu"/>
+                                    <label>Budget Min</label>
+                                    <input type='number' class="form-control" name="budget_min" placeholder="Budget Min" id="start_month_edu"/>
                                 </div>
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                                 <div class="controls">
-                                    <label>Start Year</label>
-                                    <input type='text' class="form-control" placeholder="Start Year" id="start_year_edu"/>
+                                    <label>Budget Max</label>
+                                    <input type='text' class="form-control" name="budget_max" placeholder="Budget Max" id="start_year_edu"/>
                                 </div>
                             </div>
                           </div>
@@ -90,6 +96,19 @@
                                 <div class="controls">
                                     <label>Skills Required</label>
                                     <select class="form-control" name="tags" id="tags" multiple="multiple">
+                                      <option selected>Jan</option>
+                                      <option>Feb</option>
+                                      <option>Mar</option>
+                                      <option>Apr</option>
+                                      <option>May</option>
+                                      <option>June</option>
+                                      <option>July</option>
+                                      <option>Aug</option>
+                                      <option>Sep</option>
+                                      <option>Oct</option>
+                                      <option>Nov</option>
+                                      <option>Dec</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -99,21 +118,45 @@
                       <div class="col-12">
                         <div class="form-group">
                           <label>Description</label>
-                          <textarea class="form-control" id="desc_edu" rows="5" placeholder="Comment.."></textarea>
+                          <textarea class="form-control" name="description" id="description" rows="5" placeholder="Comment.."></textarea>
                         </div>
                       </div>
                       <div class="col-12 col-sm-6">
+                        <label>File</label>
                         <div class="form-group">
-                          <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="customFile">
-                            <label class="custom-file-label" for="customFile">Choose file</label>
+                          <div class="input-group shadow">
+                            <span class="input-group-text px-3 text-muted"><i class="fas fa-image fa-lg"></i></span>
+                            <input type="file" name="file" class="d-none file-upload">
+                            <input type="text" class="form-control upload-file" placeholder="Upload Image">
+                            <button class="browse btn btn-primary" type="button"><i class="fas fa-image"></i> Browse</button>
                           </div>
+                        </div>
+
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Start Month</label>
+                                <select class="form-control" id="start_month_job" type="text">
+                                  <option selected>Jan</option>
+                                  <option>Feb</option>
+                                  <option>Mar</option>
+                                  <option>Apr</option>
+                                  <option>May</option>
+                                  <option>June</option>
+                                  <option>July</option>
+                                  <option>Aug</option>
+                                  <option>Sep</option>
+                                  <option>Oct</option>
+                                  <option>Nov</option>
+                                  <option>Dec</option>
+                                </select>
+                            </div>
                         </div>
                       </div>
                       <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                          <button class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light save" data="edu">Save
-                              Changes</button>
-                          <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
+                          <button type="submit" class="btn btn-primary mb-1 mb-sm-0 mr-0 mr-sm-1">Save Changes</button>
+                          <button type="reset" class="btn btn-outline-warning">Reset</button>
                       </div>
                     </div>
                   </form>
@@ -161,13 +204,30 @@
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 
   <script type="text/javascript">
-  $("#tags").select2({
-    tags: true,
-    tokenSeparators: [',']
-  })
+  $(document).ready(function () {
+    $('select').selectpicker();
+  });
+
+  var readURL = function(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('.upload-file').attr('placeholder', input.files[0].name);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $(".file-upload").on('change', function(){
+      readURL(this);
+  });
+
+  $(".browse").on('click', function() {
+     $(".file-upload").click();
+  });
   </script>
 
 </body>

@@ -1,36 +1,69 @@
 document.addEventListener('DOMContentLoaded', () =>{
   $('.saveCategory').on('click', function(e){
-    const xhr = new XMLHttpRequest();
-    var csrf_token = document.getElementById('csrf_token').value;
-    var url = '/adminpanel/create/categories';
-    var form_data = new FormData();
+    var file = document.getElementById('file');
+    var ins = file.files.length;
     var category = document.getElementById('category').value;
-    form_data.append("category", category);
 
-    xhr.open('POST', url)
-   	xhr.setRequestHeader("X-CSRFToken", csrf_token);
-    xhr.onload = () => {
-      if (xhr.status == 200){
-        const result = JSON.parse(xhr.responseText);
-        if (result.success) {
-          console.log("success");
-          var catlist = document.getElementById('catlist');
-          if (catlist.style.display == 'none') {
-            catlist.style.display = '';
-          }
-          console.log("here");
-          catlist.innerHTML += '<div class="col-md-10">' +
-            '<input type="text" readonly="" class="form-control" value="' + category + '">' +
-          '</div>' +
-          '<div class="col-md-2">' +
-            '<button type="button"  class="btn btn-danger">Delete</button>' +
-          '</div>';
-        }
-        else {
-          alert(result.msg);
-        }
+    if (category.length < 3 || category.length > 150) {
+      alert("Category length should be between 3 and 150");
+      return false;
+    }
+
+    if(ins == 0) {
+      alert("Please add an image for this category!")
+      return false;
+    }
+
+    else {
+      var size = file.files[0].size;
+      if (size > 2*1024*1024) {
+        alert("Picture size is too big! Max 2Mb")
+        return false;
       }
     }
-    xhr.send(form_data);
   })
+
+  document.addEventListener('click', deleteCat);
+  function deleteCat(e){
+ 		if (e.target.matches('.btn-cat') || e.target.matches('.del-cat')){
+      const request = new XMLHttpRequest();
+      var cat_id = $(e.target).attr('data');
+      var url = '/del-cat/' + cat_id;
+      request.open('GET', url);
+
+      request.onload = () =>{
+        if (request.status == 200){
+          const result = JSON.parse(request.responseText);
+          if (result.success) {
+            var cat_item = document.getElementById(cat_id);
+            cat_item.parentNode.removeChild(cat_item);
+          }
+          else {
+            alert(result.msg)
+          }
+        }
+      }
+      request.send();
+      return false;
+    }
+  }
+
+  var readURL = function(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('.profile-pic').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  $(".file-upload").on('change', function(){
+      readURL(this);
+  });
+
+  $(".upload-button").on('click', function() {
+     $(".file-upload").click();
+  });
+
 })

@@ -1,6 +1,6 @@
-from flask import render_template, Blueprint, request, url_for, jsonify, redirect
+from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort
 from flask_login import current_user, login_required
-from jobby.models import (Bids, Tasks, Users, Views, Notification,
+from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries,
     Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations)
 from jobby import db
 from PIL import Image
@@ -53,22 +53,60 @@ def create(table):
         elif table == 'users':
             return render_template('admin/createUser.html')
         elif table == 'categories':
-            return render_template('admin/createCategories.html')
+            cats = Categories.query.all()
+            return render_template('admin/createCategories.html', cats=cats)
+        elif table == 'countries':
+            ctr = Countries.query.all()
+            return render_template('admin/createCountries.html', ctr=ctr)
         elif table == 'projects':
-            return render_template('admin/createProjects.html')
+            ctrs = Categories.query.all()
+            return render_template('admin/createProjects.html', ctrs=ctrs)
+        else:
+            return abort(404), 404
     else:
         if table == 'messages':
             return "success"
         elif table == 'categories':
             category = request.form['category']
-            print(category)
-            if not category:
-                return jsonify({'success': False, 'msg': "Cannot create empty category!"})
+            if len(category) < 3 or len(category) > 150:
+                flash('Category length should be between 3 and 150')
+                return redirect(request.url)
             cat = Categories(category=category)
-            db.session.add(cat)
+            if 'file' in request.files:
+                file = request.files['file']
+                filename = file.filename
+                if allowed_img_file(filename):
+                    filename = secure_filename(filename)
+                    unique_filename = str(uuid.uuid4())+get_extension(filename)
+                    cat.cat_pic = unique_filename
+                    image = Image.open(file)
+                    i = crop_max_square(image).resize((270, 150), Image.LANCZOS)
+                    i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
+                    db.session.add(cat)
+                    db.session.commit()
+                    return redirect(request.url)
+                else:
+                    flash("Not allowed file type. Only jpeg, png or jpg")
+                    return redirect(request.url)
+            else:
+                flash("İmage is required")
+                return redirect(request.url)
+        elif table == 'countries':
+            country = request.form['country']
+            if len(country) < 2 or len(country) > 100:
+                flash("Country length should be between 2 and 100")
+                return redirect(request.url)
+            ctr = Countries(country=country)
+            db.session.add(ctr)
             db.session.commit()
-            print("here")
-            return jsonify({'success': True})
+            return redirect(request.url)
+        elif table == 'projects':
+            project_name = request.form['project_name']
+            tags = request.form['tags']
+            if 'file' in request.files:
+                file = request.files['file']
+                filename = file.filename
+            return "{}, {}, {}".format(project_name, tags, filename)
 
 @admin.route('/adminpanel/chart/<view_type>')
 def views(view_type):
@@ -293,6 +331,26 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({"success": True, 'currentField': 'e'})
 
+@admin.route('/del-cat/<cat_id>')
+def deleteCat(cat_id):
+    cat = Categories.query.get(cat_id)
+    if cat:
+        db.session.delete(cat)
+        db.session.commit()
+        os.remove(os.path.join(UPLOAD_IMG_FOLDER, cat.cat_pic))
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+
+@admin.route('/del-ctr/<ctr_id>')
+def deleteCtr(ctr_id):
+    ctr = Countries.query.get(ctr_id)
+    if ctr:
+        db.session.delete(ctr)
+        db.session.commit()
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
 
 @admin.route('/delete-user/<user_id>')
 def deleteUser(user_id):

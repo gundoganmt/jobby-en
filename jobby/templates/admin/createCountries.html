@@ -39,32 +39,20 @@
   			      {% endfor %}
               <div class="card mb-4">
                 <div class="card-header border-bottom">
-                  <h4>Create Categories</h4>
+                  <h4>Create Location</h4>
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form method="post" action="{{ url_for('admin.create', table='categories') }}" enctype="multipart/form-data">
+                  <form method="post" action="{{ url_for('admin.create', table='countries') }}">
                     <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row mb-3">
-                      <div class="col-md-2">
-                        <div class="media mb-2">
-                          <div class="avatar-wrapper">
-                            <img class="profile-pic" src="{{ url_for('static', filename='images/placeholder.png') }}" />
-                            <div class="upload-button"></div>
-                            <input class="file-upload" type="file" id="file" name="file" accept="image/*"/>
-                          </div>
-                        </div>
-                      </div>
-        							<div class="col-md-8">
-                        <div class="form-label">Category</div>
-                        <input type="text" class="form-control" id="category" name="category" placeholder="Category">
+        							<div class="col-md-10">
+                        <div class="form-label">Location</div>
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Location">
         							</div>
         							<div class="col-md-2">
                         <div class="form-label">&nbsp</div>
-                        <button type="submit" class="btn btn-primary mt-1 me-1 saveCategory">Create</button>
-        							</div>
-                      <div class="col-2">
-                        <small>Category Photo</small>
+                        <button type="submit" class="btn btn-primary mt-1 me-1 saveCountry">Create</button>
         							</div>
         						</div>
                   </form>
@@ -73,21 +61,16 @@
               </div>
             </div>
           </div>
-          {% for cat in cats %}
-            <div class="card category-card" id="{{cat.id}}">
-              <div class="item-img text-center">
-                <a href="#">
-                  <img class="card-img-top" src="{{ url_for('static', filename='images/' + cat.cat_pic ) }}">
-                </a>
-              </div>
+          {% for c in ctr %}
+            <div class="card country-card" id="{{c.id}}">
               <div class="card-body">
                 <h6 class="item-name">
-                  <a class="text-body" href="#">{{ cat }}</a>
+                  <a class="text-body" href="#">{{ c }}</a>
                 </h6>
               </div>
               <div class="item-options text-center">
-                <a class="btn btn-danger btn-cat" data="{{cat.id}}">
-                  <span class="del-cat" data={{cat.id}}>Delete</span>
+                <a class="btn btn-danger btn-ctr" data="{{c.id}}">
+                  <span class="del-ctr" data={{c.id}}>Delete</span>
                 </a>
               </div>
             </div>
@@ -130,7 +113,7 @@
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/admin/createCategories.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/createCountries.js') }}"></script>
 
 </body>
 

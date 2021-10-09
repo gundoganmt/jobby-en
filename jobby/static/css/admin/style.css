@@ -100,3 +100,48 @@
 .avatar-wrapper .upload-button:hover .fa-arrow-circle-up {
   opacity: .9;
 }
+
+.category-card{
+  margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: 100px 2fr 200px;
+}
+.card-img-top{
+  padding: 10px;
+  max-width: 100px;
+  height:80px;
+}
+
+.item-name{
+  margin-top: 10px;
+}
+
+.text-body {
+  font-weight: bold;
+}
+
+.btn-cat{
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.del-cat {
+  color: white;
+}
+
+.country-card{
+  margin-bottom: 15px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+}
+
+.btn-ctr{
+  margin-top: 20px;
+  cursor: pointer;
+  float: right;
+  margin-right: 100px;
+}
+
+.del-ctr {
+  color: white;
+}
