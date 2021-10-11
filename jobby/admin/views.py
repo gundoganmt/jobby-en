@@ -1,11 +1,12 @@
-from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort
+from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app
 from flask_login import current_user, login_required
-from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries,
-    Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations)
+from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig,
+    Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills)
 from jobby import db
 from PIL import Image
 from datetime import datetime
-from utils import crop_max_square, allowed_img_file, get_extension, UPLOAD_IMG_FOLDER
+from utils import (crop_max_square, allowed_img_file, get_extension,
+    UPLOAD_IMG_FOLDER, UPLOAD_TASK_FOLDER, allowed_offer_file, UPLOAD_OFFER_FOLDER)
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import os, uuid
@@ -33,13 +34,16 @@ def dbop(table, item_id):
         else:
             projects = Tasks.query.all()
             return render_template('admin/projectsTable.html', projects=projects)
-    elif table == 'email-settings':
-        return render_template('admin/email-settings.html')
+    elif table == 'site-settings':
+        return render_template('admin/site-settings.html')
     elif table == 'create-admin':
         return render_template('admin/create-admin.html')
     elif table == 'bids':
         bids = Bids.query.all()
         return render_template('admin/bidsTable.html', bids=bids)
+    elif table == 'offers':
+        offers = Offers.query.all()
+        return render_template('admin/offersTable.html', offers=offers)
     elif table == "messages":
         msgs = Messages.query.all()
         return render_template('admin/messagesTable.html', msgs=msgs)
@@ -58,14 +62,48 @@ def create(table):
         elif table == 'countries':
             ctr = Countries.query.all()
             return render_template('admin/createCountries.html', ctr=ctr)
+        elif table == 'skills':
+            sks = SkillsDb.query.all()
+            return render_template('admin/createSkills.html', sks=sks)
+        elif table == 'bids':
+            users = Users.query.filter_by(status='freelancer').all()
+            projects = Tasks.query.all()
+            return render_template('admin/createBids.html', users=users, projects=projects)
+        elif table == 'offers':
+            users = Users.query.all()
+            projects = Tasks.query.all()
+            return render_template('admin/createOffers.html', users=users, projects=projects)
         elif table == 'projects':
             ctrs = Categories.query.all()
-            return render_template('admin/createProjects.html', ctrs=ctrs)
+            lcts = Countries.query.all()
+            sks = SkillsDb.query.all()
+            users = Users.query.all()
+            return render_template('admin/createProjects.html', ctrs=ctrs, lcts=lcts, sks=sks, users=users)
         else:
             return abort(404), 404
     else:
         if table == 'messages':
-            return "success"
+            body = request.form['MessageBody']
+            sender = Users.query.filter_by(username=request.form['MessageSender']).first()
+            recipient = Users.query.filter_by(username=request.form['MessageRecipient']).first()
+
+            if sender == recipient:
+                flash("Sender and recipient cannot be same!", "error")
+                return redirect(request.url)
+
+            if not sender:
+                flash("Sender Not found!", "error")
+                return redirect(request.url)
+            if not recipient:
+                flash("Recipient Not found!", "error")
+                return redirect(request.url)
+            msg = Messages(sender=sender, recipient=recipient, body=body)
+
+            db.session.add(msg)
+            db.session.commit()
+            flash("Message Successfully Created!", "success")
+            return redirect(request.url)
+
         elif table == 'categories':
             category = request.form['category']
             if len(category) < 3 or len(category) > 150:
@@ -100,26 +138,180 @@ def create(table):
             db.session.add(ctr)
             db.session.commit()
             return redirect(request.url)
+        elif table == 'skills':
+            skill = request.form['skill']
+            if len(skill) == 0 or len(skill) > 100:
+                flash("skill length should be between 0 and 100")
+                return redirect(request.url)
+            sk = SkillsDb(skill=skill)
+            db.session.add(sk)
+            db.session.commit()
+            return redirect(request.url)
         elif table == 'projects':
-            project_name = request.form['project_name']
-            tags = request.form['tags']
+            project_name = request.form["project_name"].capitalize()
+            location = request.form["location"]
+            budget_min = request.form["budget_min"] or 0
+            budget_max = request.form["budget_max"] or 0
+            category = request.form["category"]
+            skills_list = request.form.getlist('skills')
+            description = request.form["description"]
+            poster = Users.query.filter_by(username=request.form['poster']).first()
+            if not poster:
+                flash("There is an error about project poster. Try again!", 'error')
+                return redirect(request.url)
+
+            if budget_min > budget_max:
+                flash("Budget min cannot exceed budget max. Try again!", 'error')
+                return redirect(request.url)
+
+            task = Tasks(project_name=project_name, location=location, budget_min=budget_min, time_posted=datetime.now(),
+                         is_active=True, budget_max=budget_max, category=category, description=description, user_id=poster.id)
+
             if 'file' in request.files:
                 file = request.files['file']
                 filename = file.filename
-            return "{}, {}, {}".format(project_name, tags, filename)
+                if allowed_img_file(filename):
+                    filename = secure_filename(filename)
+                    unique_filename = str(uuid.uuid4())+get_extension(filename)
+                    task.task_pic = unique_filename
+                    image = Image.open(file)
+                    i = crop_max_square(image).resize((356, 200), Image.LANCZOS)
+                    i.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename), quality=95)
+                else:
+                    flash('Allowed image files jpeg, png, jpg', 'error')
+                    return redirect(request.url)
+
+            db.session.add(task)
+            db.session.commit()
+
+            for skill in skills_list:
+                tskills = TaskSkills(skill=skill, task_id=task.id)
+                db.session.add(tskills)
+            db.session.commit()
+            flash("Project Successfully Created!", 'success')
+            return redirect(request.url)
+        elif table == 'bids':
+            bid_amount = request.form['bid_amount']
+            qtyInput = request.form['qtyInput']
+            qtyOption = request.form['qtyOption']
+            BidMessage = request.form['BidMessage']
+            bidder = Users.query.filter_by(username=request.form['ProjectBidder']).first()
+            bidded = Tasks.query.get(request.form['BiddedProject'])
+
+            if not bidder:
+                flash("User Not found!", "error")
+                return redirect(request.url)
+            if not bidded:
+                flash("Project Not found!", "error")
+                return redirect(request.url)
+
+            bid = Bids(bid_amount=bid_amount, num_delivery=qtyInput, type_delivery=qtyOption,
+                message=BidMessage, user_id=bidder.id, task_id=bidded.id)
+            notification = Notification(task_id=bidded.id, not_from=bidder.id, not_to=bidded.poster.id, not_type=1)
+            bidded.num_bids += 1
+            bidder.num_bids += 1
+            db.session.add(bid)
+            db.session.add(notification)
+            db.session.commit()
+            flash("Bid Successfully Created", "success")
+            return redirect(request.url)
+        elif table == 'offers':
+            subject = request.form['subject']
+            offeredTask = Tasks.query.get(request.form['offered_project'])
+            message = request.form['message']
+            offers = Users.query.filter_by(username=request.form['offerer']).first()
+            offered = Users.query.filter_by(username=request.form['offered']).first()
+
+            if offers == offered:
+                flash("Offerer and Offered cannot be same!", "error")
+                return redirect(request.url)
+
+            offer = Offers(offered=offered, offers=offers, offeredTask=offeredTask, subject=subject, message=message)
+
+            if 'file' in request.files:
+                file = request.files['file']
+                filename = file.filename
+                if allowed_offer_file(filename):
+                    filename = secure_filename(filename)
+                    unique_filename = str(uuid.uuid4())+get_extension(filename)
+                    offer.filename = unique_filename
+                    file.save(os.path.join(UPLOAD_OFFER_FOLDER, unique_filename))
+
+            notif = Notification(notification_from=offers, notification_to=offered, not_type=4)
+            db.session.add(offer)
+            db.session.add(notif)
+            db.session.commit()
+            flash('Offer succesfully Created!', "success")
+            return redirect(request.url)
+        elif table == 'emailSettings':
+            provider = request.form['ServisProvider']
+            mail_server = request.form['MailServer']
+            port = request.form['port']
+            if request.form['UseTLS'] == 'Yes':
+                use_TLS = True
+            else:
+                use_TLS = False
+            if request.form['UseSSL'] == 'Yes':
+                use_SSL = True
+            else:
+                use_SSL = False
+            username = request.form['username']
+            password = request.form['password']
+
+            config = db.session.query(MailConfig).first()
+            if not config:
+                config = MailConfig(provider=provider, mail_server=mail_server, use_SSL=use_SSL,
+                    port=port, use_TLS=use_TLS, username=username, password=password)
+
+                db.session.add(config)
+                db.session.commit()
+            else:
+                config.provider = provider
+                config.mail_server = mail_server
+                config.use_SSL = use_SSL
+                config.use_TLS = use_TLS
+                config.port = port
+                config.username = username
+                config.password = password
+
+                db.session.commit()
+
+            app = current_app._get_current_object()
+            app.config.update(
+                MAIL_SERVER=mail_server,
+                MAIL_PORT=port,
+                MAIL_USE_TLS = use_TLS,
+                MAIL_USERNAME = username,
+                MAIL_PASSWORD = password
+            )
+
+            flash("Record Updated Successfully!", "success")
+            return redirect(url_for('.dbop', table='site-settings'))
 
 @admin.route('/adminpanel/chart/<view_type>')
 def views(view_type):
     if view_type == 'users':
         users = Users.query.filter_by(status='freelancer').all()
         return render_template('admin/views.html', users=users)
+    elif view_type == 'projects':
+        projects = Tasks.query.all()
+        return render_template('admin/views.html', projects=projects)
 
 @admin.route('/user-view-data/<username>')
 def userViewData(username):
     user = Users.query.filter_by(username=username).first()
     views = Views.query.filter_by(user_id=user.id).first()
-    return jsonify({views.monday, views.tuesday, views.wednesday, views.thursday,
-        views.friday, views.saturday, views.sunday})
+    view_list = [views.monday, views.tuesday, views.wednesday, views.thursday,
+        views.friday, views.saturday, views.sunday]
+    return jsonify({'success': True, 'view_list': view_list})
+
+@admin.route('/project-view-data/<pro_id>')
+def projectViewData(pro_id):
+    project = Tasks.query.get(pro_id)
+    views = Views.query.filter_by(task_id=project.id).first()
+    view_list = [views.monday, views.tuesday, views.wednesday, views.thursday,
+        views.friday, views.saturday, views.sunday]
+    return jsonify({'success': True, 'view_list': view_list})
 
 @admin.route('/createUser', methods=['POST'])
 def createUser():
@@ -352,6 +544,19 @@ def deleteCtr(ctr_id):
     else:
         return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
 
+@admin.route('/del-sk/<ctr_id>')
+def deleteSk(ctr_id):
+    sk = SkillsDb.query.get(ctr_id)
+    if sk:
+        db.session.delete(sk)
+        db.session.commit()
+        return jsonify({'success': True})
+    else:
+        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+
 @admin.route('/delete-user/<user_id>')
 def deleteUser(user_id):
+    user = Users.query.get(user_id)
+    db.session.delete(user)
+    db.session.commit()
     return jsonify({'success': True})

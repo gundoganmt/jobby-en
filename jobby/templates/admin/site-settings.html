@@ -1,0 +1,410 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/logo/logo.png" rel="icon">
+  <title>RuangAdmin - DataTables</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        {% include 'admin/_navbar.html' %}
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+
+          <div class="row">
+            <div class="col-lg-12">
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category == 'error' %}
+                      <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        {{ message }}
+                      </div>
+                    {% else %}
+                      <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                        </button>
+                        {{ message }}
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+              <div class="card">
+                <div class="card-content">
+                  <div class="card-body">
+                    <ul class="nav nav-tabs mb-3" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center active" id="email-settings-tab" data-toggle="tab" href="#email-settings" aria-controls="email-settings" role="tab" aria-selected="true">
+                                <i class="fas fa-envelope-open-text mr-25"></i><span class="d-none d-sm-block">Email Settings</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" id="CreateAdmin-tab" data-toggle="tab" href="#CreateAdmin" aria-controls="CreateAdmin" role="tab" aria-selected="false">
+                                <i class="fas fa-user-shield mr-25"></i><span class="d-none d-sm-block">Create Admin</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" id="social-tab" data-toggle="tab" href="#social" aria-controls="social" role="tab" aria-selected="false">
+                                <i class="feather icon-share-2 mr-25"></i><span class="d-none d-sm-block">Social</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="email-settings" aria-labelledby="email-settings-tab" role="tabpanel">
+                          <!-- users edit account form start -->
+                          <form method="post" action="{{ url_for('admin.create', table='emailSettings') }}" class="validate-form mt-2 pt-50">
+                            <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <div class="row">
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="ServisProvider">Select Driver*</label>
+                                <select class="form-control" id="ServisProvider" name="ServisProvider" title="Select Driver" required>
+                                  <option>Zoho</option>
+                                  <option>SendGrid</option>
+                                  <option>MailTrap</option>
+                                  <option>Gmail</option>
+                                </select>
+                              </div>
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="MailServer">Mail Server</label>
+                                <input type="text" class="form-control" id="MailServer" name="MailServer" placeholder="Mail Server" required>
+                              </div>
+                              <div class="col-12 col-sm-4 mb-1">
+                                <label class="form-label" for="Port">Port</label>
+                                <input type="number" class="form-control" id="port" name="port" placeholder="Port" required>
+                              </div>
+                              <div class="col-12 col-sm-4 mb-1">
+                                <label class="form-label" for="UseTLS">Use TLS</label>
+                                <select class="form-control" id="UseTLS" name="UseTLS" required>
+                                  <option>Yes</option>
+                                  <option>No</option>
+                                </select>
+                              </div>
+                              <div class="col-12 col-sm-4 mb-1">
+                                <label class="form-label" for="UseSSL">Use SSL</label>
+                                <select class="form-control" id="UseSSL" name="UseSSL" required>
+                                  <option>Yes</option>
+                                  <option>No</option>
+                                </select>
+                              </div>
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                              </div>
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="password">Password</label>
+                                <input type="text" class="form-control" id="password" name="password" placeholder="Password" required>
+                              </div>
+                              <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                  <button type="submit" class="btn btn-primary mr-sm-1">Save Changes</button>
+                                  <button type="reset" class="btn btn-outline-warning">Reset</button>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- users edit account form ends -->
+                        </div>
+                        <div class="tab-pane" id="CreateAdmin" aria-labelledby="CreateAdmin-tab" role="tabpanel">
+                            <!-- users edit Info form start -->
+                            <form novalidate="">
+                                <div class="row mt-1">
+                                    <div class="col-12 col-sm-6">
+                                        <h5 class="mb-1"><i class="feather icon-user mr-25"></i>Personal Information</h5>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <div class="controls">
+                                                        <label>Birth date</label>
+                                                        <input type="text" class="form-control birthdate-picker picker__input" required="" placeholder="Birth date" data-validation-required-message="This birthdate field is required" readonly="" id="P1358671390" aria-haspopup="true" aria-readonly="false" aria-owns="P1358671390_root"><div class="picker" id="P1358671390_root" aria-hidden="true"><div class="picker__holder" tabindex="-1"><div class="picker__frame"><div class="picker__wrap"><div class="picker__box"><div class="picker__header"><div class="picker__month">October</div><div class="picker__year">2021</div><div class="picker__nav--prev" data-nav="-1" tabindex="0" role="button" aria-controls="P1358671390_table" title="Previous month"> </div><div class="picker__nav--next" data-nav="1" tabindex="0" role="button" aria-controls="P1358671390_table" title="Next month"> </div></div><table class="picker__table" id="P1358671390_table" role="grid" aria-controls="P1358671390" aria-readonly="true"><thead><tr><th class="picker__weekday" scope="col" title="Sunday">Sun</th><th class="picker__weekday" scope="col" title="Monday">Mon</th><th class="picker__weekday" scope="col" title="Tuesday">Tue</th><th class="picker__weekday" scope="col" title="Wednesday">Wed</th><th class="picker__weekday" scope="col" title="Thursday">Thu</th><th class="picker__weekday" scope="col" title="Friday">Fri</th><th class="picker__weekday" scope="col" title="Saturday">Sat</th></tr></thead><tbody><tr><td><div class="picker__day picker__day--outfocus" data-pick="1632603600000" id="P1358671390_1632603600000" tabindex="0" role="gridcell" aria-label="September, 26, 2021">26</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1632690000000" id="P1358671390_1632690000000" tabindex="0" role="gridcell" aria-label="September, 27, 2021">27</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1632776400000" id="P1358671390_1632776400000" tabindex="0" role="gridcell" aria-label="September, 28, 2021">28</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1632862800000" id="P1358671390_1632862800000" tabindex="0" role="gridcell" aria-label="September, 29, 2021">29</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1632949200000" id="P1358671390_1632949200000" tabindex="0" role="gridcell" aria-label="September, 30, 2021">30</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633035600000" id="P1358671390_1633035600000" tabindex="0" role="gridcell" aria-label="October, 1, 2021">1</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633122000000" id="P1358671390_1633122000000" tabindex="0" role="gridcell" aria-label="October, 2, 2021">2</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1633208400000" id="P1358671390_1633208400000" tabindex="0" role="gridcell" aria-label="October, 3, 2021">3</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633294800000" id="P1358671390_1633294800000" tabindex="0" role="gridcell" aria-label="October, 4, 2021">4</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633381200000" id="P1358671390_1633381200000" tabindex="0" role="gridcell" aria-label="October, 5, 2021">5</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633467600000" id="P1358671390_1633467600000" tabindex="0" role="gridcell" aria-label="October, 6, 2021">6</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633554000000" id="P1358671390_1633554000000" tabindex="0" role="gridcell" aria-label="October, 7, 2021">7</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633640400000" id="P1358671390_1633640400000" tabindex="0" role="gridcell" aria-label="October, 8, 2021">8</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633726800000" id="P1358671390_1633726800000" tabindex="0" role="gridcell" aria-label="October, 9, 2021">9</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1633813200000" id="P1358671390_1633813200000" tabindex="0" role="gridcell" aria-label="October, 10, 2021">10</div></td><td><div class="picker__day picker__day--infocus picker__day--today picker__day--highlighted" data-pick="1633899600000" id="P1358671390_1633899600000" tabindex="0" role="gridcell" aria-label="October, 11, 2021" aria-activedescendant="1633899600000">11</div></td><td><div class="picker__day picker__day--infocus" data-pick="1633986000000" id="P1358671390_1633986000000" tabindex="0" role="gridcell" aria-label="October, 12, 2021">12</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634072400000" id="P1358671390_1634072400000" tabindex="0" role="gridcell" aria-label="October, 13, 2021">13</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634158800000" id="P1358671390_1634158800000" tabindex="0" role="gridcell" aria-label="October, 14, 2021">14</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634245200000" id="P1358671390_1634245200000" tabindex="0" role="gridcell" aria-label="October, 15, 2021">15</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634331600000" id="P1358671390_1634331600000" tabindex="0" role="gridcell" aria-label="October, 16, 2021">16</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1634418000000" id="P1358671390_1634418000000" tabindex="0" role="gridcell" aria-label="October, 17, 2021">17</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634504400000" id="P1358671390_1634504400000" tabindex="0" role="gridcell" aria-label="October, 18, 2021">18</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634590800000" id="P1358671390_1634590800000" tabindex="0" role="gridcell" aria-label="October, 19, 2021">19</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634677200000" id="P1358671390_1634677200000" tabindex="0" role="gridcell" aria-label="October, 20, 2021">20</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634763600000" id="P1358671390_1634763600000" tabindex="0" role="gridcell" aria-label="October, 21, 2021">21</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634850000000" id="P1358671390_1634850000000" tabindex="0" role="gridcell" aria-label="October, 22, 2021">22</div></td><td><div class="picker__day picker__day--infocus" data-pick="1634936400000" id="P1358671390_1634936400000" tabindex="0" role="gridcell" aria-label="October, 23, 2021">23</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1635022800000" id="P1358671390_1635022800000" tabindex="0" role="gridcell" aria-label="October, 24, 2021">24</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635109200000" id="P1358671390_1635109200000" tabindex="0" role="gridcell" aria-label="October, 25, 2021">25</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635195600000" id="P1358671390_1635195600000" tabindex="0" role="gridcell" aria-label="October, 26, 2021">26</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635282000000" id="P1358671390_1635282000000" tabindex="0" role="gridcell" aria-label="October, 27, 2021">27</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635368400000" id="P1358671390_1635368400000" tabindex="0" role="gridcell" aria-label="October, 28, 2021">28</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635454800000" id="P1358671390_1635454800000" tabindex="0" role="gridcell" aria-label="October, 29, 2021">29</div></td><td><div class="picker__day picker__day--infocus" data-pick="1635541200000" id="P1358671390_1635541200000" tabindex="0" role="gridcell" aria-label="October, 30, 2021">30</div></td></tr><tr><td><div class="picker__day picker__day--infocus" data-pick="1635627600000" id="P1358671390_1635627600000" tabindex="0" role="gridcell" aria-label="October, 31, 2021">31</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1635714000000" id="P1358671390_1635714000000" tabindex="0" role="gridcell" aria-label="November, 1, 2021">1</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1635800400000" id="P1358671390_1635800400000" tabindex="0" role="gridcell" aria-label="November, 2, 2021">2</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1635886800000" id="P1358671390_1635886800000" tabindex="0" role="gridcell" aria-label="November, 3, 2021">3</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1635973200000" id="P1358671390_1635973200000" tabindex="0" role="gridcell" aria-label="November, 4, 2021">4</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1636059600000" id="P1358671390_1636059600000" tabindex="0" role="gridcell" aria-label="November, 5, 2021">5</div></td><td><div class="picker__day picker__day--outfocus" data-pick="1636146000000" id="P1358671390_1636146000000" tabindex="0" role="gridcell" aria-label="November, 6, 2021">6</div></td></tr></tbody></table><div class="picker__footer"><button class="picker__button--today" type="button" data-pick="1633899600000" disabled="" aria-controls="P1358671390">Today</button><button class="picker__button--clear" type="button" data-clear="1" disabled="" aria-controls="P1358671390">Clear</button><button class="picker__button--close" type="button" data-close="true" disabled="" aria-controls="P1358671390">Close</button></div></div></div></div></div></div>
+                                                    <div class="help-block"></div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Mobile</label>
+                                                <input type="text" class="form-control" value="+6595895857" placeholder="Mobile number here..." data-validation-required-message="This mobile number is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Website</label>
+                                                <input type="text" class="form-control" required="" placeholder="Website here..." value="https://rowboat.com/insititious/Angelo" data-validation-required-message="This Website field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Languages</label>
+                                            <select class="form-control select2-hidden-accessible" id="users-language-select2" multiple="" data-select2-id="users-language-select2" tabindex="-1" aria-hidden="true">
+                                                <option value="English" selected="" data-select2-id="2">English</option>
+                                                <option value="Spanish">Spanish</option>
+                                                <option value="French">French</option>
+                                                <option value="Russian">Russian</option>
+                                                <option value="German">German</option>
+                                                <option value="Arabic" selected="" data-select2-id="3">Arabic</option>
+                                                <option value="Sanskrit">Sanskrit</option>
+                                            </select><span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="1" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered"><li class="select2-selection__choice" title="English" data-select2-id="4"><span class="select2-selection__choice__remove" role="presentation">×</span>English</li><li class="select2-selection__choice" title="Arabic" data-select2-id="5"><span class="select2-selection__choice__remove" role="presentation">×</span>Arabic</li><li class="select2-search select2-search--inline"><input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" placeholder="" style="width: 0.75em;"></li></ul></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Gender</label>
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="vs-radio-con">
+                                                            <input type="radio" name="vueradio" checked="" value="false">
+                                                            <span class="vs-radio">
+                                                                <span class="vs-radio--border"></span>
+                                                                <span class="vs-radio--circle"></span>
+                                                            </span>
+                                                            Male
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="vs-radio-con">
+                                                            <input type="radio" name="vueradio" value="false">
+                                                            <span class="vs-radio">
+                                                                <span class="vs-radio--border"></span>
+                                                                <span class="vs-radio--circle"></span>
+                                                            </span>
+                                                            Female
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="vs-radio-con">
+                                                            <input type="radio" name="vueradio" value="false">
+                                                            <span class="vs-radio">
+                                                                <span class="vs-radio--border"></span>
+                                                                <span class="vs-radio--circle"></span>
+                                                            </span>
+                                                            Other
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact Options</label>
+                                            <ul class="list-unstyled mb-0">
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" checked="" name="customCheck1" id="customCheck1">
+                                                            <label class="custom-control-label" for="customCheck1">Email</label>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" checked="" name="customCheck2" id="customCheck2">
+                                                            <label class="custom-control-label" for="customCheck2">Message</label>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+                                                <li class="d-inline-block mr-2">
+                                                    <fieldset>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" name="customCheck3" id="customCheck3">
+                                                            <label class="custom-control-label" for="customCheck3">Phone</label>
+                                                        </div>
+                                                    </fieldset>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <h5 class="mb-1 mt-2 mt-sm-0"><i class="feather icon-map-pin mr-25"></i>Address</h5>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Address Line 1</label>
+                                                <input type="text" class="form-control" value="A-65, Belvedere Streets" required="" placeholder="Address Line 1" data-validation-required-message="This Address field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Address Line 2</label>
+                                                <input type="text" class="form-control" required="" placeholder="Address Line 2" data-validation-required-message="This Address field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Postcode</label>
+                                                <input type="text" class="form-control" required="" placeholder="postcode" value="1868" data-validation-required-message="This Postcode field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>City</label>
+                                                <input type="text" class="form-control" required="" value="New York" data-validation-required-message="This Time Zone field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>State</label>
+                                                <input type="text" class="form-control" required="" value="New York" data-validation-required-message="This Time Zone field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="controls">
+                                                <label>Country</label>
+                                                <input type="text" class="form-control" required="" value="United Kingdom" data-validation-required-message="This Time Zone field is required">
+                                            <div class="help-block"></div></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light">Save
+                                            Changes</button>
+                                        <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- users edit Info form ends -->
+                        </div>
+                        <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
+                            <!-- users edit socail form start -->
+                            <form novalidate="">
+                                <div class="row">
+                                    <div class="col-12 col-sm-6">
+
+                                        <fieldset>
+                                            <label>Twitter</label>
+                                            <div class="input-group mb-75">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text feather icon-twitter" id="basic-addon3"></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="https://www.twitter.com/adoptionism744" placeholder="https://www.twitter.com/" aria-describedby="basic-addon3">
+                                            </div>
+
+                                            <label>Facebook</label>
+                                            <div class="input-group mb-75">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text feather icon-facebook" id="basic-addon4"></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="https://www.facebook.com/adoptionism664" placeholder="https://www.facebook.com/" aria-describedby="basic-addon4">
+                                            </div>
+                                            <label>Instagram</label>
+                                            <div class="input-group mb-75">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text feather icon-instagram" id="basic-addon5"></span>
+                                                </div>
+                                                <input type="text" class="form-control" value="https://www.instagram.com/adopt-ionism744" placeholder="https://www.instagram.com/" aria-describedby="basic-addon5">
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-12 col-sm-6">
+                                        <label>Github</label>
+                                        <div class="input-group mb-75">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text feather icon-github" id="basic-addon9"></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="https://www.github.com/madop818" placeholder="https://www.github.com/" aria-describedby="basic-addon9">
+                                        </div>
+                                        <label>Codepen</label>
+                                        <div class="input-group mb-75">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text feather icon-codepen" id="basic-addon12"></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="https://www.codepen.com/adoptism243" placeholder="https://www.codepen.com/" aria-describedby="basic-addon12">
+                                        </div>
+                                        <label>Slack</label>
+                                        <div class="input-group mb-75">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text feather icon-slack" id="basic-addon11"></span>
+                                            </div>
+                                            <input type="text" class="form-control" value="@adoptionism744" placeholder="https://www.slack.com/" aria-describedby="basic-addon11">
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light">Save
+                                            Changes</button>
+                                        <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- users edit socail form ends -->
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                  <a href="login.html" class="btn btn-primary">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <!-- Page level plugins -->
+  <script src="{{ url_for('static', filename='js/admin/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/dataTables.bootstrap4.min.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script>
+    $(document).ready(function () {
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+  </script>
+
+</body>
+
+</html>

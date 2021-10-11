@@ -410,6 +410,20 @@ class Educations(db.Model):
     def __repr__(self):
         return self.field
 
+class MailConfig(db.Model):
+    __tablename__ = "MailConfig"
+    id = db.Column(db.Integer, primary_key=True)
+    provider = db.Column(db.String(50), nullable=False)
+    mail_server = db.Column(db.String(100), nullable=False)
+    use_SSL = db.Column(db.Boolean, default=True)
+    use_TLS = db.Column(db.Boolean, default=False)
+    port = db.Column(db.Integer, nullable=False)
+    username = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
+    def __repr__(self):
+        return self.provider
+
 class Skills(db.Model):
     __tablename__ = 'Skills'
     id = db.Column(db.Integer, primary_key=True)
@@ -425,6 +439,14 @@ class TaskSkills(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     skill = db.Column(db.String(50), nullable=False)
     task_id = db.Column(db.Integer, db.ForeignKey('Tasks.id'))
+
+    def __repr__(self):
+        return self.skill
+
+class SkillsDb(db.Model):
+    __tablename__ = 'SkillsDb'
+    id = db.Column(db.Integer, primary_key=True)
+    skill = db.Column(db.String(50), nullable=False)
 
     def __repr__(self):
         return self.skill

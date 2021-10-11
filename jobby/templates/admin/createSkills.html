@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/logo/logo.png" rel="icon">
+  <title>RuangAdmin - DataTables</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        {% include 'admin/_navbar.html' %}
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+          <div class="row">
+            <div class="col-lg-12">
+              {% for message in get_flashed_messages() %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                  {{ message }}
+                </div>
+  			      {% endfor %}
+              <div class="card mb-4">
+                <div class="card-header border-bottom">
+                  <h4>Create Skills</h4>
+                </div>
+                <div class="card-body py-2 my-25">
+                  <!-- form -->
+                  <form method="post" action="{{ url_for('admin.create', table='skills') }}">
+                    <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <div class="row mb-3">
+        							<div class="col-md-10">
+                        <div class="form-label">Skill</div>
+                        <input type="text" class="form-control" id="skill" name="skill" placeholder="Skill">
+        							</div>
+        							<div class="col-md-2">
+                        <div class="form-label">&nbsp</div>
+                        <button type="submit" class="btn btn-primary mt-1 me-1 saveSkill">Create</button>
+        							</div>
+        						</div>
+                  </form>
+                  <!--/ form -->
+                </div>
+              </div>
+            </div>
+          </div>
+          {% for s in sks %}
+            <div class="card country-card" id="{{s.id}}">
+              <div class="card-body">
+                <h6 class="item-name">
+                  <a class="text-body" href="#">{{ s }}</a>
+                </h6>
+              </div>
+              <div class="item-options text-center">
+                <a class="btn btn-danger btn-ctr" data="{{s.id}}">
+                  <span class="del-ctr" data={{s.id}}>Delete</span>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="ModalLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ModalLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                  <a href="login.html" class="btn btn-primary">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/createSkills.js') }}"></script>
+
+</body>
+
+</html>

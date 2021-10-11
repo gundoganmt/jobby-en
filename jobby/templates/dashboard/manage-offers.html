@@ -100,7 +100,7 @@
 														<a href="#small-dialog-1"  name="acceptOffer" data="{{offer.id}}" class="popup-with-zoom-anim button ripple-effect"><i class="icon-material-outline-check"></i> Accept</a>
 														<a href="#small-dialog-2" name="sendMessage" data="{{ offer.offers.id }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Send Message</a>
 														{% if offer.offeredTask %}
-														<a href="{{ url_for('public.task_page', task_url=offer.offeredTask.generate_task_link()) }}" class="popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-globe"></i> Project Details</a>
+														<a href="{{ url_for('public.task_page', task_url=offer.offeredTask.generate_task_link()) }}" class="button dark" target="_blank"><i class="icon-feather-globe"></i> Project Details</a>
 														{% endif %}
 														{% if offer.filename %}
 															<a href="{{ url_for('manage.download', filename=offer.filename)}}" data="{{offer.filename}}" class="button ripple-effect"><i class="icon-feather-file-text"></i> Download file</a>

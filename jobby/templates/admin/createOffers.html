@@ -54,106 +54,72 @@
               {% endwith %}
               <div class="card mb-4">
                 <div class="card-header border-bottom">
-                  <h5 style="margin-top: 10px;">Create Project</h5>
+                  <h5 style="margin-top: 10px;">Create Offer</h5>
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form method="post" action="{{ url_for('admin.create', table='projects') }}" enctype="multipart/form-data">
+                  <form method="post" action="{{ url_for('admin.create', table='offers') }}" enctype="multipart/form-data">
                     <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row">
-                      <div class="col-12 col-sm-4">
+                      <div class="col-12 col-sm-6">
                         <div class="form-group">
                             <div class="controls">
-                                <label>Project Name</label>
-                                <input type="text" class="form-control" name="project_name" placeholder="Project Name" id="project_name" required>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-4">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>Category</label>
-                                <select class="form-control" id="category" name="category" title="Select Category" data-live-search="true" data-style="btn-outline-light" required>
-                                  {% for ctr in ctrs %}
-                                    <option>{{ ctr }}</option>
-                                  {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-4">
-                        <div class="form-group">
-                            <div class="controls">
-                                <label>Location</label>
-                                <select class="form-control" id="location" name="location" title="Select Location" data-style="btn-outline-light" data-live-search="true" required>
-                                  {% for lct in lcts %}
-                                    <option>{{ lct }}</option>
-                                  {% endfor %}
-                                </select>
+                                <label>Subject</label>
+                                <input type="text" class="form-control" name="subject" placeholder="Subject" id="subject" required>
                             </div>
                         </div>
                       </div>
                       <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Budget Min</label>
-                                    <input type='number' class="form-control" name="budget_min" placeholder="Budget Min" id="budget_min"/>
-                                </div>
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Choose Project</label>
+                                <select class="form-control" id="offered_project" name="offered_project" title="Choose Project" data-live-search="true" data-style="btn-outline-light" required>
+                                  {% for project in projects %}
+                                    <option value="{{project.id}}">{{ project }}</option>
+                                  {% endfor %}
+                                </select>
                             </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Budget Max</label>
-                                    <input type='number' class="form-control" name="budget_max" placeholder="Budget Max" id="budget_max"/>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-12 col-sm-6">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                                <div class="controls">
-                                    <label>Skills Required</label>
-                                    <select class="form-control" name="skills" id="skills" title="Select Skill" multiple="multiple" data-style="btn-outline-light" data-live-search="true" data-max-options="5" required>
-                                      {% for sk in sks %}
-                                        <option>{{ sk }}</option>
-                                      {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
                       <div class="col-12">
                         <div class="form-group">
-                          <label>Description</label>
-                          <textarea class="form-control" name="description" id="description" rows="5" placeholder="Comment.." required></textarea>
+                          <label>Message</label>
+                          <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message.." required></textarea>
                         </div>
                       </div>
-                      <div class="col-12 col-sm-6">
-                        <label>Project Poster</label>
+                      <div class="col-12 col-sm-4">
+                        <label>Upload File</label>
                         <div class="form-group">
                           <div class="input-group shadow">
                             <span class="input-group-text px-3 text-muted"><i class="fas fa-image fa-lg"></i></span>
                             <input type="file" name="file" class="d-none file-upload">
-                            <input type="text" class="form-control upload-file" placeholder="Upload Image">
+                            <input type="text" class="form-control upload-file" placeholder="Upload Image" accept=".pdf, .doc, .docx">
                             <button class="browse btn btn-primary" type="button"><i class="fas fa-image"></i> Browse</button>
                           </div>
                         </div>
 
                       </div>
-                      <div class="col">
+                      <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <div class="controls">
-                                <label>Project Poster</label>
-                                <select class="form-control" id="poster" name="poster" title="Choose Project Poster" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
+                                <label>Offerer</label>
+                                <select class="form-control" id="offerer" name="offerer" title="Choose Offerer" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
                                   {% for usr in users %}
                                     <option>{{ usr }}</option>
+                                  {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-4">
+                        <div class="form-group">
+                            <div class="controls">
+                                <label>Offered</label>
+                                <select class="form-control" id="offered" name="offered" title="Choose Offered" data-style="btn-outline-light" data-live-search="true" required>
+                                  {% for usr in users %}
+                                    {% if usr.status=='freelancer' %}
+                                      <option>{{ usr }}</option>
+                                    {% endif %}
                                   {% endfor %}
                                 </select>
                             </div>

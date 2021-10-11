@@ -1,134 +1,93 @@
 $(document).ready(function () {
   // Set new default font family and font color to mimic Bootstrap's default styling
-  Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-  Chart.defaults.global.defaultFontColor = '#858796';
+  Chart.defaults.global.defaultFontFamily = "Nunito";
+  Chart.defaults.global.defaultFontColor = '#888';
+  Chart.defaults.global.defaultFontSize = '14';
 
-  function number_format(number, decimals, dec_point, thousands_sep) {
-    // *     example: number_format(1234.56, 2, ',', ' ');
-    // *     return: '1 234,56'
-    number = (number + '').replace(',', '').replace(' ', '');
-    var n = !isFinite(+number) ? 0 : +number,
-      prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
-      sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-      dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-      s = '',
-      toFixedFix = function(n, prec) {
-        var k = Math.pow(10, prec);
-        return '' + Math.round(n * k) / k;
-      };
-    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
-    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
-    if (s[0].length > 3) {
-      s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
-    }
-    if ((s[1] || '').length < prec) {
-      s[1] = s[1] || '';
-      s[1] += new Array(prec - s[1].length + 1).join('0');
-    }
-    return s.join(dec);
-  }
+  var ctx = document.getElementById('myAreaChart').getContext('2d');
 
-  // Area Chart Example
-  var ctx = document.getElementById("myAreaChart");
   var myLineChart = new Chart(ctx, {
     type: 'line',
+
+    // The data for our dataset
     data: {
       labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-      datasets: [{
-        label: "Earnings",
-        lineTension: 0.3,
-        backgroundColor: "rgba(78, 115, 223, 0.5)",
-        borderColor: "rgba(78, 115, 223, 1)",
-        pointRadius: 3,
-        pointBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointBorderColor: "rgba(78, 115, 223, 1)",
-        pointHoverRadius: 3,
-        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
-        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+      // Information about the dataset
+        datasets: [{
+        label: "Views",
+        backgroundColor: 'rgba(42,65,232,0.08)',
+        borderColor: '#2a41e8',
+        borderWidth: "3",
+        data: [0, 0, 0, 0, 0, 0, 0],
+        pointRadius: 5,
+        pointHoverRadius:5,
         pointHitRadius: 10,
-        pointBorderWidth: 2,
-        data: [0, 10000, 5000, 15000, 10000, 20000, 15000],
-      }],
+        pointBackgroundColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointBorderWidth: "2",
+      }]
     },
-    options: {
-      maintainAspectRatio: false,
-      layout: {
-        padding: {
-          left: 10,
-          right: 25,
-          top: 25,
-          bottom: 0
-        }
-      },
-      scales: {
-        xAxes: [{
-          time: {
-            unit: 'date'
-          },
-          gridLines: {
-            display: false,
-            drawBorder: false
-          },
-          ticks: {
-            maxTicksLimit: 7
-          }
-        }],
-        yAxes: [{
-          ticks: {
-            maxTicksLimit: 5,
-            padding: 10,
-            // Include a dollar sign in the ticks
-            callback: function(value, index, values) {
-              return '$' + number_format(value);
-            }
-          },
-          gridLines: {
-            color: "rgb(234, 236, 244)",
-            zeroLineColor: "rgb(234, 236, 244)",
-            drawBorder: false,
-            borderDash: [2],
-            zeroLineBorderDash: [2]
-          }
-        }],
-      },
-      legend: {
-        display: false
-      },
-      tooltips: {
-        backgroundColor: "rgb(255,255,255)",
-        bodyFontColor: "#858796",
-        titleMarginBottom: 10,
-        titleFontColor: '#6e707e',
-        titleFontSize: 14,
-        borderColor: '#dddfeb',
-        borderWidth: 1,
-        xPadding: 15,
-        yPadding: 15,
-        displayColors: false,
-        intersect: false,
-        mode: 'index',
-        caretPadding: 10,
-        callbacks: {
-          label: function(tooltipItem, chart) {
-            var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-            return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
-          }
-        }
-      }
-    }
-  });
 
-  $('#userView').on('change', function(e){
+    // Configuration options
+    options: {
+
+        layout: {
+          padding: 10,
+        },
+
+      legend: { display: false },
+      title:  { display: false },
+
+      scales: {
+        yAxes: [{
+          scaleLabel: {
+            display: false
+          },
+          gridLines: {
+             borderDash: [6, 10],
+             color: "#d8d8d8",
+             lineWidth: 1,
+                },
+        }],
+        xAxes: [{
+          scaleLabel: { display: false },
+          gridLines:  { display: false },
+        }],
+      },
+
+        tooltips: {
+          backgroundColor: '#333',
+          titleFontSize: 13,
+          titleFontColor: '#fff',
+          bodyFontColor: '#fff',
+          bodyFontSize: 13,
+          displayColors: false,
+          xPadding: 10,
+          yPadding: 10,
+          intersect: false
+        }
+    },
+});
+
+  $('#dataView').on('change', function(e){
     const xhr = new XMLHttpRequest();
-    var username = $(this).val();
-    var url = '/get-view-data/' + username;
+    var view_type = $(this).attr('data');
+    if (view_type == "userView") {
+      var username = $(this).val();
+      var url = '/user-view-data/' + username;
+    }
+    else if (view_type == "projectView") {
+      var project_id = $(this).val();
+      var url = '/project-view-data/' + project_id;
+    }
 
     xhr.open('GET', url);
     xhr.onload = () => {
       if (xhr.status == 200){
         const result = JSON.parse(xhr.responseText);
         if (result.success) {
-          $('#'+user_id).hide('slow', function(){ $('#'+user_id).remove(); });
+          myLineChart.data.datasets[0].data = result.view_list;
+          myLineChart.update();
         }
       }
     }
