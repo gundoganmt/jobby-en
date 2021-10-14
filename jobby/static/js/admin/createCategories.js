@@ -27,15 +27,15 @@ document.addEventListener('DOMContentLoaded', () =>{
   function deleteCat(e){
  		if (e.target.matches('.btn-cat') || e.target.matches('.del-cat')){
       const request = new XMLHttpRequest();
-      var cat_id = $(e.target).attr('data');
-      var url = '/del-cat/' + cat_id;
+      var type_id = $(e.target).attr('data');
+      var url = '/deleteItem/' + type_id;
       request.open('GET', url);
 
       request.onload = () =>{
         if (request.status == 200){
           const result = JSON.parse(request.responseText);
           if (result.success) {
-            var cat_item = document.getElementById(cat_id);
+            var cat_item = document.getElementById(type_id);
             cat_item.parentNode.removeChild(cat_item);
           }
           else {

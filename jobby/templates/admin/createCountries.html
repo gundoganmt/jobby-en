@@ -62,15 +62,15 @@
             </div>
           </div>
           {% for c in ctr %}
-            <div class="card country-card" id="{{c.id}}">
+            <div class="card country-card" id="ctr_{{c.id}}">
               <div class="card-body">
                 <h6 class="item-name">
                   <a class="text-body" href="#">{{ c }}</a>
                 </h6>
               </div>
               <div class="item-options text-center">
-                <a class="btn btn-danger btn-ctr" data="{{c.id}}">
-                  <span class="del-ctr" data={{c.id}}>Delete</span>
+                <a class="btn btn-danger btn-ctr" data="ctr_{{c.id}}">
+                  <span class="del-ctr" data=ctr_{{c.id}}>Delete</span>
                 </a>
               </div>
             </div>

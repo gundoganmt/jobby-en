@@ -62,15 +62,15 @@
             </div>
           </div>
           {% for s in sks %}
-            <div class="card country-card" id="{{s.id}}">
+            <div class="card country-card" id="sk_{{s.id}}">
               <div class="card-body">
                 <h6 class="item-name">
                   <a class="text-body" href="#">{{ s }}</a>
                 </h6>
               </div>
               <div class="item-options text-center">
-                <a class="btn btn-danger btn-ctr" data="{{s.id}}">
-                  <span class="del-ctr" data={{s.id}}>Delete</span>
+                <a class="btn btn-danger btn-sk" data="sk_{{s.id}}">
+                  <span class="del-sk" data=sk_{{s.id}}>Delete</span>
                 </a>
               </div>
             </div>

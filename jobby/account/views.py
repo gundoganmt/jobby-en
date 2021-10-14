@@ -1,6 +1,6 @@
-from flask import render_template, request, Blueprint, redirect, url_for, flash, abort
+from flask import render_template, request, Blueprint, redirect, url_for, flash, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from jobby.models import Users, Notification
+from jobby.models import Users, Notification, Admin
 from datetime import datetime
 from jobby import db, login_manager
 from flask_login import login_user, logout_user, login_required, current_user
@@ -10,10 +10,16 @@ account = Blueprint('account',__name__)
 
 @login_manager.user_loader
 def load_user(id):
-    return Users.query.get(int(id))
+    if session['login_type'] == 'Admin':
+        return Admin.query.get(int(id))
+    elif session['login_type'] == 'Users':
+        return Users.query.get(int(id))
+    else:
+        return None
 
 @account.route('/login', methods=['GET', 'POST'])
 def login():
+    session['login_type'] = 'Users'
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
@@ -85,9 +91,33 @@ def confirm_email(token):
     flash('Your email address has been confirmed!')
     return render_template('dashboard/dashboard.html')
 
+@account.route('/adminlogin', methods=['GET', 'POST'])
+def adminlogin():
+    session['login_type'] = 'Admin'
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['adminpassword']
+
+        admin = Admin.query.filter_by(username=username).first()
+        if admin:
+            if check_password_hash(admin.password, password):
+                login_user(admin)
+                return redirect(url_for('admin.adminpanel'))
+            else:
+                flash('Wrong Credentials! Try Again')
+                return render_template('admin/adminlogin.html')
+        else:
+            flash('Wrong Credentials! Check your spelling.')
+            return render_template('admin/adminlogin.html')
+
+    return render_template('admin/adminlogin.html')
 
 @account.route('/logout')
 @login_required
 def logout():
+    if session['login_type'] == 'Users':
+        session.pop('login_type', None)
+    elif session['login_type'] == 'Admin':
+        session.pop('login_type', None)
     logout_user()
     return redirect(url_for('public.index'))

@@ -1,8 +1,10 @@
 import os
 from flask_mail import Message
+from flask_login import current_user
 from threading import Thread
-from flask import current_app, render_template
+from flask import current_app, render_template, abort, url_for, redirect
 from flask_mail import Mail
+from functools import wraps
 mail = Mail()
 
 def send_async_email(app, msg):
@@ -58,6 +60,21 @@ def crop_center(pil_img, crop_width, crop_height):
 
 def crop_max_square(pil_img):
     return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
+
+def admin_required():
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            if current_user.is_authenticated:
+                try:
+                    if current_user.is_admin:
+                        return fn(*args, **kwargs)
+                except:
+                    abort(404), 404
+            return redirect(url_for('account.adminlogin'))
+        return decorator
+    return wrapper
+
 
 def get_category(categor_num):
     categories = {

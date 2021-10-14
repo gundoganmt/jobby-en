@@ -10,18 +10,18 @@ document.addEventListener('DOMContentLoaded', () =>{
 
   document.addEventListener('click', deleteSk);
   function deleteSk(e){
- 		if (e.target.matches('.btn-ctr') || e.target.matches('.del-ctr')){
+ 		if (e.target.matches('.btn-sk') || e.target.matches('.del-sk')){
       const request = new XMLHttpRequest();
-      var ctr_id = $(e.target).attr('data');
-      var url = '/del-sk/' + ctr_id;
+      var type_id = $(e.target).attr('data');
+      var url = '/deleteItem/' + type_id;
       request.open('GET', url);
 
       request.onload = () =>{
         if (request.status == 200){
           const result = JSON.parse(request.responseText);
           if (result.success) {
-            var ctr_item = document.getElementById(ctr_id);
-            ctr_item.parentNode.removeChild(ctr_item);
+            var sk_item = document.getElementById(type_id);
+            sk_item.parentNode.removeChild(sk_item);
           }
           else {
             alert(result.msg)

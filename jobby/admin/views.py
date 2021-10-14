@@ -1,6 +1,5 @@
 from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app
-from flask_login import current_user, login_required
-from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig,
+from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig, Admin,
     Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills)
 from jobby import db
 from PIL import Image
@@ -10,15 +9,18 @@ from utils import (crop_max_square, allowed_img_file, get_extension,
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import os, uuid
+from utils import admin_required
 
 admin = Blueprint('admin',__name__)
 
 @admin.route('/adminpanel', methods=['GET', 'POST'])
+@admin_required()
 def adminpanel():
     return render_template('admin/index.html')
 
 @admin.route('/adminpanel/<table>/<int:item_id>')
 @admin.route('/adminpanel/<table>', defaults={'item_id': None}, methods=['GET', 'POST'])
+@admin_required()
 def dbop(table, item_id):
     if table == 'users':
         if item_id:
@@ -35,9 +37,8 @@ def dbop(table, item_id):
             projects = Tasks.query.all()
             return render_template('admin/projectsTable.html', projects=projects)
     elif table == 'site-settings':
-        return render_template('admin/site-settings.html')
-    elif table == 'create-admin':
-        return render_template('admin/create-admin.html')
+        admins = Admin.query.all()
+        return render_template('admin/site-settings.html', admins=admins)
     elif table == 'bids':
         bids = Bids.query.all()
         return render_template('admin/bidsTable.html', bids=bids)
@@ -47,8 +48,12 @@ def dbop(table, item_id):
     elif table == "messages":
         msgs = Messages.query.all()
         return render_template('admin/messagesTable.html', msgs=msgs)
+    elif table == 'reviews':
+        rws = Reviews.query.all()
+        return render_template('admin/reviewsTable.html', rws=rws)
 
 @admin.route('/adminpanel/create/<table>', methods=['GET', 'POST'])
+@admin_required()
 def create(table):
     if request.method == 'GET':
         if table == 'messages':
@@ -287,8 +292,47 @@ def create(table):
 
             flash("Record Updated Successfully!", "success")
             return redirect(url_for('.dbop', table='site-settings'))
+        elif table == 'admin':
+            full_name = request.form['full_name']
+            username = request.form['username']
+            password = request.form['password']
+            email = request.form['email']
+
+            if len(username) < 3 or not username.isalnum():
+                return jsonify({'success': False, 'msg': "You have to provide valid username."})
+
+            if Admin.query.filter_by(username=username).first():
+                return jsonify({'success': False, 'msg': "This username allready being used!"})
+
+            if len(password) < 6:
+                return jsonify({'success': False, 'msg': "You have to provide valid password. At least 6 character"})
+
+            if len(email) > 50:
+                return jsonify({'success': False, 'msg': "Incorrect Email!"})
+
+            if Admin.query.filter_by(email=email).first():
+                return jsonify({'success': False, 'msg': "This email allready being used!"})
+
+            admin = Admin(username=username, email=email, password=generate_password_hash(password, method='sha256'),
+                full_name=full_name)
+
+            if 'file' in request.files:
+                file = request.files['file']
+                filename = file.filename
+                if allowed_img_file(filename):
+                    filename = secure_filename(filename)
+                    unique_filename = str(uuid.uuid4())+get_extension(filename)
+                    admin.profile_picture = unique_filename
+                    image = Image.open(file)
+                    i = crop_max_square(image).resize((300, 300), Image.LANCZOS)
+                    i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
+
+            db.session.add(admin)
+            db.session.commit()
+            return jsonify({'success': True, 'admin_id': admin.id})
 
 @admin.route('/adminpanel/chart/<view_type>')
+@admin_required()
 def views(view_type):
     if view_type == 'users':
         users = Users.query.filter_by(status='freelancer').all()
@@ -298,6 +342,7 @@ def views(view_type):
         return render_template('admin/views.html', projects=projects)
 
 @admin.route('/user-view-data/<username>')
+@admin_required()
 def userViewData(username):
     user = Users.query.filter_by(username=username).first()
     views = Views.query.filter_by(user_id=user.id).first()
@@ -306,6 +351,7 @@ def userViewData(username):
     return jsonify({'success': True, 'view_list': view_list})
 
 @admin.route('/project-view-data/<pro_id>')
+@admin_required()
 def projectViewData(pro_id):
     project = Tasks.query.get(pro_id)
     views = Views.query.filter_by(task_id=project.id).first()
@@ -314,6 +360,7 @@ def projectViewData(pro_id):
     return jsonify({'success': True, 'view_list': view_list})
 
 @admin.route('/createUser', methods=['POST'])
+@admin_required()
 def createUser():
     name = request.form['name']
     surname = request.form['surname']
@@ -360,12 +407,18 @@ def createUser():
     return redirect(url_for('.editUser', user_id=new_user.id))
 
 @admin.route('/adminpanel/editUser/<int:user_id>')
+@admin_required()
 def editUser(user_id):
     if request.method == 'GET':
         user = Users.query.get(user_id)
+        fr = request.args.get('from', type=str)
+        if fr:
+            return render_template('admin/editUser.html', user=user, fr=fr)
+
         return render_template('admin/editUser.html', user=user)
 
 @admin.route('/editUser/personel/<int:user_id>', methods=['POST'])
+@admin_required()
 def personel(user_id):
     name = request.form['name']
     surname = request.form['surname']
@@ -419,6 +472,7 @@ def personel(user_id):
     return jsonify({'success': True, 'editProfileType': "p"})
 
 @admin.route('/editUser/profile/<int:user_id>', methods=['POST'])
+@admin_required()
 def profile(user_id):
     user = Users.query.get(user_id)
     if not user:
@@ -431,6 +485,7 @@ def profile(user_id):
     return jsonify({'success': True, "editProfileType": 'pro'})
 
 @admin.route('/editUser/skill/<int:user_id>', methods=['POST'])
+@admin_required()
 def skill(user_id):
     user = Users.query.get(user_id)
     if not user:
@@ -443,6 +498,7 @@ def skill(user_id):
     return jsonify({'success': True, "editProfileType": 's', "skill": skill, "level": level, "skill_id": sk.id})
 
 @admin.route('/editUser/social/<user_id>', methods=['POST'])
+@admin_required()
 def social(user_id):
     user = Users.query.get(user_id)
     if not user:
@@ -460,6 +516,7 @@ def social(user_id):
     return jsonify({"success": True, 'editProfileType': 'so'})
 
 @admin.route('/editUser/workexp/<user_id>', methods=['POST'])
+@admin_required()
 def workexp(user_id):
     user = Users.query.get(user_id)
     if not user:
@@ -482,6 +539,7 @@ def workexp(user_id):
         "workExp_id": workexp.id, 'editProfileType': 'w', "duration": workexp.start_month + " " + str(workexp.start_year) + " - " + workexp.end_month + " " + str(workexp.end_year)})
 
 @admin.route('/editUser/education/<user_id>', methods=['POST'])
+@admin_required()
 def education(user_id):
     user = Users.query.get(user_id)
     if not user:
@@ -500,10 +558,11 @@ def education(user_id):
     db.session.add(edu)
     db.session.commit()
 
-    return jsonify({"success": True, "field": field, "school": school,
-        "edu_id": edu.id, 'editProfileType': 'e', "duration": edu.start_month + " " + str(edu.start_year) + " - " + edu.end_month + " " + str(edu.end_year)})
+    return jsonify({"success": True, "field": field, "school": school, "edu_id": edu.id, 'editProfileType': 'e',
+        "duration": edu.start_month + " " + str(edu.start_year) + " - " + edu.end_month + " " + str(edu.end_year)})
 
 @admin.route('/deleteItem/<type_id>')
+@admin_required()
 def deleteItem(type_id):
     itemType, itemId = type_id.split('_')
     if itemType == 'w':
@@ -522,41 +581,43 @@ def deleteItem(type_id):
         db.session.delete(item)
         db.session.commit()
         return jsonify({"success": True, 'currentField': 'e'})
-
-@admin.route('/del-cat/<cat_id>')
-def deleteCat(cat_id):
-    cat = Categories.query.get(cat_id)
-    if cat:
-        db.session.delete(cat)
+    elif itemType == 'ad':
+        adm = Admin.query.get(itemId)
+        if adm:
+            db.session.delete(adm)
+            db.session.commit()
+            if adm.profile_picture:
+                os.remove(os.path.join(UPLOAD_IMG_FOLDER, adm.profile_picture))
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+    elif itemType == 'cat':
+        cat = Categories.query.get(itemId)
+        if cat:
+            db.session.delete(cat)
+            db.session.commit()
+            os.remove(os.path.join(UPLOAD_IMG_FOLDER, cat.cat_pic))
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+    elif itemType == 'ctr':
+        ctr = Countries.query.get(itemId)
+        if ctr:
+            db.session.delete(ctr)
+            db.session.commit()
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+    elif itemType == 'sk':
+        sk = SkillsDb.query.get(itemId)
+        if sk:
+            db.session.delete(sk)
+            db.session.commit()
+            return jsonify({'success': True})
+        else:
+            return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+    elif itemType == 'u':
+        user = Users.query.get(itemId)
+        db.session.delete(user)
         db.session.commit()
-        os.remove(os.path.join(UPLOAD_IMG_FOLDER, cat.cat_pic))
         return jsonify({'success': True})
-    else:
-        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
-
-@admin.route('/del-ctr/<ctr_id>')
-def deleteCtr(ctr_id):
-    ctr = Countries.query.get(ctr_id)
-    if ctr:
-        db.session.delete(ctr)
-        db.session.commit()
-        return jsonify({'success': True})
-    else:
-        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
-
-@admin.route('/del-sk/<ctr_id>')
-def deleteSk(ctr_id):
-    sk = SkillsDb.query.get(ctr_id)
-    if sk:
-        db.session.delete(sk)
-        db.session.commit()
-        return jsonify({'success': True})
-    else:
-        return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
-
-@admin.route('/delete-user/<user_id>')
-def deleteUser(user_id):
-    user = Users.query.get(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({'success': True})

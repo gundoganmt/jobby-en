@@ -27,55 +27,40 @@
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <!-- Row -->
-
             <div class="row">
               <div class="col-lg-12">
                 <div class="card mb-4">
                   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Users</h6>
-                    <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.create', table='users') }}">Create User <i class="fas fa-chevron-right"></i></a>
+                    <h6 class="m-0 font-weight-bold text-primary">Reviews</h6>
+                    <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.create', table='reviews') }}">Create Review <i class="fas fa-chevron-right"></i></a>
                   </div>
-                  {% if users %}
-                    <div class="table-responsive p-3">
-                      <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                        <thead class="thead-light">
-                          <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Tagline</th>
-                            <th>Country</th>
-                            <th>Member Since</th>
-                            <th>Action</th>
+                {% if rws %}
+                  <div class="table-responsive p-3">
+                    <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>Reviewer</th>
+                          <th>Reviewed</th>
+                          <th>Reviewed Project</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for r in rws %}
+                          <tr id="{{ r.id }}">
+                            <td>{{ r.reviewed_emp }}</td>
+                            <td>{{ r.reviewed_pro }}</td>
+                            <td>{{ r.reviewed }}</td>
+                            <td>
+                              <a href="{{ url_for('admin.dbop', table='users', user_id=r.id) }}"><i class="fas fa-edit"></i></a>
+                              <a class="delUser" data="{{ r.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
+                            </td>
                           </tr>
-                        </thead>
-                        <tfoot>
-                          <tr>
-                            <th>Name</th>
-                            <th>Status</th>
-                            <th>Tagline</th>
-                            <th>Country</th>
-                            <th>Member Since</th>
-                            <th>Action</th>
-                          </tr>
-                        </tfoot>
-                        <tbody>
-                          {% for u in users %}
-                            <tr id="u_{{u.id}}">
-                              <td>{{ u.username }}</td>
-                              <td>{{ u.status }}</td>
-                              <td>{{ u.tagline }}</td>
-                              <td>{{ u.country }}</td>
-                              <td>{{ u.member_since.strftime("%d %b, %Y") }}</td>
-                              <td>
-                                <a href="{{ url_for('admin.editUser', user_id=u.id, from='table') }}"><i class="fas fa-edit"></i></a>
-                                <a class="deleteItem" data="u_{{u.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
-                              </td>
-                            </tr>
-                          {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
-                  {% endif %}
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                {% endif %}
                 </div>
               </div>
             </div>

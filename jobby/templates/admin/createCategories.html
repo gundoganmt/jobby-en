@@ -74,7 +74,7 @@
             </div>
           </div>
           {% for cat in cats %}
-            <div class="card category-card" id="{{cat.id}}">
+            <div class="card category-card" id="cat_{{cat.id}}">
               <div class="item-img text-center">
                 <a href="#">
                   <img class="card-img-top" src="{{ url_for('static', filename='images/' + cat.cat_pic ) }}">
@@ -86,8 +86,8 @@
                 </h6>
               </div>
               <div class="item-options text-center">
-                <a class="btn btn-danger btn-cat" data="{{cat.id}}">
-                  <span class="del-cat" data={{cat.id}}>Delete</span>
+                <a class="btn btn-danger btn-cat" data="cat_{{cat.id}}">
+                  <span class="del-cat" data=cat_{{cat.id}}>Delete</span>
                 </a>
               </div>
             </div>

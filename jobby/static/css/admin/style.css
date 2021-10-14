@@ -149,3 +149,14 @@
 .del-ctr {
   color: white;
 }
+
+.btn-sk{
+  margin-top: 20px;
+  cursor: pointer;
+  float: right;
+  margin-right: 100px;
+}
+
+.del-sk {
+  color: white;
+}

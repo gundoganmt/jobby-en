@@ -225,6 +225,19 @@ class Users(UserMixin, db.Model):
     def __repr__(self):
         return self.username
 
+class Admin(UserMixin, db.Model):
+    __tablename__ = 'Admin'
+    id = db.Column(db.Integer, primary_key=True)
+    is_admin = db.Column(db.Boolean, default=True)
+    full_name = db.Column(db.String(100), nullable=True, default="")
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(80), nullable=False)
+    profile_picture = db.Column(db.String(80), nullable=True, default="guest.jfif")
+
+    def __repr__(self):
+        return self.username
+
 class Offers(db.Model):
     __tablename__ = 'Offers'
     id = db.Column(db.Integer, primary_key=True)

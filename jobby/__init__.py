@@ -16,10 +16,6 @@ login_manager.login_view = 'account.login'
 login_manager.login_message = "Please login to see this page"
 last_updated = dir_last_updated('jobby/static')
 
-@login_manager.user_loader
-def load_user(id):
-    return Users.query.get(int(id))
-
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(Config)
