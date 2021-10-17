@@ -55,13 +55,13 @@
                       </tfoot>
                       <tbody>
                         {% for o in offers %}
-                          <tr id="{{ o.id }}">
+                          <tr id="o_{{o.id}}">
                             <td>{{ o.offers }}</td>
                             <td>{{ o.offered }}</td>
                             <td>{{ o.offeredTask }}</td>
                             <td>
                               <a href="{{ url_for('admin.dbop', table='offers', user_id=o.id) }}"><i class="fas fa-edit"></i></a>
-                              <a class="delUser" data="{{ o.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
+                              <a class="deleteItem" data="o_{{o.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

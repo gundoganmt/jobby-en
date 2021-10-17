@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () =>{
-  $('.delUser').on('click', function(e){
+  $('.deleteItem').on('click', function(e){
     const xhr = new XMLHttpRequest();
     var type_id = $(this).attr('data');
     var url = '/deleteItem/' + type_id;

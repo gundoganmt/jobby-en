@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, flash, redirect, url_for, abort, jsonify
 from flask_login import current_user, login_required
-from jobby.models import Users, Skills, WorkExperiences, Educations
+from jobby.models import Users, Skills, WorkExperiences, Educations, Categories, Countries
 from jobby import db, last_updated, csrf
 import os, uuid, re, json, bleach
 from PIL import Image
@@ -51,6 +51,7 @@ def editProfile_personel():
 def editProfile_profile():
     data = request.get_json(force=True)
     current_user.field_of_work = data['field_of_work']
+    print(data['field_of_work'])
     current_user.tagline = data['tagline']
     current_user.country = data['location']
     current_user.introduction = bleach.clean(data['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
@@ -137,9 +138,11 @@ def deleteItem():
 def editProfile_page():
     skills = Skills.query.filter_by(user_id=current_user.id).all()
     workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
+    categories = Categories.query.all()
+    locations = Countries.query.all()
     edus = Educations.query.filter_by(student=current_user).all()
     return render_template('editProfile/editProfile.html', last_updated=last_updated, skills=skills,
-        workExps=workExps, edus=edus)
+        workExps=workExps, edus=edus, categories=categories, locations=locations)
 
 @editProfile.app_errorhandler(413)
 def file_too_large(e):

@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', () =>{
     var description = document.getElementById('description');
     var editor = document.querySelector('#editor');
     var description = editor.children[0].innerHTML;
-    var skills = document.getElementsByClassName('keyword-text');
+    var skills_list = $('#skills').val();
 
-    if (skills.length == 0 || skills.length > 5){
-      createErrField("Add at least 1 at most 5 skills!");
+    if (skills_list.length == 0){
+      createErrField("Add at least 1 skills!");
       send_post.innerHTML = 'Post Project';
       send_post.disabled = false;
       e.preventDefault();
@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', () =>{
       var ins = document.getElementById('upload').files.length;
       const xhr = new XMLHttpRequest();
       var form_data = new FormData();
-      var skills_list = [];
 
       if(ins == 0) {
         alert("Please add an image relevant to your project!")
@@ -93,10 +92,6 @@ document.addEventListener('DOMContentLoaded', () =>{
           e.preventDefault();
           return false;
         }
-      }
-
-      for (var i = 0; i < skills.length; i++) {
-         skills_list.push(skills.item(i).innerText);
       }
 
       form_data.append("project_name", project_name);
@@ -119,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () =>{
             window.location.href = result.msg;
           }
           else {
+            alert(result.msg);
             send_post.innerHTML = 'Post Project';
             send_post.disabled = false;
           }

@@ -75,7 +75,6 @@ def admin_required():
         return decorator
     return wrapper
 
-
 def get_category(categor_num):
     categories = {
         '1': 'Programming',

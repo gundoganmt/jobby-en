@@ -370,22 +370,28 @@ def createUser():
     phone_number = request.form['phone']
 
     if len(username) < 6 or not username.isalnum():
-        return jsonify({'success': False, 'msg': "You have to provide valid username."})
+        flash("You have to provide valid username.")
+        return redirect(url_for('.create', table='users'))
 
     if Users.query.filter_by(username=username).first():
-        return jsonify({'success': False, 'msg': "This username allready being used!"})
+        flash("This username allready being used!")
+        return redirect(url_for('.create', table='users'))
 
     if len(password) < 6:
-        return jsonify({'success': False, 'msg': "You have to provide valid password. At least 6 character"})
+        flash("You have to provide valid password. At least 6 character")
+        return redirect(url_for('.create', table='users'))
 
     if len(name) < 3 or len(name) > 30 or len(surname) < 3 or len(surname) > 30:
-        return jsonify({'success': False, 'msg': "The length of name and surname should be between 3 and 30"})
+        flash("The length of name and surname should be between 3 and 30")
+        return redirect(url_for('.create', table='users'))
 
     if len(email) > 50:
-        return jsonify({'success': False, 'msg': "Incorrect Email!"})
+        flash("Incorrect Email!")
+        return redirect(url_for('.create', table='users'))
 
     if Users.query.filter_by(email=email).first():
-        return jsonify({'success': False, 'msg': "This email allready being used!"})
+        flash("This email allready being used!")
+        return redirect(url_for('.create', table='users'))
 
     hashed_password = generate_password_hash(password, method='sha256')
     new_user = Users(username=username, name=name, surname=surname, email=email, phone_number=phone_number,
@@ -412,10 +418,80 @@ def editUser(user_id):
     if request.method == 'GET':
         user = Users.query.get(user_id)
         fr = request.args.get('from', type=str)
+        cats = Categories.query.all()
+        lcts = Countries.query.all()
+        sks = SkillsDb.query.all()
         if fr:
-            return render_template('admin/editUser.html', user=user, fr=fr)
+            return render_template('admin/editUser.html', user=user, fr=fr, cats=cats, lcts=lcts, sks=sks)
 
         return render_template('admin/editUser.html', user=user)
+
+@admin.route('/adminpanel/editProject/<int:pro_id>', methods=['GET', 'POST'])
+@admin_required()
+def editProject(pro_id):
+    project = Tasks.query.get(pro_id)
+    if request.method == 'GET':
+        pro_skills = []
+        views = Views.query.filter_by(viewedTask=project).first()
+        sks = SkillsDb.query.all()
+        cats = Categories.query.all()
+        lcts = Countries.query.all()
+        for s in TaskSkills.query.filter_by(task_id=project.id).all():
+            pro_skills.append(s.skill)
+        users = Users.query.all()
+        return render_template('admin/editProject.html', project=project, views=views,
+            sks=sks, pro_skills=pro_skills, users=users, cats=cats, lcts=lcts)
+    else:
+        project_name = request.form["project_name"].capitalize()
+        location = request.form["location"]
+        budget_min = request.form["budget_min"] or 0
+        budget_max = request.form["budget_max"] or 0
+        category = request.form["category"]
+        skills_list = request.form.getlist('skills')
+        description = request.form["description"]
+        poster = Users.query.filter_by(username=request.form['poster']).first()
+
+        if not poster:
+            flash("There is an error about project poster. Try again!", 'error')
+            return redirect(request.url)
+
+        if budget_min > budget_max:
+            flash("Budget min cannot exceed budget max. Try again!", 'error')
+            return redirect(request.url)
+
+        project.project_name = project_name
+        project.location = location
+        project.budget_min = budget_min
+        project.budget_max = budget_max
+        project.category = category
+        project.description = description
+        project.poster = poster
+        project.time_posted = datetime.now()
+        project.is_active = True
+
+        if 'file' in request.files:
+            file = request.files['file']
+            filename = file.filename
+            if allowed_img_file(filename):
+                filename = secure_filename(filename)
+                unique_filename = str(uuid.uuid4())+get_extension(filename)
+                os.remove(os.path.join(UPLOAD_TASK_FOLDER, project.task_pic))
+                project.task_pic = unique_filename
+                image = Image.open(file)
+                i = crop_max_square(image).resize((356, 200), Image.LANCZOS)
+                i.save(os.path.join(UPLOAD_TASK_FOLDER, unique_filename), quality=95)
+
+        db.session.commit()
+
+        for skill in skills_list:
+            is_exist = TaskSkills.query.filter_by(skill=skill, task_id=project.id).first()
+            if not is_exist:
+                t = TaskSkills(skill=skill, task_id=project.id)
+                db.session.add(t)
+        db.session.commit()
+
+        flash("Project Successfully Created!", 'success')
+        return redirect(request.url)
 
 @admin.route('/editUser/personel/<int:user_id>', methods=['POST'])
 @admin_required()
@@ -443,7 +519,7 @@ def personel(user_id):
     if len(name) < 3 or len(name) > 30 or len(surname) < 3 or len(surname) > 30:
         return jsonify({'success': False, 'msg': "The length of name and surname should be between 3 and 30"})
 
-    if len(email) > 50:
+    if len(email) > 50 or not email:
         return jsonify({'success': False, 'msg': "Incorrect Email!"})
 
     if not email == user.email and Users.query.filter_by(email=email).first():
@@ -492,6 +568,9 @@ def skill(user_id):
         return jsonify({'success': False, "msg": 'Error occured. Refresh the page please!'})
     skill = request.form['skill']
     level = request.form['level']
+    sk = Skills.query.filter_by(skill=skill, user_id=user.id).first()
+    if sk:
+        return jsonify({'success': False, "msg": 'This skill allready exist!'})
     sk = Skills(skill=skill, level=level, user_id=user.id)
     db.session.add(sk)
     db.session.commit()
@@ -619,5 +698,22 @@ def deleteItem(type_id):
     elif itemType == 'u':
         user = Users.query.get(itemId)
         db.session.delete(user)
+        db.session.commit()
+        return jsonify({'success': True})
+    elif itemType == 'pr':
+        pr = Tasks.query.get(itemId)
+        db.session.delete(pr)
+        db.session.commit()
+        return jsonify({'success': True})
+    elif itemType == 'b':
+        b = Bids.query.get(itemId)
+        db.session.delete(b)
+        db.session.commit()
+        return jsonify({'success': True})
+    elif itemType == 'o':
+        o = Offers.query.get(itemId)
+        if o.filename:
+            os.remove(os.path.join(UPLOAD_OFFER_FOLDER, o.filename))
+        db.session.delete(o)
         db.session.commit()
         return jsonify({'success': True})

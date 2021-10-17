@@ -66,8 +66,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" id="social-tab" data-toggle="tab" href="#social" aria-controls="social" role="tab" aria-selected="false">
-                                <i class="feather icon-share-2 mr-25"></i><span class="d-none d-sm-block">Social</span>
+                            <a class="nav-link d-flex align-items-center" id="SiteSocial-tab" data-toggle="tab" href="#SiteSocial" aria-controls="SiteSocial" role="tab" aria-selected="false">
+                                <i class="fas fa-hashtag mr-25"></i><span class="d-none d-sm-block">Site Social</span>
                             </a>
                         </li>
                     </ul>
@@ -209,68 +209,84 @@
                           <!--/ form -->
                           <a class="btn btn-google btn-block" id="addAnotherAdmin" style="display: none; cursor: pointer;"><i class="fas fa-plus"></i> Add Another</a>                  <!--/ form -->
                         </div>
-                        <div class="tab-pane" id="social" aria-labelledby="social-tab" role="tabpanel">
-                            <!-- users edit socail form start -->
-                            <form novalidate="">
-                                <div class="row">
-                                    <div class="col-12 col-sm-6">
+                        <div class="tab-pane" id="SiteSocial" aria-labelledby="SiteSocial-tab" role="tabpanel">
+                          <!-- users edit socail form start -->
+                          <form>
+                            <div class="row">
+                              <div class="col-12 col-sm-6">
+                                <fieldset>
+                                    <label>Twitter</label>
+                                    <div class="input-group mb-75 input-group-merge">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fab fa-twitter" id="basic-addon3"></span>
+                                        </div>
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" style="color: #6e707e;">twitter.com/</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="maho" id="twitter" maxlength="50">
+                                    </div>
 
-                                        <fieldset>
-                                            <label>Twitter</label>
-                                            <div class="input-group mb-75">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text feather icon-twitter" id="basic-addon3"></span>
-                                                </div>
-                                                <input type="text" class="form-control" value="https://www.twitter.com/adoptionism744" placeholder="https://www.twitter.com/" aria-describedby="basic-addon3">
-                                            </div>
-
-                                            <label>Facebook</label>
-                                            <div class="input-group mb-75">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text feather icon-facebook" id="basic-addon4"></span>
-                                                </div>
-                                                <input type="text" class="form-control" value="https://www.facebook.com/adoptionism664" placeholder="https://www.facebook.com/" aria-describedby="basic-addon4">
-                                            </div>
-                                            <label>Instagram</label>
-                                            <div class="input-group mb-75">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text feather icon-instagram" id="basic-addon5"></span>
-                                                </div>
-                                                <input type="text" class="form-control" value="https://www.instagram.com/adopt-ionism744" placeholder="https://www.instagram.com/" aria-describedby="basic-addon5">
-                                            </div>
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-12 col-sm-6">
-                                        <label>Github</label>
-                                        <div class="input-group mb-75">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text feather icon-github" id="basic-addon9"></span>
-                                            </div>
-                                            <input type="text" class="form-control" value="https://www.github.com/madop818" placeholder="https://www.github.com/" aria-describedby="basic-addon9">
+                                    <label>Facebook</label>
+                                    <div class="input-group mb-75 input-group-merge">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fab fa-facebook" id="basic-addon4"></span>
                                         </div>
-                                        <label>Codepen</label>
-                                        <div class="input-group mb-75">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text feather icon-codepen" id="basic-addon12"></span>
-                                            </div>
-                                            <input type="text" class="form-control" value="https://www.codepen.com/adoptism243" placeholder="https://www.codepen.com/" aria-describedby="basic-addon12">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" style="color: #6e707e;">facebook.com/</span>
                                         </div>
-                                        <label>Slack</label>
-                                        <div class="input-group mb-75">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text feather icon-slack" id="basic-addon11"></span>
-                                            </div>
-                                            <input type="text" class="form-control" value="@adoptionism744" placeholder="https://www.slack.com/" aria-describedby="basic-addon11">
+                                        <input type="text" class="form-control" value="" id="facebook" maxlength="50">
+                                    </div>
+                                    <label>Instagram</label>
+                                    <div class="input-group mb-75 input-group-merge">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text fab fa-instagram" id="basic-addon5"></span>
                                         </div>
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" style="color: #6e707e;">www.instagram.com/</span>
+                                        </div>
+                                        <input type="text" class="form-control" value="" id="instagram" maxlength="50">
                                     </div>
-                                    <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                        <button type="submit" class="btn btn-primary glow mb-1 mb-sm-0 mr-0 mr-sm-1 waves-effect waves-light">Save
-                                            Changes</button>
-                                        <button type="reset" class="btn btn-outline-warning waves-effect waves-light">Reset</button>
-                                    </div>
-                                </div>
-                            </form>
-                            <!-- users edit socail form ends -->
+                                </fieldset>
+                              </div>
+                              <div class="col-12 col-sm-6">
+                                  <label>Github</label>
+                                  <div class="input-group mb-75 input-group-merge">
+                                      <div class="input-group-prepend">
+                                          <span class="input-group-text fab fa-github" id="basic-addon9"></span>
+                                      </div>
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text" style="color: #6e707e;">github.com/</span>
+                                      </div>
+                                      <input type="text" class="form-control" value="" id="github" maxlength="50">
+                                  </div>
+                                  <label>Youtube</label>
+                                  <div class="input-group mb-75 input-group-merge">
+                                      <div class="input-group-prepend">
+                                          <span class="input-group-text fab fa-youtube" id="basic-addon12"></span>
+                                      </div>
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text" style="color: #6e707e;">youtube.com/</span>
+                                      </div>
+                                      <input type="text" class="form-control" value="mahoga" id="youtube" maxlength="50">
+                                  </div>
+                                  <label>Linkedin</label>
+                                  <div class="input-group mb-75 input-group-merge">
+                                      <div class="input-group-prepend">
+                                          <span class="input-group-text fab fa-linkedin" id="basic-addon11"></span>
+                                      </div>
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text" style="color: #6e707e;">linkedin.com/</span>
+                                      </div>
+                                      <input type="text" class="form-control" value="" id="linkedin" maxlength="50">
+                                  </div>
+                              </div>
+                              <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                  <button class="btn btn-primary saveSetting" data="social" data-user-id="15">Save Changes</button>
+                                  <button type="reset" class="btn btn-outline-warning">Reset</button>
+                              </div>
+                            </div>
+                          </form>
+                          <!-- users edit socail form ends -->
                         </div>
                     </div>
                   </div>

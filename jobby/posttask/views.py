@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, request, redirect, url_for, flash, jsonify
 from flask_login import login_required, current_user
 from jobby import db, last_updated
-from jobby.models import Users, Tasks, TaskSkills
+from jobby.models import Users, Tasks, TaskSkills, Countries, Categories, SkillsDb
 import bleach, uuid, os
 from PIL import Image
 from werkzeug.utils import secure_filename
@@ -19,7 +19,7 @@ def post_task():
         budget_min = request.form["budget_min"] or 0
         budget_max = request.form["budget_max"] or 0
         category = request.form["category"]
-        skills_list = request.form.getlist('skills_list')[0].split(',')
+        skills_list = request.form.getlist('skills_list')
 
         if len(skills_list) > 5 or len(skills_list) < 1:
             return jsonify({'success': False, 'msg': 'Add at least 1 at most 5 skills!'})
@@ -53,6 +53,10 @@ def post_task():
         db.session.commit()
         return jsonify({'success': True, 'msg': url_for('public.task_page', task_url=task.generate_task_link())})
     else:
+        locations = Countries.query.all()
+        categories = Categories.query.all()
+        sks = SkillsDb.query.all()
         if not current_user.email_approved:
             flash('Your email has not been confirmed yet. You cannot post a project!')
-        return render_template('tasks/post-a-task.html', last_updated=last_updated)
+        return render_template('tasks/post-a-task.html', last_updated=last_updated,
+            locations=locations, categories=categories, sks=sks)

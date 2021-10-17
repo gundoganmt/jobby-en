@@ -55,13 +55,13 @@
                       </tfoot>
                       <tbody>
                         {% for p in projects %}
-                          <tr id="{{ p.id }}">
+                          <tr id="pr_{{p.id}}">
                             <td>{{ p.project_name }}</td>
                             <td>{{ p.category }}</td>
                             <td>{{ p.location }}</td>
                             <td>
-                              <a href="{{ url_for('admin.dbop', table='users', user_id=p.id) }}"><i class="fas fa-edit"></i></a>
-                              <a class="delUser" data="{{ p.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
+                              <a href="{{ url_for('admin.editProject', pro_id=p.id) }}"><i class="fas fa-edit"></i></a>
+                              <a class="deleteItem" data="pr_{{p.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

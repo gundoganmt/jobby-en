@@ -54,14 +54,14 @@
                         </tr>
                       </tfoot>
                       <tbody>
-                        {% for p in bids %}
-                          <tr id="{{ p.id }}">
-                            <td>{{ p.bidder }}</td>
-                            <td>{{ p.bidded }}</td>
-                            <td>{{ p.num_delivery }}</td>
+                        {% for b in bids %}
+                          <tr id="b_{{b.id}}">
+                            <td>{{ b.bidder }}</td>
+                            <td>{{ b.bidded }}</td>
+                            <td>{{ b.num_delivery }}</td>
                             <td>
-                              <a href="{{ url_for('admin.dbop', table='users', user_id=p.id) }}"><i class="fas fa-edit"></i></a>
-                              <a class="delUser" data="{{ p.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
+                              <a href="{{ url_for('admin.dbop', table='users', user_id=b.id) }}"><i class="fas fa-edit"></i></a>
+                              <a class="deleteItem" data="b_{{b.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

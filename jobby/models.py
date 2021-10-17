@@ -192,6 +192,9 @@ class Users(UserMixin, db.Model):
     def all_tasks(self):
         return Tasks.query.filter_by(poster=self).all()
 
+    def all_active_tasks(self):
+        return Tasks.query.filter_by(poster=self, is_active=True).all()
+
     def recom(self):
         total_success = Reviews.query.filter_by(reviewed_pro=self, recommendation=True).count()
         if self.total_reviews() == 0:

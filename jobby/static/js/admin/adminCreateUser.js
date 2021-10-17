@@ -208,13 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
      }
 
      var tbody = document.getElementById('tbody_skill');
-     tbody.innerHTML += '<tr class="table-active" id=s_' + skill_id + '>' +
-       '<td>' +
-         '<span class="font-weight-bold">' + skill + '</span>' +
-       '</td>' +
+     tbody.innerHTML += '<tr role="row" class="odd" id=s_' + skill_id + '>' +
+       '<td class="sorting_1">' + skill +'</td>' +
        '<td>' + level + '</td>' +
        '<td>' +
-       '<i class="fa fa-trash deleteItem" data="s_' + skill_id + '"aria-hidden="true"></i>' +
+         '<a class="deleteItem" data="s_' + skill_id + '" style="cursor: pointer; color: blue;"><i class="fas fa-trash deleteItem" data="s_' + skill_id + '"></i></a>' +
        '</td>' +
      '</tr>';
 
@@ -236,14 +234,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     var tbody = document.getElementById('tbody_work');
-    tbody.innerHTML += '<tr class="table-active" id=w_' + workExp_id + '>' +
-      '<td>' +
-        '<span class="font-weight-bold">' + position + '</span>' +
-      '</td>' +
+    tbody.innerHTML += '<tr role="row" class="odd" id=w_' + workExp_id + '>' +
+      '<td class="sorting_1">' + position +'</td>' +
       '<td>' + company + '</td>' +
       '<td>' + duration + '</td>' +
       '<td>' +
-      '<i class="fa fa-trash deleteItem" data="w_' + workExp_id + '"aria-hidden="true"></i>' +
+        '<a class="deleteItem" data="w_' + workExp_id + '" style="cursor: pointer; color: blue;"><i class="fas fa-trash deleteItem" data="w_' + workExp_id + '"></i></a>' +
       '</td>' +
     '</tr>';
 
@@ -265,14 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     var tbody = document.getElementById('tbody_edu');
-    tbody.innerHTML += '<tr class="table-active" id=e_' + edu_id + '>' +
-      '<td>' +
-        '<span class="font-weight-bold">' + field + '</span>' +
-      '</td>' +
+    tbody.innerHTML += '<tr role="row" class="odd" id=e_' + edu_id + '>' +
+      '<td class="sorting_1">' + field +'</td>' +
       '<td>' + school + '</td>' +
       '<td>' + duration + '</td>' +
       '<td>' +
-      '<i class="fa fa-trash deleteItem" data="e_' + edu_id + '"aria-hidden="true"></i>' +
+        '<a class="deleteItem" data="e_' + edu_id + '" style="cursor: pointer; color: blue;"><i class="fas fa-trash deleteItem" data="e_' + edu_id + '"></i></a>' +
       '</td>' +
     '</tr>';
 
