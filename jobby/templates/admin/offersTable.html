@@ -39,17 +39,17 @@
                     <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                       <thead class="thead-light">
                         <tr>
-                          <th>Title</th>
-                          <th>Category</th>
-                          <th>Location</th>
+                          <th>Offerer</th>
+                          <th>Offered</th>
+                          <th>Project</th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tfoot>
                         <tr>
-                          <th>Title</th>
-                          <th>Category</th>
-                          <th>Location</th>
+                          <th>Offerer</th>
+                          <th>Offered</th>
+                          <th>Project</th>
                           <th>Action</th>
                         </tr>
                       </tfoot>
@@ -60,7 +60,7 @@
                             <td>{{ o.offered }}</td>
                             <td>{{ o.offeredTask }}</td>
                             <td>
-                              <a href="{{ url_for('admin.dbop', table='offers', user_id=o.id) }}"><i class="fas fa-edit"></i></a>
+                              <a href="{{ url_for('admin.editOffer', offer_id=o.id) }}"><i class="fas fa-edit"></i></a>
                               <a class="deleteItem" data="o_{{o.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                             </td>
                           </tr>

@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app
+from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app, send_file
 from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig, Admin,
     Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills)
 from jobby import db
@@ -122,9 +122,7 @@ def create(table):
                     filename = secure_filename(filename)
                     unique_filename = str(uuid.uuid4())+get_extension(filename)
                     cat.cat_pic = unique_filename
-                    image = Image.open(file)
-                    i = crop_max_square(image).resize((270, 150), Image.LANCZOS)
-                    i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
+                    file.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename))
                     db.session.add(cat)
                     db.session.commit()
                     return redirect(request.url)
@@ -241,6 +239,10 @@ def create(table):
                     unique_filename = str(uuid.uuid4())+get_extension(filename)
                     offer.filename = unique_filename
                     file.save(os.path.join(UPLOAD_OFFER_FOLDER, unique_filename))
+                else:
+                    if filename:
+                        flash("Not allowed file type! 'docx', 'doc', 'pdf', 'jpeg', 'jpg', 'png' required", "error")
+                        return redirect(request.url)
 
             notif = Notification(notification_from=offers, notification_to=offered, not_type=4)
             db.session.add(offer)
@@ -412,6 +414,37 @@ def createUser():
     db.session.commit()
     return redirect(url_for('.editUser', user_id=new_user.id))
 
+@admin.route('/adminpanel/editMessage/<int:ms_id>', methods=['GET', 'POST'])
+@admin_required()
+def editMessage(ms_id):
+    msg = Messages.query.get(ms_id)
+    if request.method == 'GET':
+        users = Users.query.all()
+        return render_template('admin/editMessage.html', msg=msg, users=users)
+    else:
+        body = request.form['MessageBody']
+        sender = Users.query.filter_by(username=request.form['MessageSender']).first()
+        recipient = Users.query.filter_by(username=request.form['MessageRecipient']).first()
+
+        if sender == recipient:
+            flash("Sender and recipient cannot be same!", "error")
+            return redirect(request.url)
+
+        if not sender:
+            flash("Sender Not found!", "error")
+            return redirect(request.url)
+        if not recipient:
+            flash("Recipient Not found!", "error")
+            return redirect(request.url)
+
+        msg.sender = sender
+        msg.recipient = recipient
+        msg.body = body
+
+        db.session.commit()
+        flash("Message Successfully Edited!", "success")
+        return redirect(request.url)
+
 @admin.route('/adminpanel/editUser/<int:user_id>')
 @admin_required()
 def editUser(user_id):
@@ -425,6 +458,83 @@ def editUser(user_id):
             return render_template('admin/editUser.html', user=user, fr=fr, cats=cats, lcts=lcts, sks=sks)
 
         return render_template('admin/editUser.html', user=user)
+
+@admin.route('/adminpanel/editBid/<int:bid_id>', methods=['GET', 'POST'])
+@admin_required()
+def editBid(bid_id):
+    bid = Bids.query.get(bid_id)
+    if request.method == 'GET':
+        users = Users.query.filter_by(status='freelancer').all()
+        projects = Tasks.query.all()
+        return render_template('admin/editBid.html', bid=bid, users=users, projects=projects)
+    else:
+        bid_amount = request.form['bid_amount']
+        qtyInput = request.form['qtyInput']
+        qtyOption = request.form['qtyOption']
+        BidMessage = request.form['BidMessage']
+        bidder = Users.query.filter_by(username=request.form['ProjectBidder']).first()
+        bidded = Tasks.query.get(request.form['BiddedProject'])
+
+        if not bidder:
+            flash("User Not found!", "error")
+            return redirect(request.url)
+        if not bidded:
+            flash("Project Not found!", "error")
+            return redirect(request.url)
+
+        bid.bid_amount = bid_amount
+        bid.num_delivery = qtyInput
+        bid.type_delivery = qtyOption
+        bid.message = BidMessage
+        bid.bidder = bidder
+        bid.bidded = bidded
+
+        db.session.commit()
+        flash("Bid Successfully Edited", "success")
+        return redirect(request.url)
+
+@admin.route('/adminpanel/editOffer/<int:offer_id>', methods=['GET', 'POST'])
+@admin_required()
+def editOffer(offer_id):
+    offer = Offers.query.get(offer_id)
+    if request.method == 'GET':
+        users = Users.query.all()
+        projects = Tasks.query.all()
+        return render_template('admin/editOffer.html', offer=offer, users=users, projects=projects)
+    else:
+        subject = request.form['subject']
+        offeredTask = Tasks.query.get(request.form['offered_project'])
+        message = request.form['message']
+        offers = Users.query.filter_by(username=request.form['offerer']).first()
+        offered = Users.query.filter_by(username=request.form['offered']).first()
+
+        if offers == offered:
+            flash("Offerer and Offered cannot be same!", "error")
+            return redirect(request.url)
+
+        offer.offered = offered
+        offer.offers = offers
+        offer.offeredTask = offeredTask
+        offer.subject = subject
+        offer.message = message
+
+        if 'file' in request.files:
+            file = request.files['file']
+            filename = file.filename
+            if allowed_offer_file(filename):
+                filename = secure_filename(filename)
+                unique_filename = str(uuid.uuid4())+get_extension(filename)
+                os.remove(os.path.join(UPLOAD_OFFER_FOLDER, offer.filename))
+                offer.filename = unique_filename
+                file.save(os.path.join(UPLOAD_OFFER_FOLDER, unique_filename))
+            else:
+                if filename:
+                    flash("Not allowed file type! 'docx', 'doc', 'pdf', 'jpeg', 'jpg', 'png' required", "error")
+                    return redirect(request.url)
+
+        db.session.commit()
+        flash('Offer succesfully edited!', "success")
+        return redirect(request.url)
 
 @admin.route('/adminpanel/editProject/<int:pro_id>', methods=['GET', 'POST'])
 @admin_required()
@@ -717,3 +827,14 @@ def deleteItem(type_id):
         db.session.delete(o)
         db.session.commit()
         return jsonify({'success': True})
+    elif itemType == 'm':
+        m = Messages.query.get(itemId)
+        db.session.delete(m)
+        db.session.commit()
+        return jsonify({'success': True})
+
+@admin.route('/download/<filename>')
+@admin_required()
+def download(filename):
+    path = os.path.join(UPLOAD_OFFER_FOLDER, filename)
+    return send_file(path, as_attachment=True)

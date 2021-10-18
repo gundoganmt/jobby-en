@@ -54,18 +54,18 @@
               {% endwith %}
               <div class="card mb-4">
                 <div class="card-header border-bottom">
-                  <h5 class="mt-2">Create Offer</h5>
+                  <h5 class="mt-2">Edit Offer</h5>
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form method="post" action="{{ url_for('admin.create', table='offers') }}" enctype="multipart/form-data">
+                  <form method="post" action="{{ url_for('admin.editOffer', offer_id=offer.id) }}" enctype="multipart/form-data">
                     <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row">
                       <div class="col-12 col-sm-6">
                         <div class="form-group">
                             <div class="controls">
                                 <label>Subject</label>
-                                <input type="text" class="form-control" name="subject" placeholder="Subject" id="subject" required>
+                                <input type="text" class="form-control" name="subject" placeholder="Subject" id="subject" required value="{{ offer.subject }}">
                             </div>
                         </div>
                       </div>
@@ -75,7 +75,11 @@
                                 <label>Choose Project</label>
                                 <select class="form-control" id="offered_project" name="offered_project" title="Choose Project" data-live-search="true" data-style="btn-outline-light" required>
                                   {% for project in projects %}
-                                    <option value="{{project.id}}">{{ project }}</option>
+                                    {% if offer.offeredTask == project %}
+                                      <option value="{{project.id}}" selected>{{ project }}</option>
+                                    {% else %}
+                                      <option value="{{project.id}}">{{ project }}</option>
+                                    {% endif %}
                                   {% endfor %}
                                 </select>
                             </div>
@@ -84,7 +88,7 @@
                       <div class="col-12">
                         <div class="form-group">
                           <label>Message</label>
-                          <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message.." required></textarea>
+                          <textarea class="form-control" name="message" id="message" rows="5" placeholder="Message.." required>{{ offer.message }}</textarea>
                         </div>
                       </div>
                       <div class="col-12 col-sm-4">
@@ -93,18 +97,25 @@
                           <div class="input-group shadow">
                             <span class="input-group-text px-3 text-muted"><i class="fas fa-image fa-lg"></i></span>
                             <input type="file" name="file" class="d-none file-upload">
-                            <input type="text" class="form-control upload-file" placeholder="Upload File" accept=".pdf, .doc, .docx, .jpg, .png, .jpeg">
+                            <input type="text" class="form-control upload-file" placeholder="Upload File" accept=".pdf, .doc, .docx, .png, .jpg, .jpeg">
                             <button class="browse btn btn-primary" type="button"><i class="fas fa-image"></i> Browse</button>
                           </div>
                         </div>
+                        {% if offer.filename %}
+                          <p><a href="{{ url_for('admin.download', filename=offer.filename)}}">{{ offer.filename }}</a></p>
+                        {% endif %}
                       </div>
                       <div class="col-12 col-sm-4">
                         <div class="form-group">
                             <div class="controls">
                                 <label>Offerer</label>
                                 <select class="form-control" id="offerer" name="offerer" title="Choose Offerer" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
-                                  {% for usr in users %}
-                                    <option>{{ usr }}</option>
+                                  {% for user in users %}
+                                    {% if offer.offers == user %}
+                                      <option selected>{{ user }}</option>
+                                    {% else %}
+                                      <option>{{ user }}</option>
+                                    {% endif %}
                                   {% endfor %}
                                 </select>
                             </div>
@@ -115,9 +126,13 @@
                             <div class="controls">
                                 <label>Offered</label>
                                 <select class="form-control" id="offered" name="offered" title="Choose Offered" data-style="btn-outline-light" data-live-search="true" required>
-                                  {% for usr in users %}
-                                    {% if usr.status=='freelancer' %}
-                                      <option>{{ usr }}</option>
+                                  {% for user in users %}
+                                    {% if offer.offered == user %}
+                                      <option selected>{{ user }}</option>
+                                    {% else %}
+                                      {% if user.status == 'freelancer' %}
+                                        <option>{{ user }}</option>
+                                      {% endif %}
                                     {% endif %}
                                   {% endfor %}
                                 </select>
