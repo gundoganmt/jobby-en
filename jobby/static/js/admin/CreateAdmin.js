@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () =>{
        '<td>' + full_name + '</td>' +
        '<td>' + email + '</td>' +
        '<td>' +
-         '<a href="/adminpanel/users?user_id=10"><i class="fas fa-edit"></i></a>' +
          '<a class="deleteItem" data="ad_' + admin_id + '" style="cursor: pointer; color: blue;"><i class="fas fa-trash deleteItem" data="ad_' + admin_id + '"></i></a>' +
        '</td>' +
      '</tr>';

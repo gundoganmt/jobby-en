@@ -54,16 +54,16 @@
               {% endwith %}
               <div class="card mb-4">
                 <div class="card-header border-bottom">
-                  <h5 class="mt-2">Create Bid</h5>
+                  <h5 class="mt-2">Create Review</h5>
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
-                  <form class="validate-form mt-2 pt-50" method="post", action="{{ url_for('admin.create', table='bids') }}">
+                  <form class="validate-form mt-2 pt-50" method="post" action="{{ url_for('admin.create', table='reviews') }}">
                     <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row">
                       <div class="col-12 col-sm-6 mb-4">
-                        <label class="form-label" for="ProjectBidder">Select Bidder</label>
-                        <select class="form-control" id="ProjectBidder" name="ProjectBidder" title="Select Bidder" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
+                        <label class="form-label" for="reviewFree">Select Freelancer</label>
+                        <select class="form-control" id="reviewFree" name="reviewFree" title="Select Freelancer" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
                           {% for user in users %}
                             <option>{{ user }}</option>
                           {% endfor %}
@@ -71,40 +71,39 @@
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
                         <label class="form-label" for="BiddedProject">Select Project</label>
-                        <select class="form-control" id="BiddedProject" name="BiddedProject" title="Select Project" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
+                        <select class="form-control" id="reviewProject" name="reviewProject" title="Select Project" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
                           {% for project in projects %}
                             <option value="{{project.id}}">{{ project }}</option>
                           {% endfor %}
                         </select>
                       </div>
-                      <div class="col-4 col-sm-4 mb-4">
-                        <label class="form-label" for="bid_amount">Price</label>
-                        <input type="number" class="form-control" id="bid_amount" name="bid_amount" min="10" max="100000" placeholder="Bid Amount" required>
-                      </div>
-                      <div class="col-8">
-                        <label class="form-label">Set your delivery time <span class="text-danger">*</span></label>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-icon position-relative">
-                              <i data-feather="clock" class="fea icon-sm icons"></i>
-                              <input id="qtyInput" type="number" name="qtyInput" class="form-control ps-5" placeholder="1" max="100" required>
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-icon position-relative">
-                              <select class="form-control custom-select" id="qtyOption" name="qtyOption" data-style="btn-outline-light" required>
-                                <option value="Hours">Hours</option>
-                                <option value="Days">Days</option>
-                                <option value="Weeks">Weeks</option>
-                                <option value="Months">Months</option>
-                              </select>
-                            </div>
-                          </div>
-                        </div>
-                      </div><!--end col-->
                       <div class="col-12 col-sm-12 mb-2">
-                        <label class="form-label" for="BidMessage">Message</label>
-                        <textarea class="form-control" id="BidMessage" name="BidMessage" rows="5" placeholder="Your Message" required></textarea>
+                        <label class="form-label" for="reviewMessage">Comment</label>
+                        <textarea class="form-control" id="reviewMessage" name="reviewMessage" rows="5" placeholder="Your Message" required></textarea>
+                      </div>
+                      <div class="col-12 col-sm-4 mb-1">
+                        <label class="form-label" for="rating">Rating</label>
+                        <select class="form-control" id="rating" name="rating" required>
+                          <option>1</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                      </div>
+                      <div class="col-12 col-sm-4 mb-1">
+                        <label class="form-label" for="recom">Recommendation?</label>
+                        <select class="form-control" id="recom" name="recom" required="">
+                          <option>Yes</option>
+                          <option>No</option>
+                        </select>
+                      </div>
+                      <div class="col-12 col-sm-4 mb-1">
+                        <label class="form-label" for="intime">Finished Intime?</label>
+                        <select class="form-control" id="intime" name="intime" required="">
+                          <option>Yes</option>
+                          <option>No</option>
+                        </select>
                       </div>
                       <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
                           <button type="submit" class="btn btn-primary mr-sm-1 mr-2">Save Changes</button>
@@ -161,7 +160,8 @@
   <!-- Page level plugins -->
   <script type="text/javascript">
     $(document).ready(function () {
-      $('select').selectpicker();
+      $('#reviewFree').selectpicker();
+      $('#reviewProject').selectpicker();
     });
   </script>
 

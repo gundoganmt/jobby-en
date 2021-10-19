@@ -168,6 +168,11 @@ class Users(UserMixin, db.Model):
         self.rating = round((self.total_rating)/float(self.num_of_rating), 1)
         db.session.commit()
 
+    def editRating(self, old_rating, rating):
+        self.total_rating += rating-old_rating
+        self.rating = round((self.total_rating)/float(self.num_of_rating), 1)
+        db.session.commit()
+
     def total_win(self):
         return Tasks.query.filter_by(winner=self).count()
 

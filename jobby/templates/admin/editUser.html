@@ -28,7 +28,14 @@
         {% include 'admin/_navbar.html' %}
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
-
+          {% if user.status == 'employer' %}
+            <div class="alert alert-info alert-dismissible" role="alert">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+              In order to make this account a "freelancer" you need to complete all fields with star. Plus at least one skill.
+            </div>
+          {% endif %}
           <div class="row">
             {% if fr == 'table' %}
             <div class="col-lg-4">
@@ -138,7 +145,7 @@
             {% endif %}
               <div class="card mb-4">
                 <div class="card-header border-bottom">
-                  <h5 style="margin-top: 10px;">Basic Information</h5>
+                  <h5 class="mt-2">Basic Information</h5>
                 </div>
                 <div class="card-body py-2 my-25">
                   <!-- form -->
@@ -173,7 +180,7 @@
                         <input type="text" class="form-control" id="accountLastName" name="LastName" placeholder="Last Name" value="{{ user.surname }}">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
-                        <label class="form-label" for="accountPassword">Password <i class="fas fa-info-circle" title="We don't store raw passwords. If you change this field we use it as a password, otherwise password stays same. Also just remind you that you have to use real password to sign in. Not encripted one. "></i></label>
+                        <label class="form-label" for="accountPassword">Password* <i class="fas fa-info-circle" title="We don't store raw passwords. If you change this field we use it as a password, otherwise password stays same. Also just remind you that you have to use real password to sign in. Not encripted one. "></i></label>
                         <input type="text" class="form-control" id="accountPassword" name="password" placeholder="Password" value="{{ user.password }}">
                       </div>
                       <div class="col-12 col-sm-6 mb-1">
@@ -203,7 +210,7 @@
                   <form class="validate-form mt-2 pt-50">
                     <div class="row">
                       <div class="col-4 col-sm-4 mb-4">
-                        <label class="form-label" for="field_of_work">Field of Work</label>
+                        <label class="form-label" for="field_of_work">Field of Work*</label>
                         <select class="form-control" id="field_of_work" name="field_of_work" title="Field of work" data-style="btn-outline-light" data-live-search="true" data-size="5" required>
                           {% for cat in cats %}
                             {% if user.field_of_work == cat.category %}
@@ -215,7 +222,7 @@
                         </select>
                       </div>
                       <div class="col-4 col-sm-4 mb-1">
-                        <label class="form-label" for="tagline">Tagline</label>
+                        <label class="form-label" for="tagline">Tagline*</label>
                         <input type="text" class="form-control" id="tagline" name="tagline" placeholder="Tagline" value="{{ user.tagline }}">
                       </div>
                       <div class="col-4 col-sm-4 mb-1">
@@ -231,7 +238,7 @@
                         </select>
                       </div>
                       <div class="col-12 col-sm-12 mb-2">
-                        <label class="form-label" for="Introduction">Introduction</label>
+                        <label class="form-label" for="Introduction">Introduction*</label>
                         <textarea class="form-control" id="editor-profile" rows="5" placeholder="introduction">{{ user.introduction }}</textarea>
                       </div>
                       <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">

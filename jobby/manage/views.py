@@ -64,14 +64,8 @@ def reviews():
         review_id, recom, intime, rating = request.form['RadioValues'].split()
         comment = request.form['comment']
         review = Reviews.query.get(int(review_id))
-        if recom == 'true':
-            review.recommendation = True
-        else:
-            review.recommendation = False
-        if intime == 'true':
-            review.in_time = True
-        else:
-            review.in_time = False
+        review.recommendation = recom == 'true'
+        review.in_time = intime == 'true'
         review.rating = float(rating)
         review.body = comment
         notif = Notification(notification_to=review.reviewed_pro, notification_from=review.reviewed_emp, notedTask=review.reviewed, not_type=5)

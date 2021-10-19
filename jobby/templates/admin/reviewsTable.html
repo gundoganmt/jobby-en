@@ -47,13 +47,13 @@
                       </thead>
                       <tbody>
                         {% for r in rws %}
-                          <tr id="{{ r.id }}">
+                          <tr id="rv_{{r.id}}">
                             <td>{{ r.reviewed_emp }}</td>
                             <td>{{ r.reviewed_pro }}</td>
                             <td>{{ r.reviewed }}</td>
                             <td>
-                              <a href="{{ url_for('admin.dbop', table='users', user_id=r.id) }}"><i class="fas fa-edit"></i></a>
-                              <a class="delUser" data="{{ r.id }}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
+                              <a href="{{ url_for('admin.editReview', rv_id=r.id) }}"><i class="fas fa-edit"></i></a>
+                              <a class="deleteItem" data="rv_{{r.id}}" style="cursor: pointer; color: blue;"><i class="fas fa-trash"></i></a>
                             </td>
                           </tr>
                         {% endfor %}

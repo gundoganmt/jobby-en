@@ -191,7 +191,11 @@ document.addEventListener('DOMContentLoaded', () => {
          }
        }
        else{
-         alert(result.msg);
+         Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: result.msg,
+         })
        }
      }
    }

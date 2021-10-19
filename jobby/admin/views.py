@@ -18,24 +18,15 @@ admin = Blueprint('admin',__name__)
 def adminpanel():
     return render_template('admin/index.html')
 
-@admin.route('/adminpanel/<table>/<int:item_id>')
-@admin.route('/adminpanel/<table>', defaults={'item_id': None}, methods=['GET', 'POST'])
+@admin.route('/adminpanel/<table>', methods=['GET', 'POST'])
 @admin_required()
-def dbop(table, item_id):
+def dbop(table):
     if table == 'users':
-        if item_id:
-            user = Users.query.get(item_id)
-            return render_template('admin/users.html', user=user)
-        else:
-            users = Users.query.all()
-            return render_template('admin/usersTable.html', users=users)
+        users = Users.query.all()
+        return render_template('admin/usersTable.html', users=users)
     elif table == 'projects':
-        if item_id:
-            project = Tasks.query.get(item_id)
-            return render_template('admin/projects.html', project=project)
-        else:
-            projects = Tasks.query.all()
-            return render_template('admin/projectsTable.html', projects=projects)
+        projects = Tasks.query.all()
+        return render_template('admin/projectsTable.html', projects=projects)
     elif table == 'site-settings':
         admins = Admin.query.all()
         return render_template('admin/site-settings.html', admins=admins)
@@ -74,6 +65,10 @@ def create(table):
             users = Users.query.filter_by(status='freelancer').all()
             projects = Tasks.query.all()
             return render_template('admin/createBids.html', users=users, projects=projects)
+        elif table == 'reviews':
+            users = Users.query.filter_by(status='freelancer').all()
+            projects = Tasks.query.all()
+            return render_template('admin/createReviews.html', users=users, projects=projects)
         elif table == 'offers':
             users = Users.query.all()
             projects = Tasks.query.all()
@@ -163,7 +158,7 @@ def create(table):
                 flash("There is an error about project poster. Try again!", 'error')
                 return redirect(request.url)
 
-            if budget_min > budget_max:
+            if int(budget_min) > int(budget_max):
                 flash("Budget min cannot exceed budget max. Try again!", 'error')
                 return redirect(request.url)
 
@@ -207,6 +202,9 @@ def create(table):
             if not bidded:
                 flash("Project Not found!", "error")
                 return redirect(request.url)
+            if not bidded.poster == bidder:
+                flash("Bidder cannot be project poster! Choose other bidder.", "error")
+                return redirect(request.url)
 
             bid = Bids(bid_amount=bid_amount, num_delivery=qtyInput, type_delivery=qtyOption,
                 message=BidMessage, user_id=bidder.id, task_id=bidded.id)
@@ -217,6 +215,29 @@ def create(table):
             db.session.add(notification)
             db.session.commit()
             flash("Bid Successfully Created", "success")
+            return redirect(request.url)
+        elif table == 'reviews':
+            reviewFree = Users.query.filter_by(username=request.form['reviewFree']).first()
+            reviewProject = Tasks.query.get(request.form['reviewProject'])
+            body = request.form['reviewMessage']
+            rating = request.form['rating']
+            recom = request.form['recom'] == 'yes'
+            in_time = request.form['intime'] == 'yes'
+
+            if int(rating) < 1 or int(rating) > 5:
+                flash('invalid rating!', 'error')
+                return redirect(request.url)
+
+            rv = Reviews(recommendation=recom, in_time=in_time, body=body, rating=float(rating),
+                task_id=reviewProject.id, freelancer=reviewFree.id, employer=reviewProject.poster.id)
+
+            notif = Notification(notification_to=rv.reviewed_pro, notification_from=rv.reviewed_emp, notedTask=rv.reviewed, not_type=5)
+
+            db.session.add(notif)
+            db.session.add(rv)
+            db.session.commit()
+            rv.reviewed_pro.addRating(float(rating))
+            flash('Review succesfully created!', 'success')
             return redirect(request.url)
         elif table == 'offers':
             subject = request.form['subject']
@@ -457,7 +478,41 @@ def editUser(user_id):
         if fr:
             return render_template('admin/editUser.html', user=user, fr=fr, cats=cats, lcts=lcts, sks=sks)
 
-        return render_template('admin/editUser.html', user=user)
+        return render_template('admin/editUser.html', user=user, fr=fr, cats=cats, lcts=lcts, sks=sks)
+
+@admin.route('/adminpanel/editReview/<int:rv_id>', methods=['GET', 'POST'])
+@admin_required()
+def editReview(rv_id):
+    rv = Reviews.query.get(rv_id)
+    if request.method == 'GET':
+        users = Users.query.filter_by(status='freelancer').all()
+        projects = Tasks.query.all()
+        return render_template('admin/editReviews.html', users=users, projects=projects, rv=rv)
+    else:
+        reviewFree = Users.query.filter_by(username=request.form['reviewFree']).first()
+        reviewProject = Tasks.query.get(request.form['reviewProject'])
+        body = request.form['reviewMessage']
+        rating = request.form['rating']
+        recom = request.form['recom'] == 'yes'
+        in_time = request.form['intime'] == 'yes'
+        old_rating = rv.rating
+
+        if int(rating) < 1 or int(rating) > 5:
+            flash('invalid rating!', 'error')
+            return redirect(request.url)
+
+        rv.recommendation = recom
+        rv.in_time = in_time
+        rv.body = body
+        rv.rating = float(rating)
+        rv.task_id = reviewProject.id
+        rv.freelancer = reviewFree.id
+        rv.employer = reviewProject.poster.id
+
+        db.session.commit()
+        rv.reviewed_pro.editRating(old_rating, float(rating))
+        flash('Review succesfully edited!', 'success')
+        return redirect(request.url)
 
 @admin.route('/adminpanel/editBid/<int:bid_id>', methods=['GET', 'POST'])
 @admin_required()
@@ -667,6 +722,7 @@ def profile(user_id):
     user.tagline = request.form['tagline']
     user.country = request.form['country']
     user.introduction = request.form['introduction']
+    user.check_status()
     db.session.commit()
     return jsonify({'success': True, "editProfileType": 'pro'})
 
@@ -684,6 +740,7 @@ def skill(user_id):
     sk = Skills(skill=skill, level=level, user_id=user.id)
     db.session.add(sk)
     db.session.commit()
+    user.check_status()
     return jsonify({'success': True, "editProfileType": 's', "skill": skill, "level": level, "skill_id": sk.id})
 
 @admin.route('/editUser/social/<user_id>', methods=['POST'])
@@ -762,7 +819,7 @@ def deleteItem(type_id):
     elif itemType == 's':
         item = Skills.query.get(itemId)
         db.session.delete(item)
-        #current_user.check_status()
+        item.skilled.check_status()
         db.session.commit()
         return jsonify({"success": True, 'currentField': 's'})
     elif itemType == 'e':
@@ -830,6 +887,11 @@ def deleteItem(type_id):
     elif itemType == 'm':
         m = Messages.query.get(itemId)
         db.session.delete(m)
+        db.session.commit()
+        return jsonify({'success': True})
+    elif itemType == 'rv':
+        rv = Reviews.query.get(itemId)
+        db.session.delete(rv)
         db.session.commit()
         return jsonify({'success': True})
 
