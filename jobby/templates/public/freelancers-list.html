@@ -66,11 +66,17 @@
                             <div class="widget">
                               <div class="input-group mb-3 border rounded">
                                 <select class="form-control custom-select" name="location" id="location" title="Select Location">
-                                  {% if lc %}
-                                    <option selected value="{{lc}}">{{lc}}</option>
-                                  {% else %}
+                                  {% if not lc %}
                                     <option selected value="">Location</option>
                                   {% endif %}
+
+                                  {% for lct in lcts %}
+                                    {% if lc == lct.country %}
+                                      <option selected>{{ lct }}</option>
+                                    {% else %}
+                                      <option>{{ lct }}</option>
+                                    {% endif %}
+                                  {% endfor %}
                                 </select>
                               </div>
                             </div>
@@ -79,20 +85,17 @@
                             <div class="widget mb-4 pb-4 border-bottom">
                                 <div class="mt-4 mb-0">
                                   <select class="form-control custom-select" name="category">
-                                    {% if ct %}
-                                      <option selected value="{{ct}}">{{str_cat}}</option>
-                                    {% else %}
+                                    {% if not ct %}
                                       <option selected value="">Category</option>
                                     {% endif %}
-                                      <option value="1">Programming</option>
-                                      <option value="2">Writing</option>
-                                      <option value="3">Graphics Design</option>
-                                      <option value="4">Digital Marketing</option>
-                                      <option value="5">Data Science</option>
-                                      <option value="6">Video & Animation</option>
-                                      <option value="7">Lifestyle</option>
-                                      <option value="8">Finance</option>
-                                      <option value="9">Other</option>
+
+                                    {% for cat in cats %}
+                                      {% if ct == cat.category %}
+                                        <option selected>{{ cat }}</option>
+                                      {% else %}
+                                        <option>{{ cat }}</option>
+                                      {% endif %}
+                                    {% endfor %}
                                   </select>
                                 </div>
                             </div>

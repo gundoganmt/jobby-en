@@ -72,7 +72,7 @@
 			<!-- Row -->
 			<div class="row">
 
-				<form method="POST" name="personel" action="{{ url_for('editProfile.editProfile_personel') }}" enctype="multipart/form-data">
+				<form>
 					<input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
 
 					<div class="col-xl-12">
@@ -88,7 +88,7 @@
 										<div class="avatar-wrapper" data-tippy-placement="bottom" title="Change Picture">
 											<img class="profile-pic" src="{{ url_for('static', filename="images/"+current_user.profile_picture) }}" alt="" />
 											<div class="upload-button"></div>
-											<input class="file-upload" type="file" name="file"/>
+											<input class="file-upload" type="file" id="file" name="file"/>
 										</div>
 									</div>
 
@@ -97,31 +97,31 @@
 
 											<div class="col-xl-6">
 												<div class="submit-field">
-													<h5>Name *</h5>
-													<input type="text" name="name" class="with-border" value="{{ current_user.name }}" maxlength="30" minlength="5">
+													<h5>Username*</h5>
+													<input type="text" id="username" name="username" class="with-border" value="{{ current_user.username }}">
 												</div>
 											</div>
 
 											<div class="col-xl-6">
 												<div class="submit-field">
-													<h5>Surname *</h5>
-													<input type="text" name="surname"class="with-border" value="{{ current_user.surname }}" maxlength="30" minlength="5">
+													<h5>Email*</h5>
+													<input type="email" id="email" name="email" class="with-border" value="{{ current_user.email }}" maxlength="50">
 												</div>
 											</div>
 
 											<div class="col-xl-6">
 												<div class="submit-field">
-													<h5>Phone Number</h5>
-													<input type="number" name="phone_number" class="with-border" value="{{ current_user.phone_number }}">
+													<h5>Name</h5>
+													<input type="text" id="firstName" name="name" class="with-border" value="{{ current_user.name }}" maxlength="30" minlength="5">
 												</div>
 											</div>
 
 											<div class="col-xl-6">
 												<div class="submit-field">
-													<h5>Email *</h5>
-													<input type="email" name="email" class="with-border" value="{{ current_user.email }}" maxlength="50">
+													<h5>Surname</h5>
+													<input type="text" id="surname" name="surname" class="with-border" value="{{ current_user.surname }}" maxlength="30" minlength="5">
 												</div>
-												<button class="button personel" type="submit"><i class="icon-feather-save"></i> Save Changes</button>
+												<a class="button saveSetting" data="personal"><i class="icon-feather-save"></i> Save Changes</a>
 											</div>
 
 										</div>
@@ -236,14 +236,18 @@
 								  </table>
 								{% endif %}
 								<div class="row" id="skillForm">
-									<div class="col">
+									<div class="col-6">
 										<div class="submit-field">
 											<h5>Skill</h5>
-											<input id="skill" type="text" class="with-border">
+											<select id="skill" class="with-border" title="Select Skill">
+												{% for sk in sks %}
+													<option>{{ sk }}</option>
+												{% endfor %}
+											</select>
 										</div>
 									</div>
 
-									<div class="col">
+									<div class="col-6">
 										<div class="submit-field">
 											<h5>Level %</h5>
 											<input id="level" type="number" class="with-border">

@@ -143,6 +143,9 @@ def create(table):
             if len(skill) == 0 or len(skill) > 100:
                 flash("skill length should be between 0 and 100")
                 return redirect(request.url)
+            if SkillsDb.query.filter_by(skill=skill).first():
+                flash("This skill already exist!")
+                return redirect(request.url)
             sk = SkillsDb(skill=skill)
             db.session.add(sk)
             db.session.commit()

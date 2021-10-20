@@ -80,7 +80,8 @@ def browseTasks():
     checks = request.args.get('cx', type=str)
     tag = request.args.get('tag', type=str)
     page = request.args.get('page', type=int)
-    str_cat = request.args.get('ct', type=str)
+    cats = Categories.query.all()
+    lcts = Countries.query.all()
 
     if request.args:
         tasks = db.session.query(Tasks)
@@ -125,8 +126,8 @@ def browseTasks():
     else:
         tasks = Tasks.query.paginate(page=page, per_page=4)
     return render_template('public/tasks-list.html', tasks=tasks,
-        kw=keyword, lc=location, ct=category, str_cat=str_cat,
-        bn=budget_min, bx=budget_max, cx=checks, tag=tag)
+        kw=keyword, lc=location, ct=category, bn=budget_min,
+        bx=budget_max, cx=checks, tag=tag, lcts=lcts, cats=cats)
 
 @public.route('/u/<username>', methods=['GET', 'POST'])
 def freelancer(username):
@@ -164,8 +165,9 @@ def browseFreelancers():
     skill = request.args.get('sk', type=str)
     tag = request.args.get('tag', type=str)
     page = request.args.get('page', type=int)
-    str_cat = request.args.get('ct', type=str)
     freelancers = db.session.query(Users).filter(Users.status=='freelancer')
+    lcts = Countries.query.all()
+    cats = Categories.query.all()
 
     if request.args:
         if keyword:
@@ -193,7 +195,7 @@ def browseFreelancers():
     else:
         freelancers = freelancers.paginate(page=page, per_page=4)
     return render_template('public/freelancers-list.html', freelancers=freelancers,
-        kw=keyword, lc=location, ct=category, str_cat=str_cat,
+        kw=keyword, lc=location, ct=category, lcts=lcts, cats=cats,
         rt=rating, sk=skill, tag=tag, page=page)
 
 @public.app_errorhandler(404)

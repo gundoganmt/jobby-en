@@ -21,17 +21,33 @@
    	const xhr = new XMLHttpRequest();
    	var editProfileType = $(this).attr('data');
    	var csrf_token = document.getElementById('csrf_token').value;
+    var form_data = new FormData();
+
+    if(editProfileType == "personal"){
+      var url = '/editProfile/personal';
+      var username = document.getElementById('username').value;
+      var email = document.getElementById('email').value;
+      var name = document.getElementById('firstName').value;
+      var surname = document.getElementById('surname').value;
+      form_data.append("username", username);
+      form_data.append("email", email);
+      form_data.append("name", name);
+      form_data.append("surname", surname);
+      form_data.append("file", document.getElementById('file').files[0]);
+    }
 
    	if(editProfileType == "profile"){
    		var url = '/editProfile/profile';
       var editor = document.querySelector('#editor3');
-   		var field_of_work = document.getElementById('field_of_work');
-   		var tagline = document.getElementById('tagline');
-   		var location = document.getElementById('location');
+   		var field_of_work = document.getElementById('field_of_work').value;
+   		var tagline = document.getElementById('tagline').value;
+   		var location = document.getElementById('location').value;
    		var introduction = document.querySelector('#profileQuill');
       introduction.value = editor.children[0].innerHTML;
-   		var data = {'field_of_work': field_of_work.value, "tagline": tagline.value,
-   		'location': location.value, "introduction": introduction.value};
+      form_data.append("field_of_work", field_of_work);
+      form_data.append("tagline", tagline);
+      form_data.append("location", location);
+      form_data.append("introduction", introduction.value);
    	}
 
    	else if(editProfileType == "skill"){
@@ -47,7 +63,8 @@
         alert("skill length should be between 0 and 100");
         return false;
       }
-   		var data = {'skill': skill, "level": level};
+      form_data.append("skill", skill);
+      form_data.append("level", level);
    	}
 
    	else if(editProfileType == "workExp"){
@@ -61,9 +78,13 @@
       var end_year_job = document.getElementById('end_year_job').value;
       var desc_work = document.querySelector('#desc_work');
       desc_work.value = editor.children[0].innerHTML;
-      var data = {'position': position, "company": company, "start_month_job": start_month_job,
-      "start_year_job": start_year_job, "end_month_job": end_month_job, "end_year_job": end_year_job,
-      "desc_work": desc_work.value};
+      form_data.append("position", position);
+      form_data.append("company", company);
+      form_data.append("start_month_job", start_month_job);
+      form_data.append("start_year_job", start_year_job);
+      form_data.append("end_month_job", end_month_job);
+      form_data.append("end_year_job", end_year_job);
+      form_data.append("desc_work", desc_work.value);
    	}
 
    	else if(editProfileType == "education"){
@@ -77,9 +98,13 @@
       var end_year_edu = document.getElementById('end_year_edu').value;
       var desc_edu = document.querySelector('#desc_edu');
       desc_edu.value = editor.children[0].innerHTML;
-      var data = {'field': field, "school": school, "start_month_edu": start_month_edu,
-      "start_year_edu": start_year_edu, "end_month_edu": end_month_edu, "end_year_edu": end_year_edu,
-      "desc_edu": desc_edu.value};
+      form_data.append("field", field);
+      form_data.append("school", school);
+      form_data.append("start_month_edu", start_month_edu);
+      form_data.append("start_year_edu", start_year_edu);
+      form_data.append("end_month_edu", end_month_edu);
+      form_data.append("end_year_edu", end_year_edu);
+      form_data.append("desc_edu", desc_edu.value);
    	}
 
     else if (editProfileType == "social"){
@@ -90,12 +115,15 @@
       var github = document.getElementById('github').value;
    		var instagram = document.getElementById('instagram').value;
    		var linkedin = document.getElementById('linkedin').value;
-   		var data = {'facebook': facebook, "twitter": twitter, "youtube": youtube,
-        "github": github, "instagram": instagram, "linkedin": linkedin};
+      form_data.append("facebook", facebook);
+      form_data.append("twitter", twitter);
+      form_data.append("youtube", youtube);
+      form_data.append("github", github);
+      form_data.append("instagram", instagram);
+      form_data.append("linkedin", linkedin);
    	}
 
    	xhr.open('POST', url)
-   	xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
    	xhr.setRequestHeader("X-CSRFToken", csrf_token);
    	xhr.onload = () =>{
    		if(xhr.status == 200){
@@ -108,6 +136,16 @@
             saveWorkExp(result.workExp, result.company, result.workExp_id);
           }
           else if(result.editProfileType == 'so'){
+            Swal.fire({
+              icon: 'success',
+              title: "Good job!",
+              text: "Saved successfully!",
+              type: "success",
+              confirmButtonClass: 'btn btn-primary',
+              buttonsStyling: false,
+            });
+          }
+          else if(result.editProfileType == 'per'){
             Swal.fire({
               icon: 'success',
               title: "Good job!",
@@ -132,11 +170,15 @@
           }
    			}
    			else{
-   				alert(result.msg);
+          Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: result.msg,
+          });
    			}
    		}
    	}
-   	xhr.send(JSON.stringify(data));
+   	xhr.send(form_data);
    	return false;
    })
 
@@ -213,11 +255,11 @@
       const request = new XMLHttpRequest();
       var csrf_token = document.getElementById('csrf_token').value;
    		var type_id = $(e.target).attr('data');
-      var data = {"type_id": type_id};
+      var form_data = new FormData()
+      form_data.append('type_id', type_id);
    		var url = '/deleteItem';
 
       request.open('POST', url);
-      request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
      	request.setRequestHeader("X-CSRFToken", csrf_token);
   		request.onload = () =>{
   			if (request.status == 200){
@@ -255,11 +297,15 @@
             }
   				}
   				else{
-  					alert("Lutfen giriş yapınız");
+            Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: result.msg,
+            });
   				}
   			}
   		}
-  		request.send(JSON.stringify(data));
+  		request.send(form_data);
   		return false;
     }
   }

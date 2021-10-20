@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, flash, redirect, url_for, abort, jsonify
 from flask_login import current_user, login_required
-from jobby.models import Users, Skills, WorkExperiences, Educations, Categories, Countries
+from jobby.models import Users, Skills, WorkExperiences, Educations, Categories, Countries, SkillsDb
 from jobby import db, last_updated, csrf
 import os, uuid, re, json, bleach
 from PIL import Image
@@ -9,29 +9,33 @@ from werkzeug.utils import secure_filename
 
 editProfile = Blueprint('editProfile',__name__)
 
-@editProfile.route('/editProfile', methods=['POST'])
+@editProfile.route('/editProfile/personal', methods=['POST'])
 @login_required
-def editProfile_personel():
+def editProfile_personal():
     name = request.form['name']
     surname = request.form['surname']
+    username = request.form['username']
     email = request.form['email']
-    phone_number = request.form['phone_number']
+
+    if len(username) < 6 or not username.isalnum():
+        return jsonify({'success': False, 'msg': "You have to provide valid username."})
+
+    if not username == current_user.username and Users.query.filter_by(username=username).first():
+        return jsonify({'success': False, 'msg': "This username allready being used!"})
 
     if len(name) < 3 or len(name) > 30 or len(surname) < 3 or len(surname) > 30:
-        flash("The length of name and surname should be between 3 and 30")
-        return redirect(request.url)
+        return jsonify({'success': False, 'msg': "The length of name and surname should be between 3 and 30"})
 
-    if len(email) > 50:
-        flash("Incorrect Email!")
-        return redirect(request.url)
+    if len(email) > 50 or not email:
+        return jsonify({'success': False, 'msg': "Incorrect Email!"})
 
-    if email != current_user.email:
-        flash("Confirmation email has been sent!")
+    if not email == current_user.email and Users.query.filter_by(email=email).first():
+        return jsonify({'success': False, 'msg': "This email allready being used!"})
 
     current_user.name = name
     current_user.surname = surname
-    current_user.email = email
-    current_user.phone_number = phone_number
+    current_user.username = username
+    current_user.email  = email
 
     if 'file' in request.files:
         file = request.files['file']
@@ -43,18 +47,17 @@ def editProfile_personel():
             image = Image.open(file)
             i = crop_max_square(image).resize((300, 300), Image.LANCZOS)
             i.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename), quality=95)
+
     db.session.commit()
-    return redirect(request.url)
+    return jsonify({'success': True, 'editProfileType': "per"})
 
 @editProfile.route('/editProfile/profile', methods=['POST'])
 @login_required
 def editProfile_profile():
-    data = request.get_json(force=True)
-    current_user.field_of_work = data['field_of_work']
-    print(data['field_of_work'])
-    current_user.tagline = data['tagline']
-    current_user.country = data['location']
-    current_user.introduction = bleach.clean(data['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
+    current_user.field_of_work = request.form['field_of_work']
+    current_user.tagline = request.form['tagline']
+    current_user.country = request.form['location']
+    current_user.introduction = bleach.clean(request.form['introduction'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
     current_user.check_status()
     db.session.commit()
     return jsonify({"success": True, "editProfileType": "p"})
@@ -62,9 +65,10 @@ def editProfile_profile():
 @editProfile.route('/editProfile/skill', methods=['POST'])
 @login_required
 def editProfile_skill():
-    data = request.get_json(force=True)
-    skill = data['skill']
-    level = data['level']
+    skill = request.form['skill']
+    level = request.form['level']
+    if not SkillsDb.query.filter_by(skill=skill).first():
+        return jsonify({"success": False, "msg": "This skill does not exist!"})
     new_skill = Skills(skill=skill, level=level, user_id=current_user.id)
     db.session.add(new_skill)
     db.session.commit()
@@ -74,10 +78,9 @@ def editProfile_skill():
 @editProfile.route('/editProfile/workExp', methods=['POST'])
 @login_required
 def editProfile_workExp():
-    data = request.get_json(force=True)
-    description = bleach.clean(data['desc_work'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-    workExp = WorkExperiences(position=data['position'], company=data['company'], start_month=data['start_month_job'],
-        start_year=data['start_year_job'], end_month=data['end_month_job'], end_year=data['end_year_job'],
+    description = bleach.clean(request.form['desc_work'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
+    workExp = WorkExperiences(position=request.form['position'], company=request.form['company'], start_month=request.form['start_month_job'],
+        start_year=request.form['start_year_job'], end_month=request.form['end_month_job'], end_year=request.form['end_year_job'],
         description=description, user_id=current_user.id)
     db.session.add(workExp)
     db.session.commit()
@@ -86,10 +89,9 @@ def editProfile_workExp():
 @editProfile.route('/editProfile/education', methods=['POST'])
 @login_required
 def editProfile_education():
-    data = request.get_json(force=True)
-    description = bleach.clean(data['desc_edu'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
-    edu = Educations(field=data['field'], school=data['school'], start_month=data['start_month_edu'],
-        start_year=data['start_year_edu'], end_month=data['end_month_edu'], end_year=data['end_year_edu'],
+    description = bleach.clean(request.form['desc_edu'], tags=bleach.sanitizer.ALLOWED_TAGS+['u', 'br', 'p'])
+    edu = Educations(field=request.form['field'], school=request.form['school'], start_month=request.form['start_month_edu'],
+        start_year=request.form['start_year_edu'], end_month=request.form['end_month_edu'], end_year=request.form['end_year_edu'],
         description=description, user_id=current_user.id)
     db.session.add(edu)
     db.session.commit()
@@ -98,24 +100,20 @@ def editProfile_education():
 @editProfile.route('/editProfile/social', methods=['POST'])
 @login_required
 def editProfile_social():
-    data = request.get_json(force=True)
-
-    current_user.facebook = data['facebook']
-    current_user.twitter = data['twitter']
-    current_user.instagram = data['instagram']
-    current_user.github = data['github']
-    current_user.youtube = data['youtube']
-    current_user.linkedin = data['linkedin']
+    current_user.facebook = request.form['facebook']
+    current_user.twitter = request.form['twitter']
+    current_user.instagram = request.form['instagram']
+    current_user.github = request.form['github']
+    current_user.youtube = request.form['youtube']
+    current_user.linkedin = request.form['linkedin']
 
     db.session.commit()
-
     return jsonify({"success": True, 'editProfileType': 'so'})
 
 @editProfile.route('/deleteItem', methods=['POST'])
 @login_required
 def deleteItem():
-    data = request.get_json(force=True)
-    itemType, itemId = data['type_id'].split('_')
+    itemType, itemId = request.form['type_id'].split('_')
     if itemType == 'w':
         item = WorkExperiences.query.filter_by(id=itemId, user_id=current_user.id).first()
         db.session.delete(item)
@@ -140,9 +138,10 @@ def editProfile_page():
     workExps = WorkExperiences.query.filter_by(Worker=current_user).all()
     categories = Categories.query.all()
     locations = Countries.query.all()
+    sks = SkillsDb.query.all()
     edus = Educations.query.filter_by(student=current_user).all()
     return render_template('editProfile/editProfile.html', last_updated=last_updated, skills=skills,
-        workExps=workExps, edus=edus, categories=categories, locations=locations)
+        workExps=workExps, edus=edus, categories=categories, locations=locations, sks=sks)
 
 @editProfile.app_errorhandler(413)
 def file_too_large(e):
