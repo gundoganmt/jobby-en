@@ -7,9 +7,9 @@ class Config:
     SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:WulIgtM5zk@localhost/jobby-en"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
     WHOOSH_BASE = 'whoosh'
-    MAIL_SERVER = "smtp.zoho.com"
+    MAIL_SERVER = "mail server"
     MAIL_PORT = 465
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
-    MAIL_USERNAME = "support@jobby.net"
-    MAIL_PASSWORD = "2U8IJi6qI4H2"
+    MAIL_USERNAME = "email"
+    MAIL_PASSWORD = "password"

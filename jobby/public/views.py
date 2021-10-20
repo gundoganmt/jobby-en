@@ -1,23 +1,20 @@
 from flask import render_template, Blueprint, request, redirect, url_for, abort, flash, jsonify
 from flask_login import current_user
 from sqlalchemy import or_, and_
-from jobby.models import (
-    Tasks, Bids, Users,
-    WorkExperiences, Educations,
-    Views, Notification, Reviews, Offers,
-    Notification, TaskSkills, Skills
-    )
+from jobby.models import Tasks, Bids, Users, Offers, Notification, TaskSkills, Skills, Categories, Countries
 from jobby import db
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
 import uuid, os, json
-from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER, get_category, send_email
+from utils import allowed_offer_file, get_extension, UPLOAD_OFFER_FOLDER, send_email
 
 public = Blueprint('public',__name__)
 
 @public.route('/')
 def index():
-    return render_template('public/index.html')
+    cats = Categories.query.all()
+    lcts = Countries.query.all()
+    return render_template('public/index.html', cats=cats, lcts=lcts)
 
 @public.route('/search/<where>', methods=['GET','POST'])
 def search(where):
@@ -52,7 +49,7 @@ def search(where):
 def task_page(task_url):
     task_id = task_url.split('-')[-1]
     task = Tasks.query.filter_by(id=task_id).first_or_404()
-    category = get_category(task.category)
+    category = task.category
     if request.method == 'GET':
         task.addView()
         sk = TaskSkills.query.filter_by(task_id=task.id).all()
@@ -83,7 +80,7 @@ def browseTasks():
     checks = request.args.get('cx', type=str)
     tag = request.args.get('tag', type=str)
     page = request.args.get('page', type=int)
-    str_cat = get_category(request.args.get('ct', type=str))
+    str_cat = request.args.get('ct', type=str)
 
     if request.args:
         tasks = db.session.query(Tasks)
@@ -167,7 +164,7 @@ def browseFreelancers():
     skill = request.args.get('sk', type=str)
     tag = request.args.get('tag', type=str)
     page = request.args.get('page', type=int)
-    str_cat = get_category(request.args.get('ct', type=str))
+    str_cat = request.args.get('ct', type=str)
     freelancers = db.session.query(Users).filter(Users.status=='freelancer')
 
     if request.args:

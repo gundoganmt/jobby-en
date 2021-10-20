@@ -49,7 +49,58 @@ document.addEventListener('DOMContentLoaded', () =>{
           saveAdmin(username, email, full_name, result.admin_id);
         }
         else{
-          alert(result.msg);
+          Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: result.msg,
+          });
+        }
+      }
+    }
+    xhr.send(form_data);
+    return false;
+  })
+
+  $('.saveSocial').on('click', function(e){
+    const xhr = new XMLHttpRequest();
+    var csrf_token = document.getElementById('csrf_token').value;
+    var form_data = new FormData();
+
+    var url = '/adminpanel/create/SiteSocial';
+    var facebook = document.getElementById('facebook').value;
+    var twitter = document.getElementById('twitter').value;
+    var youtube = document.getElementById('youtube').value;
+    var github = document.getElementById('github').value;
+    var instagram = document.getElementById('instagram').value;
+    var linkedin = document.getElementById('linkedin').value;
+    form_data.append("facebook", facebook);
+    form_data.append("twitter", twitter);
+    form_data.append("youtube", youtube);
+    form_data.append("github", github);
+    form_data.append("instagram", instagram);
+    form_data.append("linkedin", linkedin);
+
+    xhr.open('POST', url)
+    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+    xhr.onload = () =>{
+      if(xhr.status == 200){
+        const result = JSON.parse(xhr.responseText);
+        if(result.success){
+          Swal.fire({
+            icon: 'success',
+            title: "Good job!",
+            text: "Saved successfully!",
+            type: "success",
+            confirmButtonClass: 'btn btn-primary',
+            buttonsStyling: false,
+          });
+        }
+        else{
+          Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: result.msg,
+          });
         }
       }
     }
@@ -85,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () =>{
    }
 
    document.addEventListener('click', deleteItem);
-
    function deleteItem(e){
      if (e.target.matches('.deleteItem')){
        const request = new XMLHttpRequest();
@@ -105,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () =>{
              }
            }
            else{
-             alert("Lutfen giriş yapınız");
+             alert("Something went wrong");
            }
          }
        }

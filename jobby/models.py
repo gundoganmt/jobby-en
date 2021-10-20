@@ -246,6 +246,16 @@ class Admin(UserMixin, db.Model):
     def __repr__(self):
         return self.username
 
+class SiteSettings(db.Model):
+    __tablename__ = 'SiteSettings'
+    id = db.Column(db.Integer, primary_key=True)
+    facebook = db.Column(db.String(80), nullable=True, default="")
+    twitter = db.Column(db.String(80), nullable=True, default="")
+    youtube = db.Column(db.String(80), nullable=True, default="")
+    github = db.Column(db.String(80), nullable=True, default="")
+    instagram = db.Column(db.String(80), nullable=True, default="")
+    linkedin = db.Column(db.String(80), nullable=True, default="")
+
 class Offers(db.Model):
     __tablename__ = 'Offers'
     id = db.Column(db.Integer, primary_key=True)

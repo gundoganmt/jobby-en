@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app, send_file
 from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig, Admin,
-    Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills)
+    Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills, SiteSettings)
 from jobby import db
 from PIL import Image
 from datetime import datetime
@@ -28,8 +28,10 @@ def dbop(table):
         projects = Tasks.query.all()
         return render_template('admin/projectsTable.html', projects=projects)
     elif table == 'site-settings':
+        mail_config = db.session.query(MailConfig).first()
+        ss = db.session.query(SiteSettings).first()
         admins = Admin.query.all()
-        return render_template('admin/site-settings.html', admins=admins)
+        return render_template('admin/site-settings.html', admins=admins, ss=ss, mail_config=mail_config)
     elif table == 'bids':
         bids = Bids.query.all()
         return render_template('admin/bidsTable.html', bids=bids)
@@ -275,14 +277,8 @@ def create(table):
             provider = request.form['ServisProvider']
             mail_server = request.form['MailServer']
             port = request.form['port']
-            if request.form['UseTLS'] == 'Yes':
-                use_TLS = True
-            else:
-                use_TLS = False
-            if request.form['UseSSL'] == 'Yes':
-                use_SSL = True
-            else:
-                use_SSL = False
+            use_TLS = request.form['UseTLS'] == 'Yes'
+            use_SSL = request.form['UseSSL'] == 'Yes'
             username = request.form['username']
             password = request.form['password']
 
@@ -309,6 +305,7 @@ def create(table):
                 MAIL_SERVER=mail_server,
                 MAIL_PORT=port,
                 MAIL_USE_TLS = use_TLS,
+                MAIL_USE_SSL = use_SSL,
                 MAIL_USERNAME = username,
                 MAIL_PASSWORD = password
             )
@@ -353,6 +350,31 @@ def create(table):
             db.session.add(admin)
             db.session.commit()
             return jsonify({'success': True, 'admin_id': admin.id})
+        elif table == 'SiteSocial':
+            facebook = request.form['facebook']
+            twitter = request.form['twitter']
+            instagram = request.form['instagram']
+            github = request.form['github']
+            youtube = request.form['youtube']
+            linkedin = request.form['linkedin']
+
+            ss = db.session.query(SiteSettings).first()
+            if not ss:
+                ss = SiteSettings(facebook=facebook, twitter=twitter, instagram=instagram,
+                    github=github, youtube=youtube, linkedin=linkedin)
+                db.session.add(ss)
+                db.session.commit()
+                return jsonify({"success": True})
+            else:
+                ss.facebook = facebook
+                ss.twitter = twitter
+                ss.instagram = instagram
+                ss.github = github
+                ss.youtube = youtube
+                ss.linkedin = linkedin
+
+                db.session.commit()
+                return jsonify({"success": True})
 
 @admin.route('/adminpanel/chart/<view_type>')
 @admin_required()

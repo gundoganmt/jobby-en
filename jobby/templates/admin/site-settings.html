@@ -6,13 +6,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link href="img/logo/logo.png" rel="icon">
-  <title>RuangAdmin - DataTables</title>
+  <title>Jobby Admin - Site Settings</title>
   <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-  <link href="{{ url_for('static', filename='css/admin/ruang-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/jobby-admin.min.css') }}" rel="stylesheet" type="text/css">
   <link href="{{ url_for('static', filename='css/admin/style.css') }}" rel="stylesheet">
 
 </head>
@@ -80,37 +77,37 @@
                               <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="ServisProvider">Select Driver</label>
                                 <select class="form-control" id="ServisProvider" name="ServisProvider" title="Select Driver" required>
-                                  <option>Zoho</option>
-                                  <option>SendGrid</option>
-                                  <option>MailTrap</option>
-                                  <option>Gmail</option>
+                                  <option {% if ss.provider=="Zoho" %} selected="selected"{% endif %}>Zoho</option>
+                                  <option {% if ss.provider=="SendGrid" %} selected="selected"{% endif %}>SendGrid</option>
+                                  <option {% if ss.provider=="MailTrap" %} selected="selected"{% endif %}>MailTrap</option>
+                                  <option {% if ss.provider=="Gmail" %} selected="selected"{% endif %}>Gmail</option>
                                 </select>
                               </div>
                               <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="MailServer">Mail Server</label>
-                                <input type="text" class="form-control" id="MailServer" name="MailServer" placeholder="Mail Server" required>
+                                <input type="text" class="form-control" id="MailServer" name="MailServer" placeholder="Mail Server" required value="{{mail_config.mail_server}}">
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="Port">Port</label>
-                                <input type="number" class="form-control" id="port" name="port" placeholder="Port" required>
+                                <input type="number" class="form-control" id="port" name="port" placeholder="Port" required value="{{mail_config.port}}">
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="UseTLS">Use TLS</label>
                                 <select class="form-control" id="UseTLS" name="UseTLS" required>
-                                  <option>Yes</option>
-                                  <option>No</option>
+                                  <option {% if mail_config.use_TLS %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not mail_config.use_TLS %} selected="selected"{% endif %}>No</option>
                                 </select>
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="UseSSL">Use SSL</label>
                                 <select class="form-control" id="UseSSL" name="UseSSL" required>
-                                  <option>Yes</option>
-                                  <option>No</option>
+                                  <option {% if mail_config.use_SSL %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not mail_config.use_SSL %} selected="selected"{% endif %}>No</option>
                                 </select>
                               </div>
                               <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required value="{{mail_config.username}}">
                               </div>
                               <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="password">Password</label>
@@ -200,7 +197,7 @@
                                 <input type="text" class="form-control" id="accountPassword" name="password" placeholder="Password">
                               </div>
                               <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                  <button type="submit" class="btn btn-primary saveAdmin">Save Changes</button>
+                                  <button type="submit" class="btn btn-primary saveAdmin mr-2">Save Changes</button>
                                   <button type="reset" class="btn btn-outline-warning">Reset</button>
                               </div>
                             </div>
@@ -222,7 +219,7 @@
                                         <div class="input-group-prepend">
                                           <span class="input-group-text" style="color: #6e707e;">twitter.com/</span>
                                         </div>
-                                        <input type="text" class="form-control" value="maho" id="twitter" maxlength="50">
+                                        <input type="text" class="form-control" value="{{ ss.twitter }}" id="twitter" maxlength="50">
                                     </div>
 
                                     <label>Facebook</label>
@@ -233,7 +230,7 @@
                                         <div class="input-group-prepend">
                                           <span class="input-group-text" style="color: #6e707e;">facebook.com/</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" id="facebook" maxlength="50">
+                                        <input type="text" class="form-control" value="{{ ss.facebook }}" id="facebook" maxlength="50">
                                     </div>
                                     <label>Instagram</label>
                                     <div class="input-group mb-75 input-group-merge">
@@ -243,7 +240,7 @@
                                         <div class="input-group-prepend">
                                           <span class="input-group-text" style="color: #6e707e;">www.instagram.com/</span>
                                         </div>
-                                        <input type="text" class="form-control" value="" id="instagram" maxlength="50">
+                                        <input type="text" class="form-control" value="{{ ss.instagram }}" id="instagram" maxlength="50">
                                     </div>
                                 </fieldset>
                               </div>
@@ -256,7 +253,7 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text" style="color: #6e707e;">github.com/</span>
                                       </div>
-                                      <input type="text" class="form-control" value="" id="github" maxlength="50">
+                                      <input type="text" class="form-control" value="{{ ss.github }}" id="github" maxlength="50">
                                   </div>
                                   <label>Youtube</label>
                                   <div class="input-group mb-75 input-group-merge">
@@ -266,7 +263,7 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text" style="color: #6e707e;">youtube.com/</span>
                                       </div>
-                                      <input type="text" class="form-control" value="mahoga" id="youtube" maxlength="50">
+                                      <input type="text" class="form-control" value="{{ ss.youtube }}" id="youtube" maxlength="50">
                                   </div>
                                   <label>Linkedin</label>
                                   <div class="input-group mb-75 input-group-merge">
@@ -276,11 +273,11 @@
                                       <div class="input-group-prepend">
                                         <span class="input-group-text" style="color: #6e707e;">linkedin.com/</span>
                                       </div>
-                                      <input type="text" class="form-control" value="" id="linkedin" maxlength="50">
+                                      <input type="text" class="form-control" value="{{ ss.linkedin }}" id="linkedin" maxlength="50">
                                   </div>
                               </div>
                               <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
-                                  <button class="btn btn-primary saveSetting" data="social" data-user-id="15">Save Changes</button>
+                                  <button class="btn btn-primary saveSocial mr-2">Save Changes</button>
                                   <button type="reset" class="btn btn-outline-warning">Reset</button>
                               </div>
                             </div>
@@ -293,29 +290,6 @@
               </div>
             </div>
           </div>
-
-          <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>Are you sure you want to logout?</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                  <a href="login.html" class="btn btn-primary">Logout</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
         <!---Container Fluid-->
       </div>
@@ -331,7 +305,9 @@
   <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/admin/ruang-admin.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jobby-admin.min.js') }}"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
   <script src="{{ url_for('static', filename='js/admin/CreateAdmin.js') }}"></script>
 
   <!-- Page level plugins -->
