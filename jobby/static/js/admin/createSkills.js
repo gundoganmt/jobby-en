@@ -22,9 +22,14 @@ document.addEventListener('DOMContentLoaded', () =>{
           if (result.success) {
             var sk_item = document.getElementById(type_id);
             sk_item.parentNode.removeChild(sk_item);
+            toastr.success(result.msg, 'Success');
           }
           else {
-            alert(result.msg)
+            Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: result.msg,
+            });
           }
         }
       }

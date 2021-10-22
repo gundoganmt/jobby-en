@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
            }
          }
          else{
-           alert("Lutfen giriş yapınız");
+           alert("Something bad happened! Refresh the page and try again."); 
          }
        }
      }

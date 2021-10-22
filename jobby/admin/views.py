@@ -3,20 +3,75 @@ from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, Sk
     Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills, SiteSettings)
 from jobby import db
 from PIL import Image
-from datetime import datetime
+from datetime import datetime, timedelta
 from utils import (crop_max_square, allowed_img_file, get_extension,
     UPLOAD_IMG_FOLDER, UPLOAD_TASK_FOLDER, allowed_offer_file, UPLOAD_OFFER_FOLDER)
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import os, uuid
+from flask_login import current_user
 from utils import admin_required
 
 admin = Blueprint('admin',__name__)
 
-@admin.route('/adminpanel', methods=['GET', 'POST'])
+@admin.route('/adminpanel')
 @admin_required()
 def adminpanel():
-    return render_template('admin/index.html')
+    total_two_months = db.session.query(Users).filter(Users.member_since > datetime.now()-timedelta(60)).count()
+    total_new_users = db.session.query(Users).filter(Users.member_since > datetime.now()-timedelta(30))
+
+    total_two_weeks = db.session.query(Users).filter(Users.member_since > datetime.now()-timedelta(14)).count()
+    week_new_users = db.session.query(Users).filter(Users.member_since > datetime.now()-timedelta(7))
+
+    last_month = total_two_months - total_new_users.count()
+    last_week = total_two_weeks - week_new_users.count()
+    all_users = Users.query.all()
+
+    if not last_month==0:
+        rate_month = 100*(total_new_users.count()-last_month)/last_month
+    else:
+        rate_month=0.0
+    if not last_week==0:
+        rate_week = 100*(week_new_users.count()-last_week)/last_week
+    else:
+        rate_week=0.0
+
+    total_two_months_pro = db.session.query(Tasks).filter(Tasks.time_posted > datetime.now()-timedelta(60)).count()
+    total_new_pro = db.session.query(Tasks).filter(Tasks.time_posted > datetime.now()-timedelta(30))
+
+    total_two_weeks_pro = db.session.query(Tasks).filter(Tasks.time_posted > datetime.now()-timedelta(14)).count()
+    week_new_pro = db.session.query(Tasks).filter(Tasks.time_posted > datetime.now()-timedelta(7))
+
+    last_month_pro = total_two_months_pro - total_new_pro.count()
+    last_week_pro = total_two_weeks_pro - week_new_pro.count()
+    all_pro = Tasks.query.all()
+
+    if not last_month_pro==0:
+        rate_month_pro = 100*(total_new_pro.count()-last_month_pro)/last_month_pro
+    else:
+        rate_month_pro=0.0
+    if not last_week_pro==0:
+        rate_week_pro = 100*(week_new_pro.count()-last_week_pro)/last_week_pro
+    else:
+        rate_week_pro=0.0
+
+    return render_template('admin/index.html', rate_month=rate_month, rate_month_pro=rate_month_pro,
+        all_users=all_users, week_new_users=week_new_users.all(), rate_week=rate_week, all_pro=all_pro,
+        week_new_pro=week_new_pro.all(), rate_week_pro=rate_week_pro)
+
+@admin.route('/adminpanel/search', methods=['GET', 'POST'])
+@admin_required()
+def search():
+    if request.method == 'GET':
+        keyword = request.args.get('kw', type=str)
+        if keyword:
+            projects = Tasks.query.whoosh_search(keyword).all()
+            users = Users.query.whoosh_search(keyword).all()
+
+        return render_template('admin/search.html', users=users, projects=projects)
+    else:
+        keyword = request.form['keyword']
+        return redirect(url_for('.search', kw=keyword))
 
 @admin.route('/adminpanel/<table>', methods=['GET', 'POST'])
 @admin_required()
@@ -107,32 +162,39 @@ def create(table):
             return redirect(request.url)
 
         elif table == 'categories':
-            category = request.form['category']
-            if len(category) < 3 or len(category) > 150:
-                flash('Category length should be between 3 and 150')
-                return redirect(request.url)
-            cat = Categories(category=category)
-            if 'file' in request.files:
-                file = request.files['file']
-                filename = file.filename
-                if allowed_img_file(filename):
-                    filename = secure_filename(filename)
-                    unique_filename = str(uuid.uuid4())+get_extension(filename)
-                    cat.cat_pic = unique_filename
-                    file.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename))
-                    db.session.add(cat)
-                    db.session.commit()
+            if current_user.username == 'gundoganm':
+                category = request.form['category']
+                if len(category) < 3 or len(category) > 150:
+                    flash('Category length should be between 3 and 150')
                     return redirect(request.url)
+                cat = Categories(category=category)
+                if 'file' in request.files:
+                    file = request.files['file']
+                    filename = file.filename
+                    if allowed_img_file(filename):
+                        filename = secure_filename(filename)
+                        unique_filename = str(uuid.uuid4())+get_extension(filename)
+                        cat.cat_pic = unique_filename
+                        file.save(os.path.join(UPLOAD_IMG_FOLDER, unique_filename))
+                        db.session.add(cat)
+                        db.session.commit()
+                        return redirect(request.url)
+                    else:
+                        flash("Not allowed file type. Only jpeg, png or jpg")
+                        return redirect(request.url)
                 else:
-                    flash("Not allowed file type. Only jpeg, png or jpg")
+                    flash("İmage is required")
                     return redirect(request.url)
             else:
-                flash("İmage is required")
+                flash("Category creation is not allowed for demo accounts!")
                 return redirect(request.url)
         elif table == 'countries':
             country = request.form['country']
             if len(country) < 2 or len(country) > 100:
                 flash("Country length should be between 2 and 100")
+                return redirect(request.url)
+            if Countries.query.filter_by(country=country).first():
+                flash("Location already exist")
                 return redirect(request.url)
             ctr = Countries(country=country)
             db.session.add(ctr)
@@ -853,6 +915,9 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({"success": True, 'currentField': 'e'})
     elif itemType == 'ad':
+        if current_user.username =='admin':
+            return jsonify({'success': False, "msg": "Cannot delete this admin!"})
+
         adm = Admin.query.get(itemId)
         if adm:
             db.session.delete(adm)
@@ -861,8 +926,11 @@ def deleteItem(type_id):
                 os.remove(os.path.join(UPLOAD_IMG_FOLDER, adm.profile_picture))
             return jsonify({'success': True})
         else:
-            return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
+            return jsonify({'success': False, "msg": "Something bad happened! Refresh the page and try again!"})
     elif itemType == 'cat':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         cat = Categories.query.get(itemId)
         if cat:
             db.session.delete(cat)
@@ -872,6 +940,9 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'ctr':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         ctr = Countries.query.get(itemId)
         if ctr:
             db.session.delete(ctr)
@@ -880,6 +951,9 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'sk':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         sk = SkillsDb.query.get(itemId)
         if sk:
             db.session.delete(sk)
@@ -888,21 +962,33 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'u':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         user = Users.query.get(itemId)
         db.session.delete(user)
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'pr':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         pr = Tasks.query.get(itemId)
         db.session.delete(pr)
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'b':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         b = Bids.query.get(itemId)
         db.session.delete(b)
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'o':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         o = Offers.query.get(itemId)
         if o.filename:
             os.remove(os.path.join(UPLOAD_OFFER_FOLDER, o.filename))
@@ -910,11 +996,17 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'm':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         m = Messages.query.get(itemId)
         db.session.delete(m)
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'rv':
+        if current_user.username == 'admin':
+            return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
+
         rv = Reviews.query.get(itemId)
         db.session.delete(rv)
         db.session.commit()

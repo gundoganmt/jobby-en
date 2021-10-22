@@ -22,9 +22,14 @@ document.addEventListener('DOMContentLoaded', () =>{
           if (result.success) {
             var ctr_item = document.getElementById(type_id);
             ctr_item.parentNode.removeChild(ctr_item);
+            toastr.success(result.msg, 'Success');
           }
           else {
-            alert(result.msg)
+            Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: result.msg,
+            });
           }
         }
       }

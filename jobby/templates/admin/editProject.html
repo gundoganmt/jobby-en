@@ -32,7 +32,7 @@
                 <div class="card-body">
                   <div class="user-avatar-section">
                     <div class="d-flex align-items-center flex-column">
-                      <img class="img-fluid rounded mt-3 mb-2" src="{{ url_for('static', filename='images/taskpics/'+project.task_pic)}}" height="110" width="110" alt="User avatar">
+                      <img class="img-fluid rounded mt-3 mb-2" src="{{ url_for('static', filename='images/taskpics/'+project.task_pic)}}" height="110" width="110">
                       <div class="user-info text-center">
                         <h4>{{ project }}</h4>
                         <span class="badge bg-light-secondary">{{ project.category }}</span>
@@ -72,7 +72,7 @@
                       </li>
                       <li class="mb-75">
                         <span class="fw-bolder me-25">Time Posted:</span>
-                        <span>{{ project.time_posted.strftime('%d:%m:%Y') }}</span>
+                        <span>{{ project.time_posted.strftime("%d %b, %Y") }}</span>
                       </li>
 
                     </ul>

@@ -37,9 +37,14 @@ document.addEventListener('DOMContentLoaded', () =>{
           if (result.success) {
             var cat_item = document.getElementById(type_id);
             cat_item.parentNode.removeChild(cat_item);
+            toastr.success(result.msg, 'Success');
           }
           else {
-            alert(result.msg)
+            Swal.fire({
+               icon: 'error',
+               title: 'Oops...',
+               text: result.msg,
+            });
           }
         }
       }

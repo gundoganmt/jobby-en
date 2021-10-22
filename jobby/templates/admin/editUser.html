@@ -87,7 +87,10 @@
                           <span class="fw-bolder me-25">Status:</span>
                           <span>{{ user.status }}</span>
                         </li>
-
+                        <li class="mb-75">
+                          <span class="fw-bolder me-25">Menber Since:</span>
+                          <span>{{ user.member_since.strftime("%d %b, %Y") }}</span>
+                        </li>
                       </ul>
                     </div>
                   {% else %}

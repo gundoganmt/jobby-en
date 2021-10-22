@@ -155,7 +155,11 @@ document.addEventListener('DOMContentLoaded', () =>{
              }
            }
            else{
-             alert("Something went wrong");
+             Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: result.msg,
+             });
            }
          }
        }

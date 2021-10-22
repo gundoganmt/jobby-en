@@ -27,63 +27,22 @@
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-            </ol>
           </div>
 
           <div class="row mb-3">
-            <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Earnings (Monthly)</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
-                        <span>Since last month</span>
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-calendar fa-2x text-primary"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Earnings (Annual) Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Sales</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">650</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">Total Users</div>
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ all_users|length }}</div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
-                        <span>Since last years</span>
-                      </div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-shopping-cart fa-2x text-success"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- New User Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">New User</div>
-                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">366</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
+                        {% if rate_month >= 0 %}
+                          <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{rate_month}}%</span>
+                        {% else %}
+                          <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{rate_month}}%</span>
+                        {% endif %}
                         <span>Since last month</span>
                       </div>
                     </div>
@@ -94,162 +53,147 @@
                 </div>
               </div>
             </div>
-            <!-- Pending Requests Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card h-100">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Pending Requests</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">New User</div>
+                      <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ week_new_users|length }}</div>
                       <div class="mt-2 mb-0 text-muted text-xs">
-                        <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
-                        <span>Since yesterday</span>
+                        {% if rate_week >= 0 %}
+                          <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{rate_week}}%</span>
+                        {% else %}
+                          <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{rate_week}}%</span>
+                        {% endif %}
+                        <span>Since last week</span>
                       </div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-comments fa-2x text-warning"></i>
+                      <i class="fas fa-user fa-2x text-info"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">All Projects</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ all_pro|length }}</div>
+                      <div class="mt-2 mb-0 text-muted text-xs">
+                        {% if rate_month_pro >= 0 %}
+                          <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{rate_month_pro}}%</span>
+                        {% else %}
+                          <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{rate_month_pro}}%</span>
+                        {% endif %}
+                        <span>Since last months</span>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fa fa-tasks fa-2x text-success"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">New Projects</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">{{ week_new_pro|length }}</div>
+                      <div class="mt-2 mb-0 text-muted text-xs">
+                        {% if rate_week_pro >= 0 %}
+                          <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> {{rate_week_pro}}%</span>
+                        {% else %}
+                          <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> {{rate_week_pro}}%</span>
+                        {% endif %}
+                        <span>Since last week</span>
+                      </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fa fa-tasks fa-2x text-warning"></i>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Invoice Example -->
-            <div class="col-xl-8 col-lg-7 mb-4">
+            <div class="col-xl-12 col-lg-12 mb-4">
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Invoice</h6>
-                  <a class="m-0 float-right btn btn-danger btn-sm" href="#">View More <i
+                  <h6 class="m-0 font-weight-bold text-primary">Recent Users</h6>
+                  <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.dbop', table='users')}}">View All <i
                       class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Item</th>
+                        <th>Username</th>
+                        <th>Email</th>
                         <th>Status</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td><a href="#">RA0449</a></td>
-                        <td>Udin Wayang</td>
-                        <td>Nasi Padang</td>
-                        <td><span class="badge badge-success">Delivered</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA5324</a></td>
-                        <td>Jaenab Bajigur</td>
-                        <td>Gundam 90' Edition</td>
-                        <td><span class="badge badge-warning">Shipping</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA8568</a></td>
-                        <td>Rivat Mahesa</td>
-                        <td>Oblong T-Shirt</td>
-                        <td><span class="badge badge-danger">Pending</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA1453</a></td>
-                        <td>Indri Junanda</td>
-                        <td>Hat Rounded</td>
-                        <td><span class="badge badge-info">Processing</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
-                      <tr>
-                        <td><a href="#">RA1998</a></td>
-                        <td>Udin Cilok</td>
-                        <td>Baby Powder</td>
-                        <td><span class="badge badge-success">Delivered</span></td>
-                        <td><a href="#" class="btn btn-sm btn-primary">Detail</a></td>
-                      </tr>
+                      {% for user in week_new_users %}
+                        <tr>
+                          <td>{{ user }}</td>
+                          <td>{{ user.email }}</td>
+                          {% if user.status == 'freelancer' %}
+                            <td><span class="badge badge-success">Freelancer</span></td>
+                          {% else %}
+                            <td><span class="badge badge-info">Employer</span></td>
+                          {% endif %}
+                          <td><a href="{{ url_for('admin.editUser', user_id=user.id, from='table') }}" class="btn btn-sm btn-primary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
                     </tbody>
                   </table>
                 </div>
-                <div class="card-footer"></div>
               </div>
             </div>
-            <!-- Message From Customer-->
-            <div class="col-xl-4 col-lg-5 ">
+            <div class="col-xl-12 col-lg-12 mb-4">
               <div class="card">
-                <div class="card-header py-4 bg-primary d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-light">Message From Customer</h6>
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Recent Projects</h6>
+                  <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.dbop', table='projects')}}">View All <i
+                      class="fas fa-chevron-right"></i></a>
                 </div>
-                <div>
-                  <div class="customer-message align-items-center">
-                    <a class="font-weight-bold" href="#">
-                      <div class="text-truncate message-title">Hi there! I am wondering if you can help me with a
-                        problem I've been having.</div>
-                      <div class="small text-gray-500 message-time font-weight-bold">Udin Cilok · 58m</div>
-                    </a>
-                  </div>
-                  <div class="customer-message align-items-center">
-                    <a href="#">
-                      <div class="text-truncate message-title">But I must explain to you how all this mistaken idea
-                      </div>
-                      <div class="small text-gray-500 message-time">Nana Haminah · 58m</div>
-                    </a>
-                  </div>
-                  <div class="customer-message align-items-center">
-                    <a class="font-weight-bold" href="#">
-                      <div class="text-truncate message-title">Lorem ipsum dolor sit amet, consectetur adipiscing elit
-                      </div>
-                      <div class="small text-gray-500 message-time font-weight-bold">Jajang Cincau · 25m</div>
-                    </a>
-                  </div>
-                  <div class="customer-message align-items-center">
-                    <a class="font-weight-bold" href="#">
-                      <div class="text-truncate message-title">At vero eos et accusamus et iusto odio dignissimos
-                        ducimus qui blanditiis
-                      </div>
-                      <div class="small text-gray-500 message-time font-weight-bold">Udin Wayang · 54m</div>
-                    </a>
-                  </div>
-                  <div class="card-footer text-center">
-                    <a class="m-0 small text-primary card-link" href="#">View More <i
-                        class="fas fa-chevron-right"></i></a>
-                  </div>
+                <div class="table-responsive">
+                  <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Project Title</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for pro in week_new_pro %}
+                        <tr>
+                          <td>{{ pro.project_name }}</td>
+                          <td>{{ pro.category }}</td>
+                          <td>{{ pro.location }}</td>
+                          <td><a href="{{ url_for('admin.editProject', pro_id=pro.id) }}" class="btn btn-sm btn-primary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
           </div>
           <!--Row-->
-
-          <div class="row">
-            <div class="col-lg-12 text-center">
-              <p>Do you like this template ? you can download from <a href="https://github.com/indrijunanda/jobbyAdmin"
-                  class="btn btn-primary btn-sm" target="_blank"><i class="fab fa-fw fa-github"></i>&nbsp;GitHub</a></p>
-            </div>
-          </div>
         </div>
         <!---Container Fluid-->
       </div>
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
-              <b><a href="https://indrijunanda.gitlab.io/" target="_blank">indrijunanda</a></b>
-            </span>
-          </div>
-        </div>
-
-        <div class="container my-auto py-2">
-          <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - distributed by
-              <b><a href="https://themewagon.com/" target="_blank">themewagon</a></b>
-            </span>
-          </div>
-        </div>
-      </footer>
-      <!-- Footer -->
     </div>
   </div>
 
@@ -262,8 +206,6 @@
   <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
   <script src="{{ url_for('static', filename='js/admin/jobby-admin.min.js') }}"></script>
-  <!-- <script src="vendor/chart.js/Chart.min.js"></script>
-  <script src="js/demo/chart-area-demo.js"></script>   -->
 </body>
 
 </html>

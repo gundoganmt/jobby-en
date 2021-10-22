@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Jobby Admin - Search</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/jobby-admin.min.css') }}" rel="stylesheet" type="text/css">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <!-- TopBar -->
+        {% include 'admin/_navbar.html' %}
+        <!-- Topbar -->
+
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Search</h1>
+          </div>
+
+          <div class="row mb-3">
+
+            <div class="col-xl-12 col-lg-12 mb-4">
+              {% if users %}
+              <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+                  <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.dbop', table='users')}}">View All <i
+                      class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for user in users %}
+                        <tr>
+                          <td>{{ user.username }}</td>
+                          <td>{{ user.email }}</td>
+                          {% if user.status == 'freelancer' %}
+                            <td><span class="badge badge-success">Freelancer</span></td>
+                          {% else %}
+                            <td><span class="badge badge-info">Employer</span></td>
+                          {% endif %}
+                          <td><a href="{{ url_for('admin.editUser', user_id=user.id, from='table') }}" class="btn btn-sm btn-primary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {% else %}
+              <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+                No user found for this keyword!
+              </div>
+              {% endif %}
+            </div>
+            <div class="col-xl-12 col-lg-12 mb-4">
+              {% if projects %}
+              <div class="card">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                  <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                  <a class="m-0 float-right btn btn-primary btn-sm" href="{{ url_for('admin.dbop', table='projects')}}">View All <i
+                      class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="table-responsive">
+                  <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Project Title</th>
+                        <th>Category</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for pro in projects %}
+                        <tr>
+                          <td>{{ pro.project_name }}</td>
+                          <td>{{ pro.category }}</td>
+                          <td>{{ pro.location }}</td>
+                          <td><a href="{{ url_for('admin.editProject', pro_id=pro.id) }}" class="btn btn-sm btn-primary">Detail</a></td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              {% else %}
+              <div class="alert alert-info alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+                No project found for this keyword!
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          <!--Row-->
+        </div>
+        <!---Container Fluid-->
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jobby-admin.min.js') }}"></script>
+</body>
+
+</html>

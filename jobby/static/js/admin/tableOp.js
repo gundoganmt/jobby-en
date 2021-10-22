@@ -10,6 +10,10 @@ document.addEventListener('DOMContentLoaded', () =>{
         const result = JSON.parse(xhr.responseText);
         if (result.success) {
           $('#'+type_id).hide('slow', function(){ $('#'+type_id).remove(); });
+          toastr.success(result.msg, 'Success');
+        }
+        else {
+          toastr.error(result.msg, 'Error');
         }
       }
     }

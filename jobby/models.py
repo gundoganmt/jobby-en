@@ -15,7 +15,7 @@ BookmarksUsers = db.Table('BookmarksUsers',
 )
 
 class Users(UserMixin, db.Model):
-    __searchable__ = ['name', 'surname', 'tagline', 'introduction']
+    __searchable__ = ['username', 'name', 'surname', 'tagline', 'introduction']
     __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=True, default="")
