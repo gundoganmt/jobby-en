@@ -45,6 +45,7 @@ def login():
 
 @account.route('/signup', methods=['GET','POST'])
 def signup():
+    session['login_type'] = 'Users'
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':

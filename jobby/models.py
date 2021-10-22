@@ -496,5 +496,8 @@ class Categories(db.Model):
     cat_pic = db.Column(db.String(80))
     category = db.Column(db.String(100), nullable=False)
 
+    def num_of_jobs(self):
+        return Tasks.query.filter_by(category=self.category).count()
+
     def __repr__(self):
         return self.category

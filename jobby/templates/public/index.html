@@ -150,7 +150,7 @@
                         <div class="card-body">
                             <ul class="list-unstyled d-flex justify-content-between mb-0">
                                 <li><a href="{{ url_for('public.browseTasks', ct=cat.category) }}" class="title h6 text-dark">{{ cat }}</a></li>
-                                <li class="h6 mb-0 jobs">15 Jobs</li>
+                                <li class="h6 mb-0 jobs">{{ cat.num_of_jobs() }} Jobs</li>
                             </ul>
                         </div>
                       </div>
