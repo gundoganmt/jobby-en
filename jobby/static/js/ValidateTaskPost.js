@@ -70,29 +70,36 @@ document.addEventListener('DOMContentLoaded', () =>{
       e.preventDefault();
     }
     else {
-      var url = '/posttask';
-      var csrf_token = document.getElementById('csrf_token').value;
-      var ins = document.getElementById('upload').files.length;
-      const xhr = new XMLHttpRequest();
-      var form_data = new FormData();
-
-      if(ins == 0) {
-        alert("Please add an image relevant to your project!")
-        send_post.innerHTML = 'Post Project';
-        send_post.disabled = false;
-        e.preventDefault();
-        return false;
+      var task_id = send_post.getAttribute('data');
+      if (task_id != "postpro") {
+        var url = '/edittask/' + task_id;
       }
       else {
-        var size = document.getElementById('upload').files[0].size;
-        if (size > 2*1024*1024) {
-          alert("Picture size is too big! Max 2Mb")
+        var url = '/posttask';
+        var ins = document.getElementById('upload').files.length;
+
+        if(ins != 0) {
+          var size = document.getElementById('upload').files[0].size;
+          if (size > 2*1024*1024) {
+            alert("Picture size is too big! Max 2Mb")
+            send_post.innerHTML = 'Post Project';
+            send_post.disabled = false;
+            e.preventDefault();
+            return false;
+          }
+        }
+        else {
+          alert("Please add relevant image to your project")
           send_post.innerHTML = 'Post Project';
           send_post.disabled = false;
           e.preventDefault();
           return false;
         }
       }
+
+      var csrf_token = document.getElementById('csrf_token').value;
+      const xhr = new XMLHttpRequest();
+      var form_data = new FormData();
 
       form_data.append("project_name", project_name);
       form_data.append("category", category);

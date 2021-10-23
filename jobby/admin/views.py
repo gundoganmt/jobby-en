@@ -269,7 +269,7 @@ def create(table):
             if not bidded:
                 flash("Project Not found!", "error")
                 return redirect(request.url)
-            if not bidded.poster == bidder:
+            if bidded.poster == bidder:
                 flash("Bidder cannot be project poster! Choose other bidder.", "error")
                 return redirect(request.url)
 

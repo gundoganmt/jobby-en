@@ -22,7 +22,13 @@ def dashboard():
 @manage.route('/get-view-data/<int:task_id>')
 @login_required
 def getViewData(task_id):
+    task = Tasks.query.get(task_id)
     views = Views.query.filter_by(task_id=task_id).first()
+    if not views:
+        return jsonify({'success': True, 'monday': 0, 'tuesday': 0, 'wednesday': 0,
+            'thursday': 0, 'friday': 0, 'saturday': 0, 'sunday': 0,
+            'project_name': task.project_name})
+
     if views.viewedTask.poster == current_user:
         return jsonify({'success': True, 'monday': views.monday, 'tuesday': views.tuesday, 'wednesday': views.wednesday,
             'thursday': views.thursday, 'friday': views.friday, 'saturday': views.saturday, 'sunday': views.sunday,
@@ -44,6 +50,17 @@ def deleteNotif(notif_id):
         db.session.delete(notif)
         db.session.commit()
         return jsonify({'success': True, 'all': False})
+
+@manage.route('/delete_pro/<task_id>')
+@login_required
+def deleteTask(task_id):
+    task = Tasks.query.filter_by(id=int(task_id), poster=current_user).first()
+    if not task:
+        return jsonify({'success': False, 'msg': 'Something bad happened! Refresh the page try again'})
+    else:
+        db.session.delete(task)
+        db.session.commit()
+        return jsonify({'success': True, 'msg': "Project Successfully Deleted!"})
 
 @csrf.exempt
 @manage.route('/reviews', methods=['GET', 'POST'])

@@ -73,7 +73,7 @@
 									</div>
 								{% endfor %}
 								{% for task in tasks %}
-									<li>
+									<li id="{{task.id}}">
 										<!-- Job Listing -->
 										<div class="job-listing width-adjustment">
 
@@ -82,7 +82,11 @@
 												<!-- Details -->
 												<div class="job-listing-description">
 													<h3 class="job-listing-title"><a href="{{ url_for('public.task_page', task_url=task.generate_task_link()) }}">{{ task.project_name }}</a></h3>
-													<!-- Job Listing Footer -->
+													<div class="job-listing-footer">
+													<ul>
+														<li><i class="icon-material-outline-date-range"></i> Posted on {{ task.time_posted.strftime("%d %b, %Y") }}</li>
+													</ul>
+												</div>
 												</div>
 											</div>
 										</div>
@@ -95,7 +99,9 @@
 										</ul>
 										<!-- Buttons -->
 										<div class="buttons-to-right always-visible">
-											<a href="{{ url_for('manage.manageBidders', task_id=task.id) }}" class="button ripple-effect"><i class="icon-material-outline-supervisor-account"></i> Bidders <span class="button-info">{{ task.num_bids }}</span></a>
+											<a href="{{ url_for('manage.manageBidders', task_id=task.id) }}" class="button ripple-effect"><i class="icon-material-outline-supervisor-account"></i>Manage Bidders <span class="button-info">{{ task.num_bids }}</span></a>
+											<a href="{{ url_for('posttask.edittask', task_id=task.id)}}" class="button gray ripple-effect ico" data-tippy-placement="top" data-tippy="" data-original-title="Edit"><i class="icon-feather-edit"></i></a>
+											<a href="#" data="{{task.id}}" class="button gray ripple-effect ico deleteTask" data-tippy-placement="top" data-tippy="" data-original-title="Remove"><i class="icon-feather-trash-2"></i></a>
 										</div>
 									</li>
 								{% endfor %}
@@ -165,6 +171,8 @@
 <script src="{{ url_for('static', filename='js/magnific-popup.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/slick.min.js')}}"></script>
 <script src="{{ url_for('static', filename='js/custom.js')}}"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="{{ url_for('static', filename='js/taskOp.js')}}"></script>
 
 <!-- Snackbar // documentation: https://www.polonel.com/snackbar/ -->
 <script>

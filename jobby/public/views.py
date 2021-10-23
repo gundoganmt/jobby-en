@@ -202,6 +202,10 @@ def browseFreelancers():
 def page_not_found(e):
     return render_template('404.html'), 404
 
+@public.app_errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
+
 @public.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'GET':

@@ -188,7 +188,10 @@ class Users(UserMixin, db.Model):
         if len(tasks) > 0:
             for task in tasks:
                 views = Views.query.filter_by(viewedTask=task).first()
-                total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
+                if not views:
+                    total_views = 0
+                else:
+                    total_views += views.monday+views.tuesday+views.wednesday+views.thursday+views.friday+views.saturday+views.sunday
         return total_views
 
     def all_reviews(self):
