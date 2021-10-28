@@ -67,10 +67,14 @@
                                 <i class="fas fa-hashtag mr-25"></i><span class="d-none d-sm-block">Site Social</span>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center" id="MoreSettings-tab" data-toggle="tab" href="#MoreSettings" aria-controls="MoreSettings" role="tab" aria-selected="false">
+                                <i class="fas fa-cog mr-25"></i><span class="d-none d-sm-block">More Settings</span>
+                            </a>
+                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane active" id="email-settings" aria-labelledby="email-settings-tab" role="tabpanel">
-                          <!-- users edit account form start -->
                           <form method="post" action="{{ url_for('admin.create', table='emailSettings') }}" class="validate-form mt-2 pt-50">
                             <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                             <div class="row">
@@ -85,31 +89,35 @@
                               </div>
                               <div class="col-12 col-sm-6 mb-1">
                                 <label class="form-label" for="MailServer">Mail Server</label>
-                                <input type="text" class="form-control" id="MailServer" name="MailServer" placeholder="Mail Server" required value="{{mail_config.mail_server}}">
+                                <input type="text" class="form-control" id="MailServer" name="MailServer" placeholder="Mail Server" required value="{{ss.mail_server}}">
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="Port">Port</label>
-                                <input type="number" class="form-control" id="port" name="port" placeholder="Port" required value="{{mail_config.port}}">
+                                <input type="number" class="form-control" id="port" name="port" placeholder="Port" required value="{{ss.port}}">
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="UseTLS">Use TLS</label>
                                 <select class="form-control" id="UseTLS" name="UseTLS" required>
-                                  <option {% if mail_config.use_TLS %} selected="selected"{% endif %}>Yes</option>
-                                  <option {% if not mail_config.use_TLS %} selected="selected"{% endif %}>No</option>
+                                  <option {% if ss.use_TLS %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not ss.use_TLS %} selected="selected"{% endif %}>No</option>
                                 </select>
                               </div>
                               <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="UseSSL">Use SSL</label>
                                 <select class="form-control" id="UseSSL" name="UseSSL" required>
-                                  <option {% if mail_config.use_SSL %} selected="selected"{% endif %}>Yes</option>
-                                  <option {% if not mail_config.use_SSL %} selected="selected"{% endif %}>No</option>
+                                  <option {% if ss.use_SSL %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not ss.use_SSL %} selected="selected"{% endif %}>No</option>
                                 </select>
                               </div>
-                              <div class="col-12 col-sm-6 mb-1">
-                                <label class="form-label" for="username">Username</label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required value="{{mail_config.username}}">
+                              <div class="col-12 col-sm-4 mb-1">
+                                <label class="form-label" for="username">Default Email Sender</label>
+                                <input type="text" class="form-control" id="defEmail" name="defEmail" placeholder="Default Email" required value="{{ss.default_sender}}">
                               </div>
-                              <div class="col-12 col-sm-6 mb-1">
+                              <div class="col-12 col-sm-4 mb-1">
+                                <label class="form-label" for="username">Email or Api_key</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required value="{{ss.username}}">
+                              </div>
+                              <div class="col-12 col-sm-4 mb-1">
                                 <label class="form-label" for="password">Password</label>
                                 <input type="text" class="form-control" id="password" name="password" placeholder="Password" required>
                               </div>
@@ -119,7 +127,6 @@
                               </div>
                             </div>
                           </form>
-                          <!-- users edit account form ends -->
                         </div>
                         <div class="tab-pane" id="CreateAdmin" aria-labelledby="CreateAdmin-tab" role="tabpanel">
                           <div class="card mb-75">
@@ -169,7 +176,6 @@
                           <hr></hr>
                           <!-- form -->
                           <form class="validate-form mt-2 pt-50" id="form_admin">
-                            <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
                             <div class="media mb-2">
                               <div class="avatar-wrapper">
                                 <img class="profile-pic" src="{{ url_for('static', filename='images/guest.jfif') }}" />
@@ -285,6 +291,30 @@
                             </div>
                           </form>
                           <!-- users edit socail form ends -->
+                        </div>
+                        <div class="tab-pane" id="MoreSettings" aria-labelledby="SiteSocial-tab" role="tabpanel">
+                          <form class="validate-form mt-2 pt-50">
+                            <div class="row">
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="confirmation_enabled">Enable email confirmation</label>
+                                <select class="form-control" id="confirmation_enabled" name="confirmation_enabled" required>
+                                  <option {% if ss.confirmation_enabled %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not ss.confirmation_enabled %} selected="selected"{% endif %}>No</option>
+                                </select>
+                              </div>
+                              <div class="col-12 col-sm-6 mb-1">
+                                <label class="form-label" for="contact_enabled">Add contact page to the site</label>
+                                <select class="form-control" id="contact_enabled" name="contact_enabled" required>
+                                  <option {% if ss.contact_enabled %} selected="selected"{% endif %}>Yes</option>
+                                  <option {% if not ss.contact_enabled %} selected="selected"{% endif %}>No</option>
+                                </select>
+                              </div>
+                              <div class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-1">
+                                  <button type="button" class="btn btn-primary mr-sm-1 mr-2 saveMore">Save Changes</button>
+                                  <button type="reset" class="btn btn-outline-warning">Reset</button>
+                              </div>
+                            </div>
+                          </form>
                         </div>
                     </div>
                   </div>

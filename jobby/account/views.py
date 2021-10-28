@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, redirect, url_for, flash, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from jobby.models import Users, Notification, Admin
+from jobby.models import Users, Notification, Admin, SiteSettings
 from datetime import datetime
 from jobby import db, login_manager
 from flask_login import login_user, logout_user, login_required, current_user
@@ -49,6 +49,7 @@ def signup():
     if current_user.is_authenticated:
         return redirect(url_for('public.index'))
     if request.method == 'POST':
+        ss = db.session.query(SiteSettings).first()
         username = request.form['username']
         email = request.form['email']
         password = request.form['password']
@@ -72,10 +73,24 @@ def signup():
                 flash('Email already being used')
                 return render_template('account/signup.html')
             else:
-                new_user = Users(username=username, email=email, password=hashed_password,
-                    member_since=datetime.utcnow(), status='employer', email_approved=True)
-                db.session.add(new_user)
-                db.session.commit()
+                if ss:
+                    if ss.confirmation_enabled:
+                        new_user = Users(username=username, email=email, password=hashed_password,
+                            member_since=datetime.utcnow(), status='employer')
+                        db.session.add(new_user)
+                        db.session.commit()
+                        send_confirmation_email(new_user)
+                    else:
+                        new_user = Users(username=username, email=email, password=hashed_password,
+                            member_since=datetime.utcnow(), status='employer', email_approved=True)
+                        db.session.add(new_user)
+                        db.session.commit()
+                else:
+                    new_user = Users(username=username, email=email, password=hashed_password,
+                        member_since=datetime.utcnow(), status='employer', email_approved=True)
+                    db.session.add(new_user)
+                    db.session.commit()
+
                 login_user(new_user)
                 return render_template('account/welcome.html')
     return render_template('account/signup.html')

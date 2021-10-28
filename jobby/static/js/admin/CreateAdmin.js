@@ -108,6 +108,45 @@ document.addEventListener('DOMContentLoaded', () =>{
     return false;
   })
 
+  $('.saveMore').on('click', function(e){
+    const xhr = new XMLHttpRequest();
+    var csrf_token = document.getElementById('csrf_token').value;
+    var form_data = new FormData();
+
+    var url = '/adminpanel/create/MoreSettings';
+    var confirmation_enabled = document.getElementById('confirmation_enabled').value;
+    var contact_enabled = document.getElementById('contact_enabled').value;
+    form_data.append("confirmation_enabled", confirmation_enabled);
+    form_data.append("contact_enabled", contact_enabled);
+
+    xhr.open('POST', url)
+    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+    xhr.onload = () =>{
+      if(xhr.status == 200){
+        const result = JSON.parse(xhr.responseText);
+        if(result.success){
+          Swal.fire({
+            icon: 'success',
+            title: "Good job!",
+            text: result.msg,
+            type: "success",
+            confirmButtonClass: 'btn btn-primary',
+            buttonsStyling: false,
+          });
+        }
+        else{
+          Swal.fire({
+             icon: 'error',
+             title: 'Oops...',
+             text: result.msg,
+          });
+        }
+      }
+    }
+    xhr.send(form_data);
+    return false;
+  })
+
   function saveAdmin(username, email, full_name, admin_id){
      var admin_table = document.getElementById('admin_table');
      var form_admin = document.getElementById('form_admin');

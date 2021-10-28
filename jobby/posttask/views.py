@@ -21,6 +21,10 @@ def post_task():
         category = request.form["category"]
         skills_list = request.form.getlist('skills_list')
 
+        if not current_user.email_approved:
+            flash('Your email has not been confirmed yet. You cannot post a project!')
+            return redirect(url_for(request.url))
+
         if len(skills_list) > 5 or len(skills_list) < 1:
             return jsonify({'success': False, 'msg': 'Add at least 1 at most 5 skills!'})
 

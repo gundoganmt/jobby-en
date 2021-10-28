@@ -77,6 +77,18 @@
         </a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.create', table='bulk-email') }}">
+          <i class="fas fa-mail-bulk"></i>
+          <span>Bulk Email</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('admin.dbop', table='contact') }}">
+          <i class="fas fa-paper-plane"></i>
+          <span>Contact Messages</span>
+        </a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseViews" aria-expanded="true" aria-controls="collapsePage">
           <i class="fas fa-eye"></i>
           <span>Views</span>

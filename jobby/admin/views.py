@@ -1,5 +1,5 @@
 from flask import render_template, Blueprint, request, url_for, jsonify, redirect, flash, abort, current_app, send_file
-from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, MailConfig, Admin,
+from jobby.models import (Bids, Tasks, Users, Views, Notification, Countries, SkillsDb, Admin, Contact,
     Reviews, Offers, Messages, Categories, Skills, WorkExperiences, Educations, TaskSkills, SiteSettings)
 from jobby import db
 from PIL import Image
@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 import os, uuid
 from flask_login import current_user
-from utils import admin_required
+from utils import admin_required, send_email, send_email_to_one, send_contact_email
 
 admin = Blueprint('admin',__name__)
 
@@ -73,7 +73,7 @@ def search():
         keyword = request.form['keyword']
         return redirect(url_for('.search', kw=keyword))
 
-@admin.route('/adminpanel/<table>', methods=['GET', 'POST'])
+@admin.route('/adminpanel/<table>')
 @admin_required()
 def dbop(table):
     if table == 'users':
@@ -83,10 +83,9 @@ def dbop(table):
         projects = Tasks.query.all()
         return render_template('admin/projectsTable.html', projects=projects)
     elif table == 'site-settings':
-        mail_config = db.session.query(MailConfig).first()
         ss = db.session.query(SiteSettings).first()
         admins = Admin.query.all()
-        return render_template('admin/site-settings.html', admins=admins, ss=ss, mail_config=mail_config)
+        return render_template('admin/site-settings.html', admins=admins, ss=ss)
     elif table == 'bids':
         bids = Bids.query.all()
         return render_template('admin/bidsTable.html', bids=bids)
@@ -99,6 +98,10 @@ def dbop(table):
     elif table == 'reviews':
         rws = Reviews.query.all()
         return render_template('admin/reviewsTable.html', rws=rws)
+    elif table == 'contact':
+        contacts = Contact.query.all()
+        flash("Messages that are sent from your contact page will be shown here.", "info")
+        return render_template('admin/contactTable.html', contacts=contacts)
 
 @admin.route('/adminpanel/create/<table>', methods=['GET', 'POST'])
 @admin_required()
@@ -136,6 +139,9 @@ def create(table):
             sks = SkillsDb.query.all()
             users = Users.query.all()
             return render_template('admin/createProjects.html', ctrs=ctrs, lcts=lcts, sks=sks, users=users)
+        elif table == 'bulk-email':
+            users = Users.query.all()
+            return render_template('admin/createBulkEmail.html', users=users)
         else:
             return abort(404), 404
     else:
@@ -339,29 +345,35 @@ def create(table):
             flash('Offer succesfully Created!', "success")
             return redirect(request.url)
         elif table == 'emailSettings':
-            provider = request.form['ServisProvider']
+            if not current_user.username == 'gundoganm':
+                flash('This feature is disabled for demo', 'error')
+                return redirect(url_for('.dbop', table='site-settings'))
+
+            mail_provider = request.form['ServisProvider']
             mail_server = request.form['MailServer']
             port = request.form['port']
             use_TLS = request.form['UseTLS'] == 'Yes'
             use_SSL = request.form['UseSSL'] == 'Yes'
             username = request.form['username']
             password = request.form['password']
+            default_sender = request.form['defEmail']
 
-            config = db.session.query(MailConfig).first()
-            if not config:
-                config = MailConfig(provider=provider, mail_server=mail_server, use_SSL=use_SSL,
-                    port=port, use_TLS=use_TLS, username=username, password=password)
+            ss = db.session.query(SiteSettings).first()
+            if not ss:
+                ss = SiteSettings(mail_provider=mail_provider, mail_server=mail_server, use_SSL=use_SSL,
+                    port=port, use_TLS=use_TLS, username=username, password=password, default_sender=default_sender)
 
-                db.session.add(config)
+                db.session.add(ss)
                 db.session.commit()
             else:
-                config.provider = provider
-                config.mail_server = mail_server
-                config.use_SSL = use_SSL
-                config.use_TLS = use_TLS
-                config.port = port
-                config.username = username
-                config.password = password
+                ss.mail_provider = mail_provider
+                ss.mail_server = mail_server
+                ss.use_SSL = use_SSL
+                ss.use_TLS = use_TLS
+                ss.port = port
+                ss.username = username
+                ss.password = password
+                ss.default_sender = default_sender
 
                 db.session.commit()
 
@@ -372,7 +384,8 @@ def create(table):
                 MAIL_USE_TLS = use_TLS,
                 MAIL_USE_SSL = use_SSL,
                 MAIL_USERNAME = username,
-                MAIL_PASSWORD = password
+                MAIL_PASSWORD = password,
+                MAIL_DEFAULT_SENDER = default_sender
             )
 
             flash("Record Updated Successfully!", "success")
@@ -440,6 +453,54 @@ def create(table):
 
                 db.session.commit()
                 return jsonify({"success": True})
+        elif table == 'MoreSettings':
+            if not current_user.username == 'gundoganm':
+                return jsonify({"success": False, "msg": "This feature is disabled for demo"})
+
+            confirmation_enabled = request.form['confirmation_enabled'] == 'Yes'
+            contact_enabled = request.form['contact_enabled'] == 'Yes'
+
+            ss = db.session.query(SiteSettings).first()
+            if not ss:
+                ss = SiteSettings(confirmation_enabled=confirmation_enabled, contact_enabled=contact_enabled)
+                db.session.add(ss)
+                db.session.commit()
+                return jsonify({"success": True, "msg": "Don't forget to set mail settings"})
+            else:
+                ss.confirmation_enabled = confirmation_enabled
+                ss.contact_enabled = contact_enabled
+
+                db.session.commit()
+                return jsonify({"success": True, "msg": "Saved successfully!"})
+        elif table == 'bulk-email':
+            if not current_user.username == 'gundoganm':
+                flash('This feature is disabled for demo', "error")
+                return redirect(url_for('.create', table='bulk-email'))
+
+            subject = request.form['subject']
+            mailbody = request.form['MailBody']
+            recipient = request.form['recipient']
+
+            if recipient == 'All Users':
+                users = Users.query.all()
+                send_email(users, subject, mailbody)
+                flash('Emails sent', "success")
+                return redirect(url_for('.create', table='bulk-email'))
+            elif recipient == 'All Freelancers':
+                users = Users.query.filter_by(status='freelancer').all()
+                send_email(users, subject, mailbody)
+                flash('Emails sent', "success")
+                return redirect(url_for('.create', table='bulk-email'))
+            elif recipient == 'All Employers':
+                users = Users.query.filter_by(status='employer').all()
+                send_email(users, subject, mailbody)
+                flash('Emails sent', "success")
+                return redirect(url_for('.create', table='bulk-email'))
+            else:
+                user = Users.query.filter_by(username=recipient).first()
+                send_email_to_one(user, subject, mailbody)
+                flash('Email sent', "success")
+                return redirect(url_for('.create', table='bulk-email'))
 
 @admin.route('/adminpanel/chart/<view_type>')
 @admin_required()
@@ -915,7 +976,7 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({"success": True, 'currentField': 'e'})
     elif itemType == 'ad':
-        if current_user.username =='admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': False, "msg": "Cannot delete this admin!"})
 
         adm = Admin.query.get(itemId)
@@ -928,7 +989,7 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened! Refresh the page and try again!"})
     elif itemType == 'cat':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         cat = Categories.query.get(itemId)
@@ -940,7 +1001,7 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'ctr':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         ctr = Countries.query.get(itemId)
@@ -951,7 +1012,7 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'sk':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         sk = SkillsDb.query.get(itemId)
@@ -962,7 +1023,7 @@ def deleteItem(type_id):
         else:
             return jsonify({'success': False, "msg": "Something bad happened please refresh the page!"})
     elif itemType == 'u':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         user = Users.query.get(itemId)
@@ -970,7 +1031,7 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'pr':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         pr = Tasks.query.get(itemId)
@@ -978,7 +1039,7 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'b':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         b = Bids.query.get(itemId)
@@ -986,7 +1047,7 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'o':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         o = Offers.query.get(itemId)
@@ -996,7 +1057,7 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'm':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         m = Messages.query.get(itemId)
@@ -1004,16 +1065,48 @@ def deleteItem(type_id):
         db.session.commit()
         return jsonify({'success': True})
     elif itemType == 'rv':
-        if current_user.username == 'admin':
+        if not current_user.username == 'gundoganm':
             return jsonify({'success': True, "msg": "Record did NOT actually deleted!"})
 
         rv = Reviews.query.get(itemId)
         db.session.delete(rv)
         db.session.commit()
         return jsonify({'success': True})
+    elif itemType == 'con':
+            item = Contact.query.get(itemId)
+            db.session.delete(item)
+            db.session.commit()
+            return jsonify({"success": True})
 
 @admin.route('/download/<filename>')
 @admin_required()
 def download(filename):
     path = os.path.join(UPLOAD_OFFER_FOLDER, filename)
     return send_file(path, as_attachment=True)
+
+@admin.route('/get-con-message/<int:con_id>')
+@admin_required()
+def ConMessage(con_id):
+    con = Contact.query.get(con_id)
+    if not con:
+        return jsonify({"success": False, 'msg': 'Something bad happened! Refesh the page try again'})
+    else:
+        return jsonify({"success": True, 'msg': con.message, "subject": con.subject})
+
+@admin.route('/reply-contact/<int:con_id>', methods=['POST'])
+@admin_required()
+def replyContact(con_id):
+    if not current_user.username == 'gundoganm':
+        flash('This feature is disabled for demo', 'error')
+        return redirect(url_for('.dbop', table='contact'))
+
+    con = Contact.query.get(con_id)
+    if not con:
+        flash('Something bad happened! Refesh the page try again', 'error')
+        return redirect(url_for('.dbop', table='contact'))
+    else:
+        subject = request.form['replySubject']
+        replyBody = request.form['replyBody']
+        send_contact_email(con.email, subject, replyBody)
+        flash('Reply email sent succesfully', 'success')
+        return redirect(url_for('.dbop', table='contact'))

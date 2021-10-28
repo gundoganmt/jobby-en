@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Jobby Admin - Contact Messages</title>
+  <link href="{{ url_for('static', filename='css/admin/all.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/jobby-admin.min.css') }}" rel="stylesheet" type="text/css">
+  <link href="{{ url_for('static', filename='css/admin/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+
+    {% include 'admin/_sidebar.html' %}
+
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div>
+        {% include 'admin/_navbar.html' %}
+        <!-- Container Fluid-->
+        <div class="container-fluid" id="container-wrapper">
+          <!-- Row -->
+            <div class="row">
+              <div class="col-lg-12">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      {% if category == 'error' %}
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                          {{ message }}
+                        </div>
+                      {% elif category == 'success' %}
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                          {{ message }}
+                        </div>
+                      {% else %}
+                        <div class="alert alert-info alert-dismissible" role="alert">
+                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                          </button>
+                          {{ message }}
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+                <div class="card mb-4">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Contact Messages</h6>
+                  </div>
+                {% if contacts %}
+                  <div class="table-responsive p-3">
+                    <table class="table align-items-center table-flush table-hover" id="dataTableHover">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Subject</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tfoot>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Subject</th>
+                          <th>Action</th>
+                        </tr>
+                      </tfoot>
+                      <tbody>
+                        {% for c in contacts %}
+                          <tr id="con_{{c.id}}">
+                            <td>{{ c.name }}</td>
+                            <td>{{ c.email }}</td>
+                            <td>{{ c.subject }}</td>
+                            <td>
+                              <a href="" name="getmessage" data="{{c.id}}" data-target="#MessageModal" data-toggle="modal"><i class="fas fa-eye"></i></a>
+                              <a href="" name="replyMessage" data="{{c.id}}" data-target="#ReplyMessageModal" data-toggle="modal"><i class="fas fa-paper-plane"></i></a>
+                              <a class="deleteItem" data="con_{{c.id}}" style="cursor: pointer; color: #6777ef;"><i class="fas fa-trash"></i></a>
+                            </td>
+                          </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                  </div>
+                {% endif %}
+                </div>
+              </div>
+            </div>
+          <!--Row-->
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <div class="modal fade" id="MessageModal" tabindex="-1" role="dialog" aria-labelledby="conSubject" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="conSubject">Subject</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="content"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="ReplyMessageModal" tabindex="-1" role="dialog" aria-labelledby="conSubject" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Reply</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form class="row gy-1 gx-2 mt-75" id="replyForm" method="post">
+            <input type='hidden' id="csrf_token" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="col-12">
+              <label class="form-label" for="replySubject">Subject</label>
+              <div class="input-group input-group-merge">
+                <input id="replySubject" name="replySubject" class="form-control" type="text" placeholder="Subject" required>
+              </div>
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="replyBody">Your Message</label>
+              <textarea class="form-control" id="replyBody" name="replyBody" rows="5" placeholder="Your reply" required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary mr-sm-1 mr-2" form="replyForm">Reply</button>
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/admin/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/jobby-admin.min.js') }}"></script>
+  <!-- Page level plugins -->
+  <script src="{{ url_for('static', filename='js/admin/jquery.dataTables.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/dataTables.bootstrap4.min.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="{{ url_for('static', filename='js/admin/tableOp.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/admin/getMessage.js') }}"></script>
+
+  <!-- Page level custom scripts -->
+  <script>
+    $(document).ready(function () {
+      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+    });
+  </script>
+
+</body>
+
+</html>

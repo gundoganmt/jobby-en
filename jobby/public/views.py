@@ -1,7 +1,9 @@
 from flask import render_template, Blueprint, request, redirect, url_for, abort, flash, jsonify
 from flask_login import current_user
 from sqlalchemy import or_, and_
-from jobby.models import Tasks, Bids, Users, Offers, Notification, TaskSkills, Skills, Categories, Countries
+from jobby.models import (Tasks, Bids, Users, Offers, Notification,
+    TaskSkills, Skills, Categories,
+    Countries, SiteSettings, Contact)
 from jobby import db
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
@@ -208,19 +210,27 @@ def server_error(e):
 
 @public.route('/contact', methods=['GET', 'POST'])
 def contact():
-    if request.method == 'GET':
-        flash("This website is for sale. If you interested in buying this website just send message. We will get back to you soon")
-        return render_template('public/contact.html')
-    else:
-        name = request.form['name']
-        email = request.form['email']
-        subject = request.form['subject']
-        comment = request.form['comment']
-        honey = request.form['honey']
-        if honey:
-            flash('something went wrong try again')
-            return render_template('public/contact.html')
+    ss = db.session.query(SiteSettings).first()
+    if ss:
+        if ss.contact_enabled:
+            if request.method == 'GET':
+                return render_template('public/contact.html')
+            else:
+                name = request.form['name']
+                email = request.form['email']
+                subject = request.form['subject']
+                message = request.form['comment']
+                honey = request.form['honey']
+                if honey:
+                    flash('something went wrong')
+                    return render_template('public/contact.html')
+                else:
+                    cnt = Contact(name=name, email=email, subject=subject, message=message)
+                    db.session.add(cnt)
+                    db.session.commit()
+                    flash("Thanks. Your message has been sent.")
+                    return redirect(request.url)
         else:
-            send_email(name, email, subject, comment)
-            flash("Thanks. Your message has been sent.")
-            return redirect(request.url)
+            abort(404), 404
+    else:
+        abort(404), 404

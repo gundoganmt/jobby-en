@@ -11,12 +11,28 @@ def send_async_email(app, msg):
     with app.app_context():
         mail.send(msg)
 
-def send_email(name, email, subject, message):
+def send_contact_email(email, subject, message):
     app = current_app._get_current_object()
-    msg = Message(subject='Jobby Contact',
-        sender="support@jobby.net",
-        recipients=["mahmut_gundogan@hotmail.com"])
-    msg.body = "name: {}, email: {}, subject: {}, message: {}".format(name, email, subject, message)
+    msg = Message(subject=subject,
+        recipients=[email])
+    msg.body = message
+    thr = Thread(target=send_async_email, args=[app, msg])
+    thr.start()
+
+def send_email(users, subject, message):
+    app = current_app._get_current_object()
+    for user in users:
+        msg = Message(subject=subject,
+            recipients=[user.email])
+        msg.body = message
+        thr = Thread(target=send_async_email, args=[app, msg])
+        thr.start()
+
+def send_email_to_one(user, subject, message):
+    app = current_app._get_current_object()
+    msg = Message(subject=subject,
+        recipients=[user.email])
+    msg.body = message
     thr = Thread(target=send_async_email, args=[app, msg])
     thr.start()
 
@@ -24,7 +40,6 @@ def send_confirmation_email(user):
     app = current_app._get_current_object()
     token = user.get_confirmation_token()
     msg = Message(subject='Confirmation email',
-        sender="support@jobby.net",
         recipients=[user.email])
     msg.html = render_template('account/email_confirmation.html', token=token, name=user.name)
     thr = Thread(target=send_async_email, args=[app, msg])

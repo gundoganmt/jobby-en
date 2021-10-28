@@ -80,6 +80,9 @@ class Users(UserMixin, db.Model):
     def all_notifications(self):
         return Notification.query.filter_by(notification_to=self).all()
 
+    def num_not(self):
+        return Notification.query.filter_by(notification_to=self, seen=False).count()
+
     def get_confirmation_token(self, expires_sec=1800):
         s = Serializer("qazxswedcvfrtgb", expires_sec)
         return s.dumps({'user_id': self.id}).decode('utf-8')
@@ -109,11 +112,6 @@ class Users(UserMixin, db.Model):
             return True
         return False
 
-    def canBid(self):
-        if self.setting_completed:
-            return True
-        return False
-
     def check_status(self):
         skill = Skills.query.filter_by(user_id=self.id).all()
         if self.field_of_work and self.tagline and self.introduction and len(skill)>0 and self.email_approved:
@@ -121,9 +119,6 @@ class Users(UserMixin, db.Model):
         else:
             self.status = 'employer'
         db.session.commit()
-
-    def num_not(self):
-        return Notification.query.filter_by(notification_to=self, seen=False).count()
 
     def addView(self):
         today = datetime.today()
@@ -249,6 +244,14 @@ class Admin(UserMixin, db.Model):
     def __repr__(self):
         return self.username
 
+class Contact(db.Model):
+    __tablename__ = 'Contact'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=True, default="")
+    email = db.Column(db.String(80), nullable=True, default="")
+    subject = db.Column(db.String(80), nullable=True, default="")
+    message = db.Column(db.Text, nullable=False)
+
 class SiteSettings(db.Model):
     __tablename__ = 'SiteSettings'
     id = db.Column(db.Integer, primary_key=True)
@@ -258,6 +261,16 @@ class SiteSettings(db.Model):
     github = db.Column(db.String(80), nullable=True, default="")
     instagram = db.Column(db.String(80), nullable=True, default="")
     linkedin = db.Column(db.String(80), nullable=True, default="")
+    mail_provider = db.Column(db.String(50), nullable=True)
+    mail_server = db.Column(db.String(100), nullable=True)
+    use_SSL = db.Column(db.Boolean, default=True)
+    use_TLS = db.Column(db.Boolean, default=False)
+    port = db.Column(db.Integer, nullable=True)
+    username = db.Column(db.String(50), nullable=True)
+    password = db.Column(db.String(100), nullable=True)
+    default_sender = db.Column(db.String(100), nullable=True)
+    confirmation_enabled = db.Column(db.Boolean, default=False)
+    contact_enabled = db.Column(db.Boolean, default=True)
 
 class Offers(db.Model):
     __tablename__ = 'Offers'
@@ -443,20 +456,6 @@ class Educations(db.Model):
 
     def __repr__(self):
         return self.field
-
-class MailConfig(db.Model):
-    __tablename__ = "MailConfig"
-    id = db.Column(db.Integer, primary_key=True)
-    provider = db.Column(db.String(50), nullable=False)
-    mail_server = db.Column(db.String(100), nullable=False)
-    use_SSL = db.Column(db.Boolean, default=True)
-    use_TLS = db.Column(db.Boolean, default=False)
-    port = db.Column(db.Integer, nullable=False)
-    username = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-
-    def __repr__(self):
-        return self.provider
 
 class Skills(db.Model):
     __tablename__ = 'Skills'
