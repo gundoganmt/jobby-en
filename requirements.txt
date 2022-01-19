@@ -21,7 +21,7 @@ Flask-SQLAlchemy==2.4.1
 Flask-WhooshAlchemy @ git+git://github.com/miguelgrinberg/flask-whooshalchemy.git@f6266d34ed836a880a0f81586002770e6fc1b45a
 Flask-WTF==0.14.2
 greenlet==1.1.2
-gunicorn==18.0
+gunicorn==20.1.0
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
