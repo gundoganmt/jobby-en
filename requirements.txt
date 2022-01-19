@@ -11,7 +11,7 @@ contextlib2==0.6.0
 distlib==0.3.0
 distro==1.4.0
 dnspython==1.16.0
-eventlet==0.24.1
+eventlet==0.30.2
 Flask==1.1.1
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
@@ -21,7 +21,7 @@ Flask-SQLAlchemy==2.4.1
 Flask-WhooshAlchemy @ git+git://github.com/miguelgrinberg/flask-whooshalchemy.git@f6266d34ed836a880a0f81586002770e6fc1b45a
 Flask-WTF==0.14.2
 greenlet==1.1.2
-gunicorn==18.0.0
+gunicorn==20.1.0
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
